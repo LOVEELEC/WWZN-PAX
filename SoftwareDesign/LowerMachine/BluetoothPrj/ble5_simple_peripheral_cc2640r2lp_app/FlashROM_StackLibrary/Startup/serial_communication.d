@@ -1,6 +1,6 @@
 # FIXED
 
-Startup/serial_communication.obj: C:/ti/SoftwareDesign/LowerMachine/BluetoothPrj/serial_communication.c
+Startup/serial_communication.obj: C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/BTP_DevFile/CommunicationInterface/src/serial_communication.c
 Startup/serial_communication.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/string.h
 Startup/serial_communication.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/linkage.h
 Startup/serial_communication.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/kernel/tirtos/packages/ti/sysbios/knl/Task.h
@@ -186,7 +186,7 @@ Startup/serial_communication.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/sourc
 Startup/serial_communication.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/osal/src/inc/comdef.h
 Startup/serial_communication.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/hal/src/target/_common/hal_types.h
 
-C:/ti/SoftwareDesign/LowerMachine/BluetoothPrj/serial_communication.c: 
+C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/BTP_DevFile/CommunicationInterface/src/serial_communication.c: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/string.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/linkage.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/kernel/tirtos/packages/ti/sysbios/knl/Task.h: 

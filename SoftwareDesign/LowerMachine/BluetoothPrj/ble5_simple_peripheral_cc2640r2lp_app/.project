@@ -133,6 +133,16 @@
 			<locationURI>SRC_BLE_DIR/osal/src/inc/osal_snv.h</locationURI>
 		</link>
 		<link>
+			<name>Startup/LL_loopQueue.c</name>
+			<type>1</type>
+			<location>C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/BTP_DevFile/dataStruct/loopQueue/src/LL_loopQueue.c</location>
+		</link>
+		<link>
+			<name>Startup/LL_loopQueue.h</name>
+			<type>1</type>
+			<location>C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/BTP_DevFile/dataStruct/loopQueue/inc/LL_loopQueue.h</location>
+		</link>
+		<link>
 			<name>Startup/board.c</name>
 			<type>1</type>
 			<locationURI>SRC_BLE_DIR/target/board.c</locationURI>
@@ -140,12 +150,12 @@
 		<link>
 			<name>Startup/serial_communication.c</name>
 			<type>1</type>
-			<location>C:/ti/SoftwareDesign/LowerMachine/BluetoothPrj/serial_communication.c</location>
+			<location>C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/BTP_DevFile/CommunicationInterface/src/serial_communication.c</location>
 		</link>
 		<link>
 			<name>Startup/serial_communication.h</name>
 			<type>1</type>
-			<location>C:/ti/SoftwareDesign/LowerMachine/BluetoothPrj/serial_communication.h</location>
+			<location>C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/BTP_DevFile/CommunicationInterface/inc/serial_communication.h</location>
 		</link>
 		<link>
 			<name>TOOLS/cc26xx_app.cmd</name>

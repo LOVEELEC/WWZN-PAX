@@ -6,3 +6,6 @@ V0.0.1
     + UART Baud Rate is 1Mbps;
     + The length of data sent/received must be 20;
     + Two tasks: one for receiving UART data and one for BLE;
+
+V0.0.2
+	+ 只保留Write和Notify服务

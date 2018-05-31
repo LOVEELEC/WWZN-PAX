@@ -64,35 +64,35 @@ extern "C"
  * CONSTANTS
  */
 
-// Profile Parameters
-#define SIMPLEPROFILE_CHAR1                   0  // RW uint8 - Profile Characteristic 1 value
-#define SIMPLEPROFILE_CHAR2                   1  // RW uint8 - Profile Characteristic 2 value
-#define SIMPLEPROFILE_CHAR3                   2  // RW uint8 - Profile Characteristic 3 value
-#define SIMPLEPROFILE_CHAR4                   3  // RW uint8 - Profile Characteristic 4 value
-#define SIMPLEPROFILE_CHAR5                   4  // RW uint8 - Profile Characteristic 4 value
+//// Profile Parameters
+//#define SIMPLEPROFILE_CHAR1                   0  // RW uint8 - Profile Characteristic 1 value
+//#define SIMPLEPROFILE_CHAR2                   1  // RW uint8 - Profile Characteristic 2 value
+//#define SIMPLEPROFILE_CHAR3                   2  // RW uint8 - Profile Characteristic 3 value
+//#define SIMPLEPROFILE_CHAR4                   3  // RW uint8 - Profile Characteristic 4 value
+//#define SIMPLEPROFILE_CHAR5                   4  // RW uint8 - Profile Characteristic 4 value
 
 // Simple Profile Service UUID
 #define SIMPLEPROFILE_SERV_UUID               0xFFF0
 
-// Key Pressed UUID
-#define SIMPLEPROFILE_CHAR1_UUID            0xFFF1
-#define SIMPLEPROFILE_CHAR2_UUID            0xFFF2
-#define SIMPLEPROFILE_CHAR3_UUID            0xFFF3
-#define SIMPLEPROFILE_CHAR4_UUID            0xFFF4
-#define SIMPLEPROFILE_CHAR5_UUID            0xFFF5
+//// Key Pressed UUID
+//#define SIMPLEPROFILE_CHAR1_UUID            0xFFF1
+//#define SIMPLEPROFILE_CHAR2_UUID            0xFFF2
+//#define SIMPLEPROFILE_CHAR3_UUID            0xFFF3
+//#define SIMPLEPROFILE_CHAR4_UUID            0xFFF4
+//#define SIMPLEPROFILE_CHAR5_UUID            0xFFF5
 
 // Simple Keys Profile Services bit fields
 #define SIMPLEPROFILE_SERVICE               0x00000001
 
-// Length of Characteristic 5 in bytes
-#define SIMPLEPROFILE_CHAR5_LEN             5
+//// Length of Characteristic 5 in bytes
+//#define SIMPLEPROFILE_CHAR5_LEN             5
 
 /***************************************************************************/
-#define SIMPLEPROFILE_BTPWrite              5  // RW uint8 - Profile BTPWrite value
-#define SIMPLEPROFILE_BTPNotify             6  // RW uint8 - Profile BTPNotify value
+#define SIMPLEPROFILE_BTPWrite              0  // RW uint8 - Profile BTPWrite value
+#define SIMPLEPROFILE_BTPNotify             1  // RW uint8 - Profile BTPNotify value
 
-#define BTPWriteChannel_UUID                0xFFF6
-#define BTPNotifyChannel_UUID               0xFFF7
+#define BTPWriteChannel_UUID                0xFFF1
+#define BTPNotifyChannel_UUID               0xFFF2
 
 #define BTPWRITECHANNEL_LEN                 20
 #define BTPNOTITYCHANNEL_LEN                20

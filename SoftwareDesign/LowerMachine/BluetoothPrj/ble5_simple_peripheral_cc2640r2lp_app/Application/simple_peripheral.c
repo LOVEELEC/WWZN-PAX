@@ -679,25 +679,31 @@ static void SimpleBLEPeripheral_init(void)
   // Setup the SimpleProfile Characteristic Values
   // For more information, see the sections in the User's Guide:
   // http://software-dl.ti.com/lprf/ble5stack-docs-latest/html/ble-stack/gatt.html#
-  // http://software-dl.ti.com/lprf/ble5stack-docs-latest/html/ble-stack/gatt.html#gattservapp-module
-  {
-    uint8_t charValue1 = 1;
-    uint8_t charValue2 = 2;
-    uint8_t charValue3 = 3;
-    uint8_t charValue4 = 4;
-    uint8_t charValue5[SIMPLEPROFILE_CHAR5_LEN] = { 1, 2, 3, 4, 5 };
-
-    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR1, sizeof(uint8_t),
-                               &charValue1);
-    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR2, sizeof(uint8_t),
-                               &charValue2);
-    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR3, sizeof(uint8_t),
-                               &charValue3);
-    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR4, sizeof(uint8_t),
-                               &charValue4);
-    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR5, SIMPLEPROFILE_CHAR5_LEN,
-                               charValue5);
-  }
+//  // http://software-dl.ti.com/lprf/ble5stack-docs-latest/html/ble-stack/gatt.html#gattservapp-module
+//  {
+//    uint8_t charValue1 = 1;
+//    uint8_t charValue2 = 2;
+//    uint8_t charValue3 = 3;
+//    uint8_t charValue4 = 4;
+//    uint8_t charValue5[SIMPLEPROFILE_CHAR5_LEN] = { 1, 2, 3, 4, 5 };
+//    /***************************************************************************/
+////    uint8_t BtpWriteValue[] = {};
+//    /***************************************************************************/
+//
+//    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR1, sizeof(uint8_t),
+//                               &charValue1);
+//    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR2, sizeof(uint8_t),
+//                               &charValue2);
+//    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR3, sizeof(uint8_t),
+//                               &charValue3);
+//    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR4, sizeof(uint8_t),
+//                               &charValue4);
+//    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR5, SIMPLEPROFILE_CHAR5_LEN,
+//                               charValue5);
+//    /***************************************************************************/
+//
+//    /***************************************************************************/
+//  }
 
   // Register callback with SimpleGATTprofile
   SimpleProfile_RegisterAppCBs(&SimpleBLEPeripheral_simpleProfileCBs);
@@ -1411,17 +1417,17 @@ static void SimpleBLEPeripheral_processCharValueChangeEvt(uint8_t paramID)
 
   switch(paramID)
   {
-    case SIMPLEPROFILE_CHAR1:
-      SimpleProfile_GetParameter(SIMPLEPROFILE_CHAR1, &newValue);
-
-      Display_print1(dispHandle, SBP_ROW_STATUS_1, 0, "Char 1: %d", (uint16_t)newValue);
-      break;
-
-    case SIMPLEPROFILE_CHAR3:
-      SimpleProfile_GetParameter(SIMPLEPROFILE_CHAR3, &newValue);
-
-      Display_print1(dispHandle, SBP_ROW_STATUS_1, 0, "Char 3: %d", (uint16_t)newValue);
-      break;
+//    case SIMPLEPROFILE_CHAR1:
+//      SimpleProfile_GetParameter(SIMPLEPROFILE_CHAR1, &newValue);
+//
+//      Display_print1(dispHandle, SBP_ROW_STATUS_1, 0, "Char 1: %d", (uint16_t)newValue);
+//      break;
+//
+//    case SIMPLEPROFILE_CHAR3:
+//      SimpleProfile_GetParameter(SIMPLEPROFILE_CHAR3, &newValue);
+//
+//      Display_print1(dispHandle, SBP_ROW_STATUS_1, 0, "Char 3: %d", (uint16_t)newValue);
+//      break;
 
     default:
       // should not reach here!
@@ -1458,16 +1464,16 @@ static void SimpleBLEPeripheral_performPeriodicTask(void)
     uint8_t charValue6[BTPNOTITYCHANNEL_LEN] = { 'a', 'b', 'c', 'd', 'e', 'f' };
 	
 	/***************************************************************************/
- // Call to retrieve the value of the third characteristic in the profile
-  if (SimpleProfile_GetParameter(SIMPLEPROFILE_CHAR3, &valueToCopy) == SUCCESS)
-  {
-    // Call to set that value of the fourth characteristic in the profile.
-    // Note that if notifications of the fourth characteristic have been
-    // enabled by a GATT client device, then a notification will be sent
-    // every time this function is called.
-    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR4, sizeof(uint8_t),
-                               &valueToCopy);
-  }
+// // Call to retrieve the value of the third characteristic in the profile
+//  if (SimpleProfile_GetParameter(SIMPLEPROFILE_CHAR3, &valueToCopy) == SUCCESS)
+//  {
+//    // Call to set that value of the fourth characteristic in the profile.
+//    // Note that if notifications of the fourth characteristic have been
+//    // enabled by a GATT client device, then a notification will be sent
+//    // every time this function is called.
+//    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR4, sizeof(uint8_t),
+//                               &valueToCopy);
+//  }
 	/***************************************************************************/
 #ifdef TEST_USART
 //    /* Send data by UART */
