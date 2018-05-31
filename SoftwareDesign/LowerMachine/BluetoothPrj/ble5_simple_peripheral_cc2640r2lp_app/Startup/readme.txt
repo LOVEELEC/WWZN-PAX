@@ -5,3 +5,4 @@ V0.0.1
       UART->Rx <==> BLE Notify Service)实现UART与蓝牙数据之间的双向收发功能
     + UART Baud Rate is 1Mbps;
     + The length of data sent/received must be 20;
+    + Two tasks: one for receiving UART data and one for BLE;
