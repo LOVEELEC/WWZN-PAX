@@ -185,6 +185,8 @@ Startup/serial_communication.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/sourc
 Startup/serial_communication.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/inc/bcomdef.h
 Startup/serial_communication.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/osal/src/inc/comdef.h
 Startup/serial_communication.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/hal/src/target/_common/hal_types.h
+Startup/serial_communication.obj: C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/BTP_DevFile/dataStruct/loopQueue/inc/LL_loopQueue.h
+Startup/serial_communication.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdlib.h
 
 C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/BTP_DevFile/CommunicationInterface/src/serial_communication.c: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/string.h: 
@@ -371,3 +373,5 @@ C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/hal/src/inc/hal_def
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/inc/bcomdef.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/osal/src/inc/comdef.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/hal/src/target/_common/hal_types.h: 
+C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/BTP_DevFile/dataStruct/loopQueue/inc/LL_loopQueue.h: 
+C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdlib.h: 

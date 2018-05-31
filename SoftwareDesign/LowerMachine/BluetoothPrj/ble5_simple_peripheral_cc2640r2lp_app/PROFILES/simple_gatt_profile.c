@@ -159,75 +159,19 @@ static simpleProfileCBs_t *simpleProfile_AppCBs = NULL;
 // Simple Profile Service attribute
 static CONST gattAttrType_t simpleProfileService = { ATT_BT_UUID_SIZE, simpleProfileServUUID };
 
-
-//// Simple Profile Characteristic 1 Properties
-//static uint8 simpleProfileChar1Props = GATT_PROP_READ | GATT_PROP_WRITE;
-//
-//// Characteristic 1 Value
-//static uint8 simpleProfileChar1 = 0;
-//
-//// Simple Profile Characteristic 1 User Description
-//static uint8 simpleProfileChar1UserDesp[17] = "Characteristic 1";
-//
-//
-//// Simple Profile Characteristic 2 Properties
-//static uint8 simpleProfileChar2Props = GATT_PROP_READ;
-//
-//// Characteristic 2 Value
-//static uint8 simpleProfileChar2 = 0;
-//
-//// Simple Profile Characteristic 2 User Description
-//static uint8 simpleProfileChar2UserDesp[17] = "Characteristic 2";
-//
-//
-//// Simple Profile Characteristic 3 Properties
-//static uint8 simpleProfileChar3Props = GATT_PROP_WRITE;
-//
-//// Characteristic 3 Value
-//static uint8 simpleProfileChar3 = 0;
-//
-//// Simple Profile Characteristic 3 User Description
-//static uint8 simpleProfileChar3UserDesp[17] = "Characteristic 3";
-//
-//
-//// Simple Profile Characteristic 4 Properties
-//static uint8 simpleProfileChar4Props = GATT_PROP_NOTIFY;
-//
-//// Characteristic 4 Value
-//static uint8 simpleProfileChar4 = 0;
-//
-//// Simple Profile Characteristic 4 Configuration Each client has its own
-//// instantiation of the Client Characteristic Configuration. Reads of the
-//// Client Characteristic Configuration only shows the configuration for
-//// that client and writes only affect the configuration of that client.
-//static gattCharCfg_t *simpleProfileChar4Config;
-//
-//// Simple Profile Characteristic 4 User Description
-//static uint8 simpleProfileChar4UserDesp[17] = "Characteristic 4";
-//
-//
-//// Simple Profile Characteristic 5 Properties
-//static uint8 simpleProfileChar5Props = GATT_PROP_READ;
-//
-//// Characteristic 5 Value
-//static uint8 simpleProfileChar5[SIMPLEPROFILE_CHAR5_LEN] = { 0, 0, 0, 0, 0 };
-//
-//// Simple Profile Characteristic 5 User Description
-//static uint8 simpleProfileChar5UserDesp[17] = "Characteristic 5";
-
 /***************************************************************************/
-
+BTP_DataMsg_Struct BTP_DataMsg;
 // Simple Profile BTPWriteChannel Properties
 static uint8 BTPWriteChannelProps = GATT_PROP_WRITE;
 // BTPWriteChannel Value
-uint8 BTPWriteChannelBuf[BTPWRITECHANNEL_LEN] = { 0, 0, 0, 0, 0, 0 };
+static uint8 BTPWriteChannelBuf[BTPWRITECHANNEL_LEN] = { 0, 0, 0, 0, 0, 0 };
 // Simple Profile BTPWriteChannel User Description
 static uint8 BTPWriteChannelUserDesp[16] = "BTPWriteChannel";
 
 // Simple Profile BTPNotifyChannel Properties
 static uint8 BTPNotifyChannelProps = GATT_PROP_NOTIFY;
 // BTPNotifyChannel Value
-uint8 BTPNotifyChannelProfile[BTPNOTITYCHANNEL_LEN] = { 0, 0, 0, 0, 0, 0 };
+static uint8 BTPNotifyChannelProfile[BTPNOTITYCHANNEL_LEN] = { 0, 0, 0, 0, 0, 0 };
 // Simple Profile BTPNotifyChannel Configuration Each client has its own
 // instantiation of the Client Characteristic Configuration. Reads of the
 // Client Characteristic Configuration only shows the configuration for
@@ -255,135 +199,6 @@ static gattAttribute_t simpleProfileAttrTbl[SERVAPP_NUM_ATTR_SUPPORTED] =
     0,                                        /* handle */
     (uint8 *)&simpleProfileService            /* pValue */
   },
-
-//    // Characteristic 1 Declaration
-//    {
-//      { ATT_BT_UUID_SIZE, characterUUID },
-//      GATT_PERMIT_READ,
-//      0,
-//      &simpleProfileChar1Props
-//    },
-//
-//      // Characteristic Value 1
-//      {
-//        { ATT_BT_UUID_SIZE, simpleProfilechar1UUID },
-//        GATT_PERMIT_READ | GATT_PERMIT_WRITE,
-//        0,
-//        &simpleProfileChar1
-//      },
-//
-//      // Characteristic 1 User Description
-//      {
-//        { ATT_BT_UUID_SIZE, charUserDescUUID },
-//        GATT_PERMIT_READ,
-//        0,
-//        simpleProfileChar1UserDesp
-//      },
-//
-//    // Characteristic 2 Declaration
-//    {
-//      { ATT_BT_UUID_SIZE, characterUUID },
-//      GATT_PERMIT_READ,
-//      0,
-//      &simpleProfileChar2Props
-//    },
-//
-//      // Characteristic Value 2
-//      {
-//        { ATT_BT_UUID_SIZE, simpleProfilechar2UUID },
-//        GATT_PERMIT_READ,
-//        0,
-//        &simpleProfileChar2
-//      },
-//
-//      // Characteristic 2 User Description
-//      {
-//        { ATT_BT_UUID_SIZE, charUserDescUUID },
-//        GATT_PERMIT_READ,
-//        0,
-//        simpleProfileChar2UserDesp
-//      },
-//
-//    // Characteristic 3 Declaration
-//    {
-//      { ATT_BT_UUID_SIZE, characterUUID },
-//      GATT_PERMIT_READ,
-//      0,
-//      &simpleProfileChar3Props
-//    },
-//
-//      // Characteristic Value 3
-//      {
-//        { ATT_BT_UUID_SIZE, simpleProfilechar3UUID },
-//        GATT_PERMIT_WRITE,
-//        0,
-//        &simpleProfileChar3
-//      },
-//
-//      // Characteristic 3 User Description
-//      {
-//        { ATT_BT_UUID_SIZE, charUserDescUUID },
-//        GATT_PERMIT_READ,
-//        0,
-//        simpleProfileChar3UserDesp
-//      },
-//
-//    // Characteristic 4 Declaration
-//    {
-//      { ATT_BT_UUID_SIZE, characterUUID },
-//      GATT_PERMIT_READ,
-//      0,
-//      &simpleProfileChar4Props
-//    },
-//
-//      // Characteristic Value 4
-//      {
-//        { ATT_BT_UUID_SIZE, simpleProfilechar4UUID },
-//        0,
-//        0,
-//        &simpleProfileChar4
-//      },
-//
-//      // Characteristic 4 configuration
-//      {
-//        { ATT_BT_UUID_SIZE, clientCharCfgUUID },
-//        GATT_PERMIT_READ | GATT_PERMIT_WRITE,
-//        0,
-//        (uint8 *)&simpleProfileChar4Config
-//      },
-//
-//      // Characteristic 4 User Description
-//      {
-//        { ATT_BT_UUID_SIZE, charUserDescUUID },
-//        GATT_PERMIT_READ,
-//        0,
-//        simpleProfileChar4UserDesp
-//      },
-//
-//    // Characteristic 5 Declaration
-//    {
-//      { ATT_BT_UUID_SIZE, characterUUID },
-//      GATT_PERMIT_READ,
-//      0,
-//      &simpleProfileChar5Props
-//    },
-//
-//      // Characteristic Value 5
-//      {
-//        { ATT_BT_UUID_SIZE, simpleProfilechar5UUID },
-//        GATT_PERMIT_AUTHEN_READ,
-//        0,
-//        simpleProfileChar5
-//      },
-//
-//      // Characteristic 5 User Description
-//      {
-//        { ATT_BT_UUID_SIZE, charUserDescUUID },
-//        GATT_PERMIT_READ,
-//        0,
-//        simpleProfileChar5UserDesp
-//      },
-      
       /***************************************************************************/
       // BTPWriteChannel Declaration
     {
@@ -493,18 +308,6 @@ CONST gattServiceCBs_t simpleProfileCBs =
 bStatus_t SimpleProfile_AddService( uint32 services )
 {
   uint8 status;
-
-//  // Allocate Client Characteristic Configuration table
-//  simpleProfileChar4Config = (gattCharCfg_t *)ICall_malloc( sizeof(gattCharCfg_t) *
-//                                                            linkDBNumConns );
-//  if ( simpleProfileChar4Config == NULL )
-//  {
-//    return ( bleMemAllocError );
-//  }
-//
-//  // Initialize Client Characteristic Configuration attributes
-//  GATTServApp_InitCharCfg( INVALID_CONNHANDLE, simpleProfileChar4Config );
-  
   /***************************************************************************/
 	// Allocate Client Characteristic Configuration table
   BTPNotifyChannelConfig = (gattCharCfg_t *)ICall_malloc( sizeof(gattCharCfg_t) *
@@ -575,95 +378,34 @@ bStatus_t SimpleProfile_RegisterAppCBs( simpleProfileCBs_t *appCallbacks )
 bStatus_t SimpleProfile_SetParameter( uint8 param, uint8 len, void *value )
 {
   bStatus_t ret = SUCCESS;
+  uint8_t realLen = 0;
   switch ( param )
   {
-//    case SIMPLEPROFILE_CHAR1:
-//      if ( len == sizeof ( uint8 ) )
-//      {
-//        simpleProfileChar1 = *((uint8*)value);
-//      }
-//      else
-//      {
-//        ret = bleInvalidRange;
-//      }
-//      break;
-//
-//    case SIMPLEPROFILE_CHAR2:
-//      if ( len == sizeof ( uint8 ) )
-//      {
-//        simpleProfileChar2 = *((uint8*)value);
-//      }
-//      else
-//      {
-//        ret = bleInvalidRange;
-//      }
-//      break;
-//
-//    case SIMPLEPROFILE_CHAR3:
-//      if ( len == sizeof ( uint8 ) )
-//      {
-//        simpleProfileChar3 = *((uint8*)value);
-//      }
-//      else
-//      {
-//        ret = bleInvalidRange;
-//      }
-//      break;
-//
-//    case SIMPLEPROFILE_CHAR4:
-//      if ( len == sizeof ( uint8 ) )
-//      {
-//        simpleProfileChar4 = *((uint8*)value);
-//
-//        // See if Notification has been enabled
-//        GATTServApp_ProcessCharCfg( simpleProfileChar4Config, &simpleProfileChar4, FALSE,
-//                                    simpleProfileAttrTbl, GATT_NUM_ATTRS( simpleProfileAttrTbl ),
-//                                    INVALID_TASK_ID, simpleProfile_ReadAttrCB );
-//      }
-//      else
-//      {
-//        ret = bleInvalidRange;
-//      }
-//      break;
-//
-//    case SIMPLEPROFILE_CHAR5:
-//      if ( len == SIMPLEPROFILE_CHAR5_LEN )
-//      {
-//        VOID memcpy( simpleProfileChar5, value, SIMPLEPROFILE_CHAR5_LEN );
-//      }
-//      else
-//      {
-//        ret = bleInvalidRange;
-//      }
-//	    break;
 	  /***************************************************************************/
 	  case SIMPLEPROFILE_BTPWrite:
-      if ( len == BTPWRITECHANNEL_LEN )
-      {
-        VOID memcpy( BTPWriteChannelBuf, value, BTPWRITECHANNEL_LEN );
-      }
-      else
-      {
-        ret = bleInvalidRange;
-      }
+	    realLen = BTP_DataMsg.WriteServiceBuffer.DataBufMaxSize - piLoopQueue->QueueLength(&BTP_DataMsg.WriteServiceBuffer);
+	    if (realLen > BTPWRITECHANNEL_LEN){
+	        /* 数据缓冲区溢出 */
+	        realLen = BTPWRITECHANNEL_LEN;
+	    }
+	    piLoopQueue->EnQueue(&BTP_DataMsg.WriteServiceBuffer, BTPWriteChannelBuf, realLen);
       break;
 
 	 case SIMPLEPROFILE_BTPNotify:
-      if ( len == BTPNOTITYCHANNEL_LEN )
-      {
-        BTPNotifyCnt = (BTPNotifyCnt >= 255) ? 0 : (BTPNotifyCnt + 1);
-		VOID memcpy( BTPNotifyChannelProfile, value, BTPNOTITYCHANNEL_LEN );
-//		Display_print1(dispHandle, SBP_ROW_RESULT, 0, "BTPNotify: %d", BTPNotifyCnt);
-//		Display_print0(dispHandle, SBP_ROW_STATUS_1, 0, Util_convertBdAddr2Str(BTPNotifyChannelProfile));
-        // See if Notification has been enabled
-        GATTServApp_ProcessCharCfg( BTPNotifyChannelConfig, BTPNotifyChannelProfile, FALSE,
-                                    simpleProfileAttrTbl, GATT_NUM_ATTRS( simpleProfileAttrTbl ),
-                                    INVALID_TASK_ID, simpleProfile_ReadAttrCB );
-      }
-      else
-      {
-        ret = bleInvalidRange;
-      }
+	     realLen = piLoopQueue->QueueLength(&BTP_DataMsg.NotifyServiceBuffer);
+	     if (realLen == 0){
+	         ret = bleInvalidRange;
+	         break;
+	     }
+//	     if (realLen > BTPWRITECHANNEL_LEN){
+//	         /* 数据缓冲区溢出 */
+//	         realLen = BTPWRITECHANNEL_LEN;
+//	     }
+//	     piLoopQueue->EnQueue(&BTP_DataMsg.NotifyServiceBuffer, BTPNotifyChannelProfile, realLen);
+	     // See if Notification has been enabled
+	     GATTServApp_ProcessCharCfg( BTPNotifyChannelConfig, BTPNotifyChannelProfile, FALSE,
+	                                 simpleProfileAttrTbl, GATT_NUM_ATTRS( simpleProfileAttrTbl ),
+	                                 INVALID_TASK_ID, simpleProfile_ReadAttrCB );
       break;
 	/***************************************************************************/
 	  
@@ -691,43 +433,32 @@ bStatus_t SimpleProfile_SetParameter( uint8 param, uint8 len, void *value )
 bStatus_t SimpleProfile_GetParameter( uint8 param, void *value )
 {
   bStatus_t ret = SUCCESS;
+  uint8_t realLen = 0;
   switch ( param )
   {
-//    case SIMPLEPROFILE_CHAR1:
-//      *((uint8*)value) = simpleProfileChar1;
-//      break;
-//
-//    case SIMPLEPROFILE_CHAR2:
-//      *((uint8*)value) = simpleProfileChar2;
-//      break;
-//
-//    case SIMPLEPROFILE_CHAR3:
-//      *((uint8*)value) = simpleProfileChar3;
-//      break;
-//
-//    case SIMPLEPROFILE_CHAR4:
-//      *((uint8*)value) = simpleProfileChar4;
-//      break;
-//
-//    case SIMPLEPROFILE_CHAR5:
-//      VOID memcpy( value, simpleProfileChar5, SIMPLEPROFILE_CHAR5_LEN );
-//      break;
-	
 	/***************************************************************************/
 	case SIMPLEPROFILE_BTPWrite:
-//	  if (BTPWriteCnt != BTPWriteCntBackup)
-//	  {
-//	      BTPWriteCntBackup = (BTPWriteCntBackup >= 255)? 0 : (BTPWriteCntBackup + 1);
-//          Display_print1(dispHandle, SBP_ROW_ROLESTATE, 0, "BTPWrite: %d", BTPWriteCnt);
-////          Display_print0(dispHandle, SBP_ROW_BDADDR, 0, Util_convertBdAddr2Str(BTPWriteChannelBuf));
-          VOID memcpy( value, BTPWriteChannelBuf, BTPWRITECHANNEL_LEN );
-//	  }else{
-//	      ret = INVALIDPARAMETER;
-//	  }
+	    realLen = piLoopQueue->QueueLength(&BTP_DataMsg.WriteServiceBuffer);
+	    if (realLen == 0){
+	        break;
+	    }
+	    if (realLen > BTPWRITECHANNEL_LEN){
+            /* 数据缓冲区溢出 */
+            realLen = BTPWRITECHANNEL_LEN;
+	    }
+	    piLoopQueue->DeQueue(&BTP_DataMsg.WriteServiceBuffer, value, realLen);
       break;
 	
 	case SIMPLEPROFILE_BTPNotify:
-      VOID memcpy( value, BTPNotifyChannelProfile, BTPNOTITYCHANNEL_LEN );
+	    realLen = piLoopQueue->QueueLength(&BTP_DataMsg.NotifyServiceBuffer);
+	    if (realLen == 0){
+	        break;
+	    }
+	    if (realLen > BTPWRITECHANNEL_LEN){
+	        /* 数据缓冲区溢出 */
+	        realLen = BTPWRITECHANNEL_LEN;
+	    }
+	    piLoopQueue->DeQueue(&BTP_DataMsg.NotifyServiceBuffer, value, realLen);
       break;
 	/***************************************************************************/
 	  
@@ -761,7 +492,7 @@ static bStatus_t simpleProfile_ReadAttrCB(uint16_t connHandle,
                                           uint8_t method)
 {
   bStatus_t status = SUCCESS;
-
+  uint8_t realLen = 0;
   // Make sure it's not a blob operation (no attributes in the profile are long)
   if ( offset > 0 )
   {
@@ -774,26 +505,6 @@ static bStatus_t simpleProfile_ReadAttrCB(uint16_t connHandle,
     uint16 uuid = BUILD_UINT16( pAttr->type.uuid[0], pAttr->type.uuid[1]);
     switch ( uuid )
     {
-      // No need for "GATT_SERVICE_UUID" or "GATT_CLIENT_CHAR_CFG_UUID" cases;
-      // gattserverapp handles those reads
-
-      // characteristics 1 and 2 have read permissions
-      // characteritisc 3 does not have read permissions; therefore it is not
-      //   included here
-      // characteristic 4 does not have read permissions, but because it
-      //   can be sent as a notification, it is included here
-//      case SIMPLEPROFILE_CHAR1_UUID:
-//      case SIMPLEPROFILE_CHAR2_UUID:
-//      case SIMPLEPROFILE_CHAR4_UUID:
-//        *pLen = 1;
-//        pValue[0] = *pAttr->pValue;
-//        break;
-//
-//      case SIMPLEPROFILE_CHAR5_UUID:
-//        *pLen = SIMPLEPROFILE_CHAR5_LEN;
-//        VOID memcpy( pValue, pAttr->pValue, SIMPLEPROFILE_CHAR5_LEN );
-//        break;
-	
 	/***************************************************************************/
 //      case BTPWriteChannel_UUID:
 //        *pLen = BTPWRITECHANNEL_LEN;
@@ -801,8 +512,16 @@ static bStatus_t simpleProfile_ReadAttrCB(uint16_t connHandle,
 //        break;
 		
 	  case BTPNotifyChannel_UUID:
-        *pLen = BTPNOTITYCHANNEL_LEN;
-        VOID memcpy( pValue, pAttr->pValue, BTPNOTITYCHANNEL_LEN );
+	      realLen = piLoopQueue->QueueLength(&BTP_DataMsg.NotifyServiceBuffer);
+	      if (realLen == 0){
+	          break;
+	      }
+	      if (realLen > BTPWRITECHANNEL_LEN){
+	          /* 数据缓冲区溢出 */
+	          realLen = BTPWRITECHANNEL_LEN;
+	      }
+	      *pLen = realLen;
+	      piLoopQueue->DeQueue(&BTP_DataMsg.NotifyServiceBuffer, pValue, realLen);
         break;
 	/***************************************************************************/
 		
@@ -851,51 +570,16 @@ static bStatus_t simpleProfile_WriteAttrCB(uint16_t connHandle,
     uint16 uuid = BUILD_UINT16( pAttr->type.uuid[0], pAttr->type.uuid[1]);
     switch ( uuid )
     {
-//      case SIMPLEPROFILE_CHAR1_UUID:
-//      case SIMPLEPROFILE_CHAR3_UUID:
-//
-//        // Validate the value
-//        // Make sure it's not a blob oper
-//        if ( offset == 0 )
-//        {
-//          if ( len != 1 )
-//          {
-//            status = ATT_ERR_INVALID_VALUE_SIZE;
-//          }
-//        }
-//        else
-//        {
-//          status = ATT_ERR_ATTR_NOT_LONG;
-//        }
-//
-//        //Write the value
-//        if ( status == SUCCESS )
-//        {
-//          uint8 *pCurValue = (uint8 *)pAttr->pValue;
-//          *pCurValue = pValue[0];
-//
-//          if( pAttr->pValue == &simpleProfileChar1 )
-//          {
-//            notifyApp = SIMPLEPROFILE_CHAR1;
-//          }
-//          else
-//          {
-//            notifyApp = SIMPLEPROFILE_CHAR3;
-//          }
-//        }
-//
-//        break;
-		
-		/***************************************************************************/
+      /***************************************************************************/
 	  case BTPWriteChannel_UUID:
 	  	// Validate the value
         // Make sure it's not a blob oper
         if ( offset == 0 )
         {
-          if ( len != BTPWRITECHANNEL_LEN )
-          {
-            status = ATT_ERR_INVALID_VALUE_SIZE;
-          }
+            if ( len > BTPWRITECHANNEL_LEN )
+            {
+                status = ATT_ERR_INVALID_VALUE_SIZE;
+            }
         }
         else
         {
@@ -905,15 +589,7 @@ static bStatus_t simpleProfile_WriteAttrCB(uint16_t connHandle,
 		//Write the value
         if ( status == SUCCESS )
         {
-          uint8 *pCurValue = (uint8 *)pAttr->pValue;
-
-          BTPWriteCnt = (BTPWriteCnt >= 255) ? 0 : (BTPWriteCnt + 1);
-          VOID memcpy( pCurValue, pValue, BTPNOTITYCHANNEL_LEN );
-          /* Send data by UART */
-          if (BTPWriteCnt != BTPWriteCntBackup){
-              BTPWriteCntBackup = (BTPWriteCntBackup >= 255)? 0 : (BTPWriteCntBackup + 1);
-              UART_write(uart, pCurValue, BTPWRITECHANNEL_LEN);
-          }
+          UART_write(uart, pValue, len);
           if( pAttr->pValue == BTPWriteChannelBuf )
           {
             notifyApp = SIMPLEPROFILE_BTPWrite;

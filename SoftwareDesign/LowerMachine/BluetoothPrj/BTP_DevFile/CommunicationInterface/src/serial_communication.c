@@ -109,33 +109,22 @@ static void SerialCommunication_init(void)
  *
  * @return  None.
  */
-static uint8 readDataLen = 0;
+//static uint8 readDataLen = 0;
 static void SerialCommunication_taskFxn(UArg a0, UArg a1)
 {
     char ret = 0;
+    uint8_t readData = 0;
     // Initialize application
     SerialCommunication_init();
 
     // Application main loop
     for (;;)
     {
-//        /* Send data from UART */
-//        if (BTPWriteCnt != BTPWriteCntBackup){
-//            BTPWriteCntBackup = (BTPWriteCntBackup >= 255)? 0 : (BTPWriteCntBackup + 1);
-//            UART_write(uart, BTPWriteChannelBuf, BTPWRITECHANNEL_LEN);
-//        }
         /* Read data from UART */
-        ret = UART_read(uart, &BTPNotifyChannelProfile[readDataLen], (BTPNOTITYCHANNEL_LEN - readDataLen));
+        ret = UART_read(uart, &readData, 1);
         if (ret > 0){
-            readDataLen += ret;
-            ret = 0x00;
-            if (readDataLen == BTPNOTITYCHANNEL_LEN){
-                readDataLen = 0x00;
-//                UART_write(uart, BTPNotifyChannelProfile, BTPNOTITYCHANNEL_LEN);
-                BTPNotifyCntBackup = (BTPNotifyCntBackup >= 255)? 0 : (BTPNotifyCntBackup + 1);
-//                SimpleProfile_SetParameter(SIMPLEPROFILE_BTPNotify, BTPNOTITYCHANNEL_LEN, BTPNotifyChannelProfile);
-            }else if (readDataLen > BTPNOTITYCHANNEL_LEN){
-                // error status
+            if (piLoopQueue->EnQueue(&BTP_DataMsg.NotifyServiceBuffer, &readData, 1) < 1){
+                /* Buffer is Full */
             }
         }
     }

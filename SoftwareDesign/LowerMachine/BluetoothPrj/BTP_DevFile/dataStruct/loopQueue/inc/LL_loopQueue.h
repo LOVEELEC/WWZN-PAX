@@ -26,16 +26,15 @@ typedef uint8_t   LoopDataWidth;
 /* Exported constants --------------------------------------------------------*/     
 /* Exported macro ------------------------------------------------------------*/
 #define LOOPDATABUFMAXSIZE              (1024)     
-#define USE_MALLOC_DEFINE_BUF_SIZE     
+//#define USE_MALLOC_DEFINE_BUF_SIZE
 /* Exported functions --------------------------------------------------------*/
 /* Exported variables --------------------------------------------------------*/
 typedef struct _loopQueueStructDef
 {
     #ifndef USE_MALLOC_DEFINE_BUF_SIZE
     LoopDataWidth dataBuf[LOOPDATABUFMAXSIZE];
-    #else
-    LoopDataWidth *pdataBuf;
     #endif
+    LoopDataWidth *pdataBuf;
     uint32_t dataPtrIn;
     uint32_t dataPtrOut;
     uint32_t DataBufMaxSize;                        // 用于记录数据空间的大小

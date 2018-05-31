@@ -50,6 +50,7 @@ static bool InitQueue(ploopQueue pploopQueue, uint32_t dataLen)
 {
     memset(pploopQueue,0x00,sizeof(loopQueue));
     pploopQueue->DataBufMaxSize = sizeof(pploopQueue->dataBuf);
+    pploopQueue->pdataBuf = pploopQueue->dataBuf;
     return (true);
 }  
 

@@ -185,7 +185,7 @@ all: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@$(MAKE) --no-print-directory -Onone "ble5_simple_peripheral_cc2640r2lp_app.out"
 
 dependents:
-	-cd C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/ble5_simple_peripheral_cc2640r2lp_stack_library/FlashROM_Library && $(MAKE) clean all
+	-cd C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/ble5_simple_peripheral_cc2640r2lp_stack_library/FlashROM_Library && $(MAKE) all
 
 # Tool invocations
 ble5_simple_peripheral_cc2640r2lp_app.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS) C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/ble5_simple_peripheral_cc2640r2lp_stack_library/FlashROM_Library/ble5_simple_peripheral_cc2640r2lp_stack_library.lib

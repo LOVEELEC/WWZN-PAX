@@ -91,7 +91,7 @@
 
 #include "simple_peripheral.h"
 
-
+#include "simple_gatt_profile.h"
 
 /*********************************************************************
  * CONSTANTS
@@ -376,6 +376,7 @@ static uint8_t rspTxRetry = 0;
  * LOCAL FUNCTIONS
  */
 static void SerialCommunication_init(void);
+static void SimpleBLEPeripheral_ServiceBufferInit(void);
 static void SimpleBLEPeripheral_init( void );
 static void SimpleBLEPeripheral_taskFxn(UArg a0, UArg a1);
 
@@ -504,6 +505,12 @@ static void SerialCommunication_init(void)
     }
 }
 
+
+static void SimpleBLEPeripheral_ServiceBufferInit(void)
+{
+    piLoopQueue->InitQueue(&BTP_DataMsg.WriteServiceBuffer,sizeof(BTP_DataMsg.WriteServiceBuffer.dataBuf));
+    piLoopQueue->InitQueue(&BTP_DataMsg.NotifyServiceBuffer,sizeof(BTP_DataMsg.WriteServiceBuffer.dataBuf));
+}
 /*********************************************************************
  * @fn      SimpleBLEPeripheral_init
  *
@@ -525,6 +532,7 @@ static void SimpleBLEPeripheral_init(void)
   // so that the application can send and receive messages.
   ICall_registerApp(&selfEntity, &syncEvent);
 
+  SimpleBLEPeripheral_ServiceBufferInit();
 #ifdef USE_RCOSC
   RCOSC_enableCalibration();
 #endif // USE_RCOSC
@@ -1413,7 +1421,7 @@ static void SimpleBLEPeripheral_charValueChangeCB(uint8_t paramID)
 static void SimpleBLEPeripheral_processCharValueChangeEvt(uint8_t paramID)
 {
 #ifndef FEATURE_OAD_ONCHIP
-  uint8_t newValue;
+//  uint8_t newValue;
 
   switch(paramID)
   {
@@ -1449,66 +1457,20 @@ static void SimpleBLEPeripheral_processCharValueChangeEvt(uint8_t paramID)
  *
  * @return  None.
  */
-/***************************************************************************/
-#ifdef TEST_USART
-static uint8 gsnu8readDataLen = 0;
-#endif
-/***************************************************************************/
 static void SimpleBLEPeripheral_performPeriodicTask(void)
 {
 #ifndef FEATURE_OAD_ONCHIP
-  uint8_t valueToCopy;
-
+//  uint8_t valueToCopy;
+//    uint8_t dataLen = piLoopQueue->QueueLength(&BTP_DataMsg.NotifyServiceBuffer);
 	/***************************************************************************/
-    int_fast32_t gsn8ret = 0;
-    uint8_t charValue6[BTPNOTITYCHANNEL_LEN] = { 'a', 'b', 'c', 'd', 'e', 'f' };
 	
 	/***************************************************************************/
-// // Call to retrieve the value of the third characteristic in the profile
-//  if (SimpleProfile_GetParameter(SIMPLEPROFILE_CHAR3, &valueToCopy) == SUCCESS)
-//  {
-//    // Call to set that value of the fourth characteristic in the profile.
-//    // Note that if notifications of the fourth characteristic have been
-//    // enabled by a GATT client device, then a notification will be sent
-//    // every time this function is called.
-//    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR4, sizeof(uint8_t),
-//                               &valueToCopy);
-//  }
-	/***************************************************************************/
-#ifdef TEST_USART
-//    /* Send data by UART */
-//    if (BTPWriteCnt != BTPWriteCntBackup){
-//        BTPWriteCntBackup = (BTPWriteCntBackup >= 255)? 0 : (BTPWriteCntBackup + 1);
-//        if (SimpleProfile_GetParameter(SIMPLEPROFILE_BTPWrite, charValue6) == SUCCESS){
-//            UART_write(uart, charValue6, BTPWRITECHANNEL_LEN);
-//        }
-//    }
 
+	/***************************************************************************/
     /* NOTIFY  */
-    if (BTPNotifyCnt != BTPNotifyCntBackup){
-        SimpleProfile_SetParameter(SIMPLEPROFILE_BTPNotify, BTPNOTITYCHANNEL_LEN, BTPNotifyChannelProfile);
-    }
-//    /* Read data from UART */
-//    gsn8ret = UART_read(uart, &charValue6[gsnu8readDataLen], (BTPNOTITYCHANNEL_LEN - gsnu8readDataLen));
-////    gsn8ret = UART_readPolling(uart, &charValue6[gsnu8readDataLen], (BTPNOTITYCHANNEL_LEN - gsnu8readDataLen));
-//    if (gsn8ret > 0){
-//        gsnu8readDataLen += gsn8ret;
-//        gsn8ret = 0x00;
-//        if (gsnu8readDataLen == BTPNOTITYCHANNEL_LEN){
-//            gsnu8readDataLen = 0x00;
-//            SimpleProfile_SetParameter(SIMPLEPROFILE_BTPNotify, BTPNOTITYCHANNEL_LEN, charValue6);
-//        }else if (gsnu8readDataLen > BTPNOTITYCHANNEL_LEN){
-//            // error status
-//            gsnu8readDataLen = 0;
-//        }
+//    if (dataLen){
+        SimpleProfile_SetParameter(SIMPLEPROFILE_BTPNotify, BTPNOTITYCHANNEL_LEN, (void *)0);
 //    }
-#else
-//  	if (SimpleProfile_GetParameter(SIMPLEPROFILE_BTPWrite, charValue6) == SUCCESS)
-//  	{
-//		SimpleProfile_SetParameter(SIMPLEPROFILE_BTPNotify, BTPNOTITYCHANNEL_LEN, charValue6);
-//	}
-//	SimpleProfile_SetParameter(SIMPLEPROFILE_BTPNotify, BTPNOTITYCHANNEL_LEN, charValue6);
-#endif
 	/***************************************************************************/
 #endif //!FEATURE_OAD_ONCHIP
 }
