@@ -16,5 +16,5 @@ V0.0.3
 	+ 目前还未将Characteristic Value指向的位置变成循环队列的数据入口
 
 V0.0.4
-	+ 将Characteristic Value指向的位置变成循环队列的数据入口
+	+ 将Characteristic Value指向的位置变成循环队列的数据入口So
 	

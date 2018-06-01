@@ -663,6 +663,19 @@ static void SimpleBLEPeripheral_init(void)
     GAPBondMgr_SetParameter(GAPBOND_BONDING_ENABLED, sizeof(uint8_t), &bonding);
   }
 
+//  // Setup the GAP Bond Manager
+//    {
+//      uint8_t pairMode = GAPBOND_PAIRING_MODE_WAIT_FOR_REQ;
+//      uint8_t mitm = FALSE;
+//      uint8_t ioCap = GAPBOND_IO_CAP_NO_INPUT_NO_OUTPUT;
+//      uint8_t bonding = TRUE;
+//
+//      GAPBondMgr_SetParameter(GAPBOND_PAIRING_MODE, sizeof(uint8_t), &pairMode);
+//      GAPBondMgr_SetParameter(GAPBOND_MITM_PROTECTION, sizeof(uint8_t), &mitm);
+//      GAPBondMgr_SetParameter(GAPBOND_IO_CAPABILITIES, sizeof(uint8_t), &ioCap);
+//      GAPBondMgr_SetParameter(GAPBOND_BONDING_ENABLED, sizeof(uint8_t), &bonding);
+//    }
+
   // Initialize GATT attributes
   GGS_AddService(GATT_ALL_SERVICES);           // GAP GATT Service
   GATTServApp_AddService(GATT_ALL_SERVICES);   // GATT Service
