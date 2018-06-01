@@ -104,13 +104,6 @@ typedef struct _BTP_DataMsg_Struct_Def{
     loopQueue NotifyServiceBuffer;
 } BTP_DataMsg_Struct, *pBTP_DataMsg_Struct;
 
-//extern uint8 BTPWriteChannelBuf[BTPWRITECHANNEL_LEN];
-//extern uint8 BTPNotifyChannelProfile[BTPNOTITYCHANNEL_LEN];
-//extern uint8 BTPWriteCntBackup;
-//extern uint8 BTPWriteCnt;
-//extern uint8 BTPNotifyCnt;
-//extern uint8 BTPNotifyCntBackup;
-
 extern UART_Handle uart;
 extern BTP_DataMsg_Struct BTP_DataMsg;
 /***************************************************************************/
