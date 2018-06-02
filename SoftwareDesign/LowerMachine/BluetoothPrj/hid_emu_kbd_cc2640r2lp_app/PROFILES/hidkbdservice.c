@@ -145,10 +145,54 @@ static CONST uint8 hidInfo[HID_INFORMATION_LEN] =
   HID_KBD_FLAGS                                   // Flags
 };
 
+/************************************************/
+#define TEST_HID_MANUFACTURER_CUSTOM_EQUIPMENT
+/************************************************/
+
 // HID Report Map characteristic value
 // Keyboard report descriptor (using format for Boot interface descriptor)
 static CONST uint8 hidReportMap[] =
 {
+/************************************************/
+#ifdef TEST_HID_MANUFACTURER_CUSTOM_EQUIPMENT
+#define HID_IN_PACKET                   21
+#define HID_OUT_PACKET                  21
+    0x06, 0xA0, 0xFF,       /* USAGE_PAGE (Vendor Page: 0xFFA0) */
+    0x09, 0x01,             /* USAGE (Demo Kit)               */
+    0xa1, 0x01,             /* COLLECTION (Application)       */
+    0x09, 0x02,             /* */
+    0xA1, 0x00,
+    0x06, 0xA1, 0xFF,
+    /* 13 */
+
+    //ÊäÈë±¨¸æ
+    0x09, 0x03,
+    0x09, 0x04,
+    0x15, 0x00,
+    0x25, 0x7F,
+    0x35, 0x00,
+    0x45, 0xFF,
+    0x75, 0x08,
+    0x95, HID_IN_PACKET,
+    0x81, 0x02,
+    /* 31 */
+
+    // Êä³ö±¨¸æ
+    0x09, 0x05,
+    0x09, 0x06,
+    0x15, 0x00,
+    0x25, 0x7F,
+    0x35, 0x00,
+    0x45, 0xFF,
+    0x75, 0x08,
+    0x95, HID_OUT_PACKET,
+    0x91, 0x02,
+    /* 49 */
+    0xC0,
+    0xC0
+    /* 51 */
+#else
+/************************************************/
   0x05, 0x01,     // Usage Pg (Generic Desktop)
   0x09, 0x06,     // Usage (Keyboard)
   0xA1, 0x01,     // Collection: (Application)
@@ -184,7 +228,8 @@ static CONST uint8 hidReportMap[] =
                   //
                   // Key arrays (6 bytes)
   0x95, 0x06,     // Report Count (6)
-  0x75, 0x08,     // Report Size (8)
+//  0x75, 0x08,     // Report Size (8)
+  0x75, 0x0A,     // Report Size (10)
   0x15, 0x00,     // Log Min (0)
   0x25, 0x65,     // Log Max (101)
   0x05, 0x07,     // Usage Pg (Key Codes)
@@ -193,6 +238,7 @@ static CONST uint8 hidReportMap[] =
   0x81, 0x00,     // Input: (Data, Array)
                   //
   0xC0            // End Collection
+#endif
 };
 
 // HID report map length

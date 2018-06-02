@@ -88,7 +88,8 @@
 #define MOUSE_BUTTON_NONE           0x00
 
 // HID keyboard input report length
-#define HID_KEYBOARD_IN_RPT_LEN     8
+//#define HID_KEYBOARD_IN_RPT_LEN     8
+#define HID_KEYBOARD_IN_RPT_LEN     21
 
 // HID LED output report length
 #define HID_LED_OUT_RPT_LEN         1
@@ -476,7 +477,7 @@ void HidEmuKbd_init(void)
   HidDev_StartDevice();
 
   // Initialize keys on SmartRF06EB.
-  Board_initKeys(HidEmuKbd_keyPressHandler);
+  Board_initKeys(HidEmuKbd_keyPressHandler);        // °´¼ü³õÊ¼»¯
 
   // Register with GAP for HCI/Host messages
   GAP_RegisterForMsgs(selfEntity);
@@ -489,7 +490,7 @@ void HidEmuKbd_init(void)
 #endif // !defined (USE_LL_CONN_PARAM_UPDATE)
   
   // Use default data Tx / Rx data length and times
-  HCI_EXT_SetMaxDataLenCmd(LL_MIN_LINK_DATA_LEN, LL_MIN_LINK_DATA_TIME, LL_MIN_LINK_DATA_LEN, LL_MIN_LINK_DATA_TIME);
+  HCI_EXT_SetMaxDataLenCmd(LL_MIN_LINK_DATA_LEN, LL_MIN_LINK_DATA_TIME, LL_MIN_LINK_DATA_LEN, LL_MIN_LINK_DATA_TIME);   // Set Payload Size
 }
 
 /*********************************************************************
@@ -779,6 +780,7 @@ static void HidEmuKbd_sendReport(uint8_t keycode)
 {
   uint8_t buf[HID_KEYBOARD_IN_RPT_LEN];
 
+  memset(buf, 0, HID_KEYBOARD_IN_RPT_LEN);
   buf[0] = 0;         // Modifier keys
   buf[1] = 0;         // Reserved
   buf[2] = keycode;   // Keycode 1
@@ -787,6 +789,11 @@ static void HidEmuKbd_sendReport(uint8_t keycode)
   buf[5] = 0;         // Keycode 4
   buf[6] = 0;         // Keycode 5
   buf[7] = 0;         // Keycode 6
+
+  buf[HID_KEYBOARD_IN_RPT_LEN -4] = 't';
+  buf[HID_KEYBOARD_IN_RPT_LEN -3] = 'e';
+  buf[HID_KEYBOARD_IN_RPT_LEN -2] = 's';
+  buf[HID_KEYBOARD_IN_RPT_LEN -1] = 't';
 
   HidDev_Report(HID_RPT_ID_KEY_IN, HID_REPORT_TYPE_INPUT,
                 HID_KEYBOARD_IN_RPT_LEN, buf);
