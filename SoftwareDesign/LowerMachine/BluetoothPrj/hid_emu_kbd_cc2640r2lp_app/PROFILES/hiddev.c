@@ -146,7 +146,7 @@
 #ifdef HID_DEV_RPT_QUEUE_LEN
   #define HID_DEV_REPORT_Q_SIZE               (HID_DEV_RPT_QUEUE_LEN+1)
 #else
-  #define HID_DEV_REPORT_Q_SIZE               (21)
+  #define HID_DEV_REPORT_Q_SIZE               (21+1)
 #endif
 
 // HID Auto Sync White List configuration parameter. This parameter should be
