@@ -148,6 +148,11 @@
 			<locationURI>SRC_BLE_DIR/target/board.c</locationURI>
 		</link>
 		<link>
+			<name>Startup/readme.txt</name>
+			<type>1</type>
+			<location>C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/hid_emu_kbd_cc2640r2lp_app/Startup/readme.txt</location>
+		</link>
+		<link>
 			<name>TOOLS/cc26xx_app.cmd</name>
 			<type>1</type>
 			<locationURI>SRC_BLE_DIR/common/cc26xx/ccs/cc26xx_app.cmd</locationURI>
