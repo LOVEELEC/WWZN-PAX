@@ -164,8 +164,9 @@ int main()
 
   /* Register Application callback to trap asserts raised in the Stack */
   RegisterAssertCback(AssertHandler);
-//  SerialCommunication_init();
+
   PIN_init(BoardGpioInitTable);
+  SerialCommunication_init();
 
 #ifdef CC1350_LAUNCHXL
   // Enable 2.4GHz Radio
@@ -216,14 +217,13 @@ int main()
   /* Kick off profile - Priority 3 */
   GAPRole_createTask();
 
-
     /* Kick off HID service task - Priority 2 */
     HidDev_createTask();
 
     /* Kick off application - Priority 1 */
     HidEmuKbd_createTask();
 
-//    SerialCommunication_createTask();
+    SerialCommunication_createTask();
   /* enable interrupts and start SYS/BIOS */
   BIOS_start();
 

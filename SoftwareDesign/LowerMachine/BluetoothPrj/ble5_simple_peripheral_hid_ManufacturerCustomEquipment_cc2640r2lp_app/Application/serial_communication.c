@@ -20,6 +20,8 @@
 #include "serial_communication.h"
 #include "util.h"
 
+#include "hiddev.h"
+#include "hidkbdservice.h"
 /*********************************************************************
  * CONSTANTS
  */
@@ -98,7 +100,7 @@ void SerialCommunication_init(void)
 {
     UART_Params uartParams;
 
-//    SimpleBLEPeripheral_ServiceBufferInit();
+    SimpleBLEPeripheral_ServiceBufferInit();
 
     /* Call driver init functions */
     UART_init();
@@ -115,7 +117,7 @@ void SerialCommunication_init(void)
 
     if (uart == NULL) {
         /* UART_open() failed */
-//        while (1);
+        while (1);
     }
 }
 
@@ -159,34 +161,43 @@ void SerialCommunication_init(void)
 static void SerialCommunication_taskFxn(UArg a0, UArg a1)
 {
     char ret = 0;
-    uint8_t realLen = 0x00;
+    uint16_t realLen = 0x00;
     uint8_t readData[HID_IN_PACKET] = {0};
 
     char        input;
     const char  string[] = "hello world!\r\n";
     // Initialize application
-    SerialCommunication_init();
+//    SerialCommunication_init();
+    if (uart == NULL) {
+        /* UART_open() failed */
+        while (1);
+    }
 
     // Application main loop
     UART_write(uart, string, sizeof(string));
     for (;;)
     {
-        UART_read(uart, &input, 1);
-        UART_write(uart, &input, 1);
-//        /* Read data from UART */
-//        ret = UART_read(uart, readData, HID_IN_PACKET);
-//        if (ret > 0){
-//            realLen = BTP_DataMsg.WriteServiceBuffer.DataBufMaxSize - piLoopQueue->QueueLength(&BTP_DataMsg.WriteServiceBuffer);
-//            if (realLen >= HID_IN_PACKET){
-//                if (piLoopQueue->EnQueue(&BTP_DataMsg.NotifyServiceBuffer, readData, HID_IN_PACKET) ==  HID_IN_PACKET){
-//                    /* Enqueue the message */
+//        UART_read(uart, &input, 1);
+//        UART_write(uart, &input, 1);
+//        UART_read(uart, readData, HID_IN_PACKET);
+//        UART_write(uart, readData, HID_IN_PACKET);
+        /* Read data from UART */
+        ret = UART_read(uart, readData, HID_IN_PACKET);
+        if (ret == HID_IN_PACKET){
+            realLen = BTP_DataMsg.WriteServiceBuffer.DataBufMaxSize - piLoopQueue->QueueLength(&BTP_DataMsg.WriteServiceBuffer);
+            if (realLen >= HID_IN_PACKET){
+                if (piLoopQueue->EnQueue(&BTP_DataMsg.NotifyServiceBuffer, readData, HID_IN_PACKET) ==  HID_IN_PACKET){
+                    /* Enqueue the message */
+                    UART_write(uart, readData, HID_IN_PACKET);
+//                    HidDev_Report(HID_RPT_ID_KEY_IN, HID_REPORT_TYPE_INPUT,
+//                                  HID_IN_PACKET, readData);
 //                    HidBTP_enqueueMsg();
-//                }
-//            }else{
-//                /* Buffer is Full */
-//
-//            }
-//        }
+                }
+            }else{
+                /* Buffer is Full */
+
+            }
+        }
     }
 }
 /*********************************************************************
