@@ -105,7 +105,7 @@
 									<listOptionValue builtIn="false" value="ICALL_MAX_NUM_ENTITIES=6"/>
 									<listOptionValue builtIn="false" value="ICALL_MAX_NUM_TASKS=5"/>
 									<listOptionValue builtIn="false" value="ICALL_STACK0_ADDR"/>
-									<listOptionValue builtIn="false" value="POWER_SAVING"/>
+									<listOptionValue builtIn="false" value="xPOWER_SAVING"/>
 									<listOptionValue builtIn="false" value="RF_SINGLEMODE"/>
 									<listOptionValue builtIn="false" value="STACK_LIBRARY"/>
 									<listOptionValue builtIn="false" value="USE_ICALL"/>

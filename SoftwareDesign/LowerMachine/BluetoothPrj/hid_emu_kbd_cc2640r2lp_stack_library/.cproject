@@ -85,7 +85,7 @@
 									<listOptionValue builtIn="false" value="OSAL_CBTIMER_NUM_TASKS=1"/>
 									<listOptionValue builtIn="false" value="OSAL_MAX_NUM_PROXY_TASKS=3"/>
 									<listOptionValue builtIn="false" value="OSAL_SNV=1"/>
-									<listOptionValue builtIn="false" value="POWER_SAVING"/>
+									<listOptionValue builtIn="false" value="xPOWER_SAVING"/>
 									<listOptionValue builtIn="false" value="RF_SINGLEMODE"/>
 									<listOptionValue builtIn="false" value="STACK_LIBRARY"/>
 									<listOptionValue builtIn="false" value="USE_ICALL"/>
@@ -130,4 +130,5 @@
 			<content-type-mapping configuration="" content-type="org.eclipse.cdt.core.cxxSource" language="com.ti.ccstudio.core.TIGPPLanguage"/>
 		</project-mappings>
 	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 </cproject>
