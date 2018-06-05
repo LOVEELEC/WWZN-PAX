@@ -71,6 +71,7 @@
 
 #include "ble_user_config.h"
 
+#include "serial_communication.h"
 // BLE user defined configuration
 #ifdef ICALL_JT
 icall_userCfg_t user0Cfg = BLE_USER_CFG;
@@ -156,6 +157,7 @@ int main()
   /* Kick off application - Priority 1 */
   HidEmuKbd_createTask();
 
+//  SerialCommunication_createTask();
   /* enable interrupts and start SYS/BIOS */
   BIOS_start();
 

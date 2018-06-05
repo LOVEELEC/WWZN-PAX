@@ -73,6 +73,7 @@
 
 #include "hidemukbd.h"
 
+#include "serial_communication.h"
 /*********************************************************************
  * MACROS
  */
@@ -201,11 +202,11 @@ static ICall_EntityID selfEntity;
 
 // Event globally used to post local events and pend on system and
 // local events.
-static ICall_SyncHandle syncEvent;
+ICall_SyncHandle syncEvent;
 
 // Queue object used for app messages
 static Queue_Struct appMsg;
-static Queue_Handle appMsgQueue;
+Queue_Handle appMsgQueue;
 
 // Task configuration
 Task_Struct hidEmuKbdTask;
@@ -776,27 +777,33 @@ static void HidEmuKbd_handleKeys(uint8_t shift, uint8_t keys)
  *
  * @return  none
  */
+
+static uint8_t testPenDown[] = {0x02,0xe6,0x0f,0x00,0x00,0x02,0x64,0x00,0x06,0x00,0x01,0x46,0x00,0x35,0x00,0x77,0x06,0x5e,0x0b,0xce,0xba};
+static uint8_t testPenUp[] = {0x02,0xe7,0x0f,0x00,0x0a,0x02,0x00,0x00,0x06,0x00,0x01,0x46,0x00,0x35,0x00,0x69,0x06,0x54,0x0b,0x40,0x04};
 static void HidEmuKbd_sendReport(uint8_t keycode)
 {
-  uint8_t buf[HID_KEYBOARD_IN_RPT_LEN];
-
-  memset(buf, 0, HID_KEYBOARD_IN_RPT_LEN);
-  buf[0] = 0;         // Modifier keys
-  buf[1] = 0;         // Reserved
-  buf[2] = keycode;   // Keycode 1
-  buf[3] = 0;         // Keycode 2
-  buf[4] = 0;         // Keycode 3
-  buf[5] = 0;         // Keycode 4
-  buf[6] = 0;         // Keycode 5
-  buf[7] = 0;         // Keycode 6
-
-  buf[HID_KEYBOARD_IN_RPT_LEN -4] = 't';
-  buf[HID_KEYBOARD_IN_RPT_LEN -3] = 'e';
-  buf[HID_KEYBOARD_IN_RPT_LEN -2] = 's';
-  buf[HID_KEYBOARD_IN_RPT_LEN -1] = 't';
-
-  HidDev_Report(HID_RPT_ID_KEY_IN, HID_REPORT_TYPE_INPUT,
-                HID_KEYBOARD_IN_RPT_LEN, buf);
+    uint8_t buf[HID_KEYBOARD_IN_RPT_LEN];
+    if (keycode == 0x4F){
+        memcpy(buf, testPenDown, HID_KEYBOARD_IN_RPT_LEN);
+    }else{
+        memcpy(buf, testPenUp, HID_KEYBOARD_IN_RPT_LEN);
+    }
+    HidDev_Report(HID_RPT_ID_KEY_IN, HID_REPORT_TYPE_INPUT,
+                  HID_KEYBOARD_IN_RPT_LEN, buf);
+//    uint8_t buf[HID_KEYBOARD_IN_RPT_LEN];
+//    uint8_t realLen = piLoopQueue->QueueLength(&pBTP_DataMsg->WriteServiceBuffer);
+//    if (realLen < HID_KEYBOARD_IN_RPT_LEN){
+//        return;
+//    }
+//    if (realLen > HID_KEYBOARD_IN_RPT_LEN){
+//        /* 数据缓冲区溢出 */
+//        realLen = HID_KEYBOARD_IN_RPT_LEN;
+//    }
+//    memset(buf, 0, HID_KEYBOARD_IN_RPT_LEN);
+//    piLoopQueue->DeQueue(&pBTP_DataMsg->WriteServiceBuffer, buf, realLen);
+//
+//    HidDev_Report(HID_RPT_ID_KEY_IN, HID_REPORT_TYPE_INPUT,
+//                  HID_KEYBOARD_IN_RPT_LEN, buf);
 }
 
 #ifdef USE_HID_MOUSE

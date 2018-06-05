@@ -103,7 +103,7 @@
 									<listOptionValue builtIn="false" value="ICALL_JT"/>
 									<listOptionValue builtIn="false" value="ICALL_LITE"/>
 									<listOptionValue builtIn="false" value="ICALL_MAX_NUM_ENTITIES=6"/>
-									<listOptionValue builtIn="false" value="ICALL_MAX_NUM_TASKS=4"/>
+									<listOptionValue builtIn="false" value="ICALL_MAX_NUM_TASKS=5"/>
 									<listOptionValue builtIn="false" value="ICALL_STACK0_ADDR"/>
 									<listOptionValue builtIn="false" value="POWER_SAVING"/>
 									<listOptionValue builtIn="false" value="RF_SINGLEMODE"/>

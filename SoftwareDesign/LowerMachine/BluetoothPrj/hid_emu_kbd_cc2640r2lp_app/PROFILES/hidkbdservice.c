@@ -56,6 +56,8 @@
 #include "hiddev.h"
 #include "battservice.h"
 
+
+#include "serial_communication.h"
 /*********************************************************************
  * MACROS
  */
@@ -155,8 +157,6 @@ static CONST uint8 hidReportMap[] =
 {
 /************************************************/
 #ifdef TEST_HID_MANUFACTURER_CUSTOM_EQUIPMENT
-#define HID_IN_PACKET                   21
-#define HID_OUT_PACKET                  21
     0x06, 0xA0, 0xFF,       /* USAGE_PAGE (Vendor Page: 0xFFA0) */
     0x09, 0x01,             /* USAGE (Demo Kit)               */
     0xa1, 0x01,             /* COLLECTION (Application)       */
@@ -425,7 +425,8 @@ static gattAttribute_t hidAttrTbl[] =
       // HID Report characteristic, key input
       {
         { ATT_BT_UUID_SIZE, hidReportUUID },
-        GATT_PERMIT_ENCRYPT_READ,
+//        GATT_PERMIT_ENCRYPT_READ,
+        GATT_PERMIT_READ,
         0,
         &hidReportKeyIn
       },
