@@ -166,7 +166,7 @@ int main()
   RegisterAssertCback(AssertHandler);
 
   PIN_init(BoardGpioInitTable);
-  SerialCommunication_init();
+//  SerialCommunication_init();
 
 #ifdef CC1350_LAUNCHXL
   // Enable 2.4GHz Radio
@@ -208,6 +208,7 @@ int main()
   user0Cfg.appServiceInfo->timerTickPeriod = Clock_tickPeriod;
   user0Cfg.appServiceInfo->timerMaxMillisecond  = ICall_getMaxMSecs();
 #endif  /* ICALL_JT */
+//  SerialCommunication_init();
   /* Initialize ICall module */
   ICall_init();
 

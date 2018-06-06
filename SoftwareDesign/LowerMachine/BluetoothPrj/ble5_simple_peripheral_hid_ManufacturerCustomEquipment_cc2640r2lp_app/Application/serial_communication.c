@@ -47,8 +47,8 @@ UART_Handle uart;
 BTP_DataMsg_Struct BTP_DataMsg;
 pBTP_DataMsg_Struct pBTP_DataMsg = &BTP_DataMsg;
 
-//extern Queue_Handle appMsgQueue;
-//extern ICall_SyncHandle syncEvent;
+extern Queue_Handle appMsgQueue;
+extern ICall_SyncHandle syncEvent;
 /*********************************************************************
  * LOCAL FUNCTIONS
  */
@@ -121,6 +121,20 @@ void SerialCommunication_init(void)
     }
 }
 
+void SerialCommunication_Send(uint8_t * pbuf, uint16_t size)
+{
+//    uint16_t realLen = BTP_DataMsg.WriteServiceBuffer.DataBufMaxSize - piLoopQueue->QueueLength(&BTP_DataMsg.WriteServiceBuffer);
+//    if (realLen >= size){
+//        if (piLoopQueue->EnQueue(&BTP_DataMsg.WriteServiceBuffer, readData, size) ==  size){
+//            /* Enqueue the message */
+////            UART_write(uart, readData, HID_IN_PACKET);
+//        }
+//    }else{
+//        /* Buffer is Full */
+//
+//    }
+    UART_write(uart, pbuf, size);
+}
 /*********************************************************************
  * @fn      HidEmuKbd_enqueueMsg
  *
@@ -131,22 +145,22 @@ void SerialCommunication_init(void)
  *#define HIDEMUKBD_KEY_CHANGE_EVT              0x0001
  * @return  TRUE or FALSE
  */
-//static uint8_t HidBTP_enqueueMsg(void)
-//{
-//    hidBtpEvt_t *pMsg;
-//
-//  // Create dynamic pointer to message.
-//  if (pMsg = ICall_malloc(sizeof(hidBtpEvt_t)))
-//  {
-//    pMsg->hdr.event = 0x0001;
-//    pMsg->hdr.state = 0x50;
-//
-//    // Enqueue the message.
-//    return Util_enqueueMsg(appMsgQueue, syncEvent, (uint8_t *)pMsg);
-//  }
-//
-//  return FALSE;
-//}
+static uint8_t HidBTP_enqueueMsg(void)
+{
+    hidBtpEvt_t *pMsg;
+
+  // Create dynamic pointer to message.
+  if (pMsg = ICall_malloc(sizeof(hidBtpEvt_t)))
+  {
+    pMsg->hdr.event = 0x0001;
+    pMsg->hdr.state = 0x50;
+
+    // Enqueue the message.
+    return Util_enqueueMsg(appMsgQueue, syncEvent, (uint8_t *)pMsg);
+  }
+
+  return FALSE;
+}
 
 /*********************************************************************
  * @fn      SimpleBLEPeripheral_taskFxn
@@ -163,35 +177,25 @@ static void SerialCommunication_taskFxn(UArg a0, UArg a1)
     char ret = 0;
     uint16_t realLen = 0x00;
     uint8_t readData[HID_IN_PACKET] = {0};
-
-    char        input;
-    const char  string[] = "hello world!\r\n";
     // Initialize application
-//    SerialCommunication_init();
-    if (uart == NULL) {
-        /* UART_open() failed */
-        while (1);
-    }
+    SerialCommunication_init();
+//    if (uart == NULL) {
+//        /* UART_open() failed */
+//        while (1);
+//    }
 
     // Application main loop
-    UART_write(uart, string, sizeof(string));
     for (;;)
     {
-//        UART_read(uart, &input, 1);
-//        UART_write(uart, &input, 1);
-//        UART_read(uart, readData, HID_IN_PACKET);
-//        UART_write(uart, readData, HID_IN_PACKET);
         /* Read data from UART */
         ret = UART_read(uart, readData, HID_IN_PACKET);
         if (ret == HID_IN_PACKET){
-            realLen = BTP_DataMsg.WriteServiceBuffer.DataBufMaxSize - piLoopQueue->QueueLength(&BTP_DataMsg.WriteServiceBuffer);
+            realLen = BTP_DataMsg.NotifyServiceBuffer.DataBufMaxSize - piLoopQueue->QueueLength(&BTP_DataMsg.NotifyServiceBuffer);
             if (realLen >= HID_IN_PACKET){
                 if (piLoopQueue->EnQueue(&BTP_DataMsg.NotifyServiceBuffer, readData, HID_IN_PACKET) ==  HID_IN_PACKET){
                     /* Enqueue the message */
-                    UART_write(uart, readData, HID_IN_PACKET);
-//                    HidDev_Report(HID_RPT_ID_KEY_IN, HID_REPORT_TYPE_INPUT,
-//                                  HID_IN_PACKET, readData);
-//                    HidBTP_enqueueMsg();
+//                    UART_write(uart, readData, HID_IN_PACKET);
+                    HidBTP_enqueueMsg();
                 }
             }else{
                 /* Buffer is Full */

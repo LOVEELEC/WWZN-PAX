@@ -26,8 +26,8 @@ typedef struct _BTP_DataMsg_Struct_Def{
 extern UART_Handle uart;
 extern pBTP_DataMsg_Struct pBTP_DataMsg;
 
+void SerialCommunication_Send(uint8_t * pbuf, uint16_t size);
 void SerialCommunication_init(void);
 void SerialCommunication_createTask(void);
-
 
 #endif /* STARTUP_SERIAL_COMMUNICATION_H_ */

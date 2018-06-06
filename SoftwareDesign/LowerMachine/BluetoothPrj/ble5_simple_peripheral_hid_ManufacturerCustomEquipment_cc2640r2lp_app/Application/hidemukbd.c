@@ -478,8 +478,8 @@ void HidEmuKbd_init(void)
   // Start the GAP Role and Register the Bond Manager.
   HidDev_StartDevice();
 
-  // Initialize keys on SmartRF06EB.
-  Board_initKeys(HidEmuKbd_keyPressHandler);        // 按键初始化
+//  // Initialize keys on SmartRF06EB.
+//  Board_initKeys(HidEmuKbd_keyPressHandler);        // 按键初始化
 
   // Register with GAP for HCI/Host messages
   GAP_RegisterForMsgs(selfEntity);
@@ -778,33 +778,22 @@ static void HidEmuKbd_handleKeys(uint8_t shift, uint8_t keys)
  *
  * @return  none
  */
-
-static uint8_t testPenDown[] = {0x02,0xe6,0x0f,0x00,0x00,0x02,0x64,0x00,0x06,0x00,0x01,0x46,0x00,0x35,0x00,0x77,0x06,0x5e,0x0b,0xce,0xba};
-static uint8_t testPenUp[] = {0x02,0xe7,0x0f,0x00,0x0a,0x02,0x00,0x00,0x06,0x00,0x01,0x46,0x00,0x35,0x00,0x69,0x06,0x54,0x0b,0x40,0x04};
 static void HidEmuKbd_sendReport(uint8_t keycode)
 {
     uint8_t buf[HID_KEYBOARD_IN_RPT_LEN];
-    if (keycode == 0x4F){
-        memcpy(buf, testPenDown, HID_KEYBOARD_IN_RPT_LEN);
-    }else{
-        memcpy(buf, testPenUp, HID_KEYBOARD_IN_RPT_LEN);
+    uint16_t realLen = piLoopQueue->QueueLength(&pBTP_DataMsg->NotifyServiceBuffer);
+    if (realLen < HID_KEYBOARD_IN_RPT_LEN){
+        return;
     }
+    if (realLen > HID_KEYBOARD_IN_RPT_LEN){
+        /* 数据缓冲区溢出 */
+        realLen = HID_KEYBOARD_IN_RPT_LEN;
+    }
+    memset(buf, 0, HID_KEYBOARD_IN_RPT_LEN);
+    piLoopQueue->DeQueue(&pBTP_DataMsg->NotifyServiceBuffer, buf, realLen);
+
     HidDev_Report(HID_RPT_ID_KEY_IN, HID_REPORT_TYPE_INPUT,
                   HID_KEYBOARD_IN_RPT_LEN, buf);
-//    uint8_t buf[HID_KEYBOARD_IN_RPT_LEN];
-//    uint8_t realLen = piLoopQueue->QueueLength(&pBTP_DataMsg->WriteServiceBuffer);
-//    if (realLen < HID_KEYBOARD_IN_RPT_LEN){
-//        return;
-//    }
-//    if (realLen > HID_KEYBOARD_IN_RPT_LEN){
-//        /* 数据缓冲区溢出 */
-//        realLen = HID_KEYBOARD_IN_RPT_LEN;
-//    }
-//    memset(buf, 0, HID_KEYBOARD_IN_RPT_LEN);
-//    piLoopQueue->DeQueue(&pBTP_DataMsg->WriteServiceBuffer, buf, realLen);
-//
-//    HidDev_Report(HID_RPT_ID_KEY_IN, HID_REPORT_TYPE_INPUT,
-//                  HID_KEYBOARD_IN_RPT_LEN, buf);
 }
 
 #ifdef USE_HID_MOUSE
@@ -844,19 +833,21 @@ static void HidEmuKbd_sendMouseReport(uint8_t buttons)
  */
 static uint8_t HidEmuKbd_receiveReport(uint8_t len, uint8_t *pData)
 {
-  // Verify data length
-  if (len == HID_LED_OUT_RPT_LEN)
-  {
-    // Set keyfob LEDs
-    //HalLedSet(HAL_LED_1, ((*pData & LED_CAPS_LOCK) == LED_CAPS_LOCK));
-    //HalLedSet(HAL_LED_2, ((*pData & LED_NUM_LOCK) == LED_NUM_LOCK));
-
+    SerialCommunication_Send(pData, len);
     return SUCCESS;
-  }
-  else
-  {
-    return ATT_ERR_INVALID_VALUE_SIZE;
-  }
+//  // Verify data length
+//  if (len == HID_LED_OUT_RPT_LEN)
+//  {
+//    // Set keyfob LEDs
+//    //HalLedSet(HAL_LED_1, ((*pData & LED_CAPS_LOCK) == LED_CAPS_LOCK));
+//    //HalLedSet(HAL_LED_2, ((*pData & LED_NUM_LOCK) == LED_NUM_LOCK));
+//
+//    return SUCCESS;
+//  }
+//  else
+//  {
+//    return ATT_ERR_INVALID_VALUE_SIZE;
+//  }
 }
 
 /*********************************************************************
