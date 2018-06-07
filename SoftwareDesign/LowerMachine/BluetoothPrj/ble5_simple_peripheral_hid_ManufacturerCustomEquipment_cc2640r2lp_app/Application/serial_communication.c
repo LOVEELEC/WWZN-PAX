@@ -121,6 +121,18 @@ void SerialCommunication_init(void)
     }
 }
 
+void SerialCommunication_SendBleDisconnect(void)
+{
+    uint8_t test[] = "> Bluetooth Disconnect!\r\n";
+    UART_write(uart, test, sizeof(test));
+}
+
+void SerialCommunication_SendBleConnect(void)
+{
+    uint8_t test[] = "> Bluetooth Connect!\r\n";
+    UART_write(uart, test, sizeof(test));
+}
+
 void SerialCommunication_Send(uint8_t * pbuf, uint16_t size)
 {
 //    uint16_t realLen = BTP_DataMsg.WriteServiceBuffer.DataBufMaxSize - piLoopQueue->QueueLength(&BTP_DataMsg.WriteServiceBuffer);

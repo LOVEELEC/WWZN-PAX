@@ -73,7 +73,7 @@
 #include "peripheral.h"
 
 #include "hiddev.h"
-
+#include "serial_communication.h"
 /*********************************************************************
  * MACROS
  */
@@ -85,12 +85,12 @@
 #define DEFAULT_SCAN_PARAM_NOTIFY_TEST        TRUE
 
 // Advertising intervals (units of 625us, 160=100ms).
-#define HID_INITIAL_ADV_INT_MIN               48
-#define HID_INITIAL_ADV_INT_MAX               80
-#define HID_HIGH_ADV_INT_MIN                  32
-#define HID_HIGH_ADV_INT_MAX                  48
-#define HID_LOW_ADV_INT_MIN                   1600
-#define HID_LOW_ADV_INT_MAX                   1600
+#define HID_INITIAL_ADV_INT_MIN               48        // 30ms
+#define HID_INITIAL_ADV_INT_MAX               80        // 50ms
+#define HID_HIGH_ADV_INT_MIN                  32        // 20ms
+#define HID_HIGH_ADV_INT_MAX                  48        // 30ms
+#define HID_LOW_ADV_INT_MIN                   1600      // 1000ms
+#define HID_LOW_ADV_INT_MAX                   1600      // 1000ms
 
 // Advertising timeouts in sec.
 #define HID_INITIAL_ADV_TIMEOUT               60
@@ -1231,7 +1231,7 @@ static void HidDev_disconnected(void)
   hidProtocolMode = HID_PROTOCOL_MODE_REPORT;
   hidDevPairingStarted = FALSE;
   hidDevGapBondPairingState = HID_GAPBOND_PAIRING_STATE_NONE;
-
+  SerialCommunication_SendBleDisconnect();
   // Reset last report sent out
   memset(&lastReport, 0, sizeof(hidDevReport_t));
 
@@ -1296,6 +1296,7 @@ static void HidDev_processPairStateEvt(uint8_t state, uint8_t status)
     if (status == SUCCESS)
     {
       hidDevConnSecure = TRUE;
+      SerialCommunication_SendBleConnect();
       Util_restartClock(&reportReadyClock, HID_REPORT_READY_TIME);
     }
   }
@@ -1304,6 +1305,7 @@ static void HidDev_processPairStateEvt(uint8_t state, uint8_t status)
     if (status == SUCCESS)
     {
       hidDevConnSecure = TRUE;
+      SerialCommunication_SendBleConnect();
       Util_restartClock(&reportReadyClock, HID_REPORT_READY_TIME);
 
 #if DEFAULT_SCAN_PARAM_NOTIFY_TEST == TRUE

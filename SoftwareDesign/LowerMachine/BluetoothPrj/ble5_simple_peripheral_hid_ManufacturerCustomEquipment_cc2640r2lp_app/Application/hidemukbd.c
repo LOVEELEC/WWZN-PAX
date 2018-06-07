@@ -107,26 +107,30 @@
 
 // Minimum connection interval (units of 1.25ms) if automatic parameter update
 // request is enabled.
+// 如果自动更新连接参数请求被使能的话，用到的最小连接间隔，单位1.25 ms
 #define DEFAULT_DESIRED_MIN_CONN_INTERVAL     8
 
 // Maximum connection interval (units of 1.25ms) if automatic parameter update
 // request is enabled.
+// 如果自动更新连接参数请求被使能的话，用到的最大连接间隔，单位1.25 ms
 #define DEFAULT_DESIRED_MAX_CONN_INTERVAL     8
 
 // Slave latency to use if automatic parameter update request is enabled
+// 如果自动更新连接参数请求被使能的话，用到的从机时延
 #define DEFAULT_DESIRED_SLAVE_LATENCY         50
 
 // Supervision timeout value (units of 10ms) if automatic parameter update
 // request is enabled.
+// 如果自动更新连接参数请求被使能的话，用到的超时时间，单位10 ms
 #define DEFAULT_DESIRED_CONN_TIMEOUT          500
 
 // Whether to enable automatic parameter update request when a connection is
-// formed.
+// formed.当一个连接建立的时候，是否需要自动申请连接参数更新，当设置为"TRUE"的时候就是需要，相反，就是不需要。
 #define DEFAULT_ENABLE_UPDATE_REQUEST         GAPROLE_LINK_PARAM_UPDATE_INITIATE_BOTH_PARAMS
 
 // Connection Pause Peripheral time value (in seconds)
-//#define DEFAULT_CONN_PAUSE_PERIPHERAL         10
-#define DEFAULT_CONN_PAUSE_PERIPHERAL         1
+// 如果自动更新连接参数请求被使能的话，用到的时间间隔，单位s
+#define DEFAULT_CONN_PAUSE_PERIPHERAL         10
 
 // Default GAP pairing mode
 #define DEFAULT_PAIRING_MODE                  GAPBOND_PAIRING_MODE_WAIT_FOR_REQ
@@ -278,8 +282,10 @@ static uint8_t advData[] =
   // appearance
   0x03,   // length of this data
   GAP_ADTYPE_APPEARANCE,
-  LO_UINT16(GAP_APPEARE_HID_KEYBOARD),
-  HI_UINT16(GAP_APPEARE_HID_KEYBOARD),
+//  LO_UINT16(GAP_APPEARE_HID_KEYBOARD),
+//  HI_UINT16(GAP_APPEARE_HID_KEYBOARD),
+    LO_UINT16(GAP_APPEARE_GENERIC_HID),
+    HI_UINT16(GAP_APPEARE_GENERIC_HID),
 
   // service UUIDs
   0x05,   // length of this data
