@@ -22,6 +22,7 @@
 
 #include "hiddev.h"
 #include "hidkbdservice.h"
+#include "crc16.h"
 /*********************************************************************
  * CONSTANTS
  */
@@ -49,6 +50,12 @@ pBTP_DataMsg_Struct pBTP_DataMsg = &BTP_DataMsg;
 
 extern Queue_Handle appMsgQueue;
 extern ICall_SyncHandle syncEvent;
+
+// Entity ID globally used to check for source and/or destination of messages
+static ICall_EntityID serialselfEntity;
+// Event globally used to post local events and pend on system and
+// local events.
+static ICall_SyncHandle serialsyncEvent;
 /*********************************************************************
  * LOCAL FUNCTIONS
  */
@@ -99,6 +106,7 @@ void SerialCommunication_createTask(void)
 void SerialCommunication_init(void)
 {
     UART_Params uartParams;
+    ICall_registerApp(&serialselfEntity, &serialsyncEvent);
 
     SimpleBLEPeripheral_ServiceBufferInit();
 
@@ -107,6 +115,7 @@ void SerialCommunication_init(void)
 
     /* Create a UART with data processing off. */
     UART_Params_init(&uartParams);
+//    uartParams.readMode = UART_MODE_CALLBACK;
     uartParams.writeDataMode = UART_DATA_BINARY;
     uartParams.readDataMode = UART_DATA_BINARY;
     uartParams.readReturnMode = UART_RETURN_FULL;
@@ -123,14 +132,40 @@ void SerialCommunication_init(void)
 
 void SerialCommunication_SendBleDisconnect(void)
 {
-    uint8_t test[] = "> Bluetooth Disconnect!\r\n";
-    UART_write(uart, test, sizeof(test));
+    uint8_t DisConMesg[HID_IN_PACKET];
+    memset(DisConMesg, 0x00, HID_IN_PACKET);
+    DisConMesg[0] = 0x02;
+    DisConMesg[1] = 0x58;
+
+    *(width_t *)(&DisConMesg[DisConMesg[2]+4]) = crcCompute(DisConMesg, (DisConMesg[2] + 4));
+    UART_write(uart, DisConMesg, HID_IN_PACKET);
+//    uint8_t test[] = "> Bluetooth Disconnect!\r\n";
+//    UART_write(uart, test, sizeof(test));
 }
 
 void SerialCommunication_SendBleConnect(void)
 {
-    uint8_t test[] = "> Bluetooth Connect!\r\n";
-    UART_write(uart, test, sizeof(test));
+    uint8_t ConMesg[HID_IN_PACKET];
+    memset(ConMesg, 0x00, HID_IN_PACKET);
+    ConMesg[0] = 0x02;
+    ConMesg[1] = 0x57;
+
+    *(width_t *)(&ConMesg[ConMesg[2]+4]) = crcCompute(ConMesg, (ConMesg[2]+4));
+    UART_write(uart, ConMesg, HID_IN_PACKET);
+//    uint8_t test[] = "> Bluetooth Connect!\r\n";
+//    UART_write(uart, test, sizeof(test));
+}
+
+
+void SerialCommunication_SendBleTransferCMP(void)
+{
+    uint8_t ConMesg[HID_IN_PACKET];
+    memset(ConMesg, 0x00, HID_IN_PACKET);
+    ConMesg[0] = 0x02;
+    ConMesg[1] = 0x59;
+
+    *(width_t *)(&ConMesg[ConMesg[2]+4]) = crcCompute(ConMesg, (ConMesg[2]+4));
+    UART_write(uart, ConMesg, HID_IN_PACKET);
 }
 
 void SerialCommunication_Send(uint8_t * pbuf, uint16_t size)
@@ -191,11 +226,6 @@ static void SerialCommunication_taskFxn(UArg a0, UArg a1)
     uint8_t readData[HID_IN_PACKET] = {0};
     // Initialize application
     SerialCommunication_init();
-//    if (uart == NULL) {
-//        /* UART_open() failed */
-//        while (1);
-//    }
-
     // Application main loop
     for (;;)
     {
@@ -211,6 +241,37 @@ static void SerialCommunication_taskFxn(UArg a0, UArg a1)
                 }
             }else{
                 /* Buffer is Full */
+
+            }
+        }
+    }
+}
+
+void *serialmainThread(void *arg0)
+{
+    char ret = 0;
+    uint16_t realLen = 0x00;
+    uint8_t readData[HID_IN_PACKET] = {0};
+    // Initialize application
+    SerialCommunication_init();
+//    if (uart == NULL) {
+//        /* UART_open() failed */
+//        while (1);
+//    }
+    // Application main loop
+    for (;;){
+        /* Read data from UART */
+        ret = UART_read(uart, readData, HID_IN_PACKET);
+        if (ret == HID_IN_PACKET){
+            realLen = BTP_DataMsg.NotifyServiceBuffer.DataBufMaxSize - piLoopQueue->QueueLength(&BTP_DataMsg.NotifyServiceBuffer);
+            if (realLen >= HID_IN_PACKET){
+                if (piLoopQueue->EnQueue(&BTP_DataMsg.NotifyServiceBuffer, readData, HID_IN_PACKET) ==  HID_IN_PACKET){
+                    /* Enqueue the message */
+//                    UART_write(uart, readData, HID_IN_PACKET);
+                    HidBTP_enqueueMsg();
+                }
+            }else{
+                    /* Buffer is Full */
 
             }
         }

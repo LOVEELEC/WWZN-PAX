@@ -405,6 +405,8 @@ void HidEmuKbd_init(void)
   //uint8 bdAddress[B_ADDR_LEN] = { 0x22, 0x22, 0x22, 0x22, 0x22, 0x5A };
   //HCI_EXT_SetBDADDRCmd(bdAddress);
 
+  HCI_EXT_SetTxPowerCmd(HCI_EXT_TX_POWER_5_DBM);   //设置发射功率
+//  HCI_EXT_SetTxPowerCmd(HCI_EXT_TX_POWER_MINUS_21_DBM);   //设置发射功率
   // Set device's Sleep Clock Accuracy
   //HCI_EXT_SetSCACmd(40);
 
@@ -800,6 +802,7 @@ static void HidEmuKbd_sendReport(uint8_t keycode)
 
     HidDev_Report(HID_RPT_ID_KEY_IN, HID_REPORT_TYPE_INPUT,
                   HID_KEYBOARD_IN_RPT_LEN, buf);
+    SerialCommunication_SendBleTransferCMP();
 }
 
 #ifdef USE_HID_MOUSE

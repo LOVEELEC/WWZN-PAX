@@ -47,6 +47,8 @@
 /*******************************************************************************
  * INCLUDES
  */
+/* POSIX Header files */
+#include <pthread.h>
 
 #include <xdc/runtime/Error.h>
 
@@ -140,6 +142,7 @@ extern void AssertHandler(uint8 assertCause, uint8 assertSubcause);
 
 extern Display_Handle dispHandle;
 
+static void serial_main(void);
 /*******************************************************************************
  * @fn          Main
  *
@@ -208,7 +211,7 @@ int main()
   user0Cfg.appServiceInfo->timerTickPeriod = Clock_tickPeriod;
   user0Cfg.appServiceInfo->timerMaxMillisecond  = ICall_getMaxMSecs();
 #endif  /* ICALL_JT */
-//  SerialCommunication_init();
+
   /* Initialize ICall module */
   ICall_init();
 
@@ -225,12 +228,145 @@ int main()
     HidEmuKbd_createTask();
 
     SerialCommunication_createTask();
+
+//    serial_main();
   /* enable interrupts and start SYS/BIOS */
   BIOS_start();
 
   return 0;
 }
 
+void *BlemainThread(void *arg0)
+{
+#if defined( USE_FPGA )
+  HWREG(PRCM_BASE + PRCM_O_PDCTL0) &= ~PRCM_PDCTL0_RFC_ON;
+  HWREG(PRCM_BASE + PRCM_O_PDCTL1) &= ~PRCM_PDCTL1_RFC_ON;
+#endif // USE_FPGA
+
+  /* Register Application callback to trap asserts raised in the Stack */
+  RegisterAssertCback(AssertHandler);
+
+#ifdef CC1350_LAUNCHXL
+  // Enable 2.4GHz Radio
+  radCtrlHandle = PIN_open(&radCtrlState, radCtrlCfg);
+
+#ifdef POWER_SAVING
+  Power_registerNotify(&rFSwitchPowerNotifyObj,
+                       PowerCC26XX_ENTERING_STANDBY | PowerCC26XX_AWAKE_STANDBY,
+                       (Power_NotifyFxn) rFSwitchNotifyCb, NULL);
+#endif //POWER_SAVING
+#endif //CC1350_LAUNCHXL
+
+#if defined( USE_FPGA )
+  // set RFC mode to support BLE
+  // Note: This must be done before the RF Core is released from reset!
+  SET_RFC_BLE_MODE(RFC_MODE_BLE);
+#endif // USE_FPGA
+
+#ifdef CACHE_AS_RAM
+  // retain cache during standby
+  Power_setConstraint(PowerCC26XX_SB_VIMS_CACHE_RETAIN);
+  Power_setConstraint(PowerCC26XX_NEED_FLASH_IN_IDLE);
+#else
+  // Enable iCache prefetching
+  VIMSConfigure(VIMS_BASE, TRUE, TRUE);
+  // Enable cache
+  VIMSModeSet(VIMS_BASE, VIMS_MODE_ENABLED);
+#endif //CACHE_AS_RAM
+
+#if !defined( POWER_SAVING ) || defined( USE_FPGA )
+  /* Set constraints for Standby, powerdown and idle mode */
+  // PowerCC26XX_SB_DISALLOW may be redundant
+  Power_setConstraint(PowerCC26XX_SB_DISALLOW);
+  Power_setConstraint(PowerCC26XX_IDLE_PD_DISALLOW);
+#endif // POWER_SAVING | USE_FPGA
+
+#ifdef ICALL_JT
+  /* Update User Configuration of the stack */
+  user0Cfg.appServiceInfo->timerTickPeriod = Clock_tickPeriod;
+  user0Cfg.appServiceInfo->timerMaxMillisecond  = ICall_getMaxMSecs();
+#endif  /* ICALL_JT */
+    /* Initialize ICall module */
+    ICall_init();
+
+    /* Start tasks of external images - Priority 5 */
+    ICall_createRemoteTasks();
+
+    /* Kick off profile - Priority 3 */
+    GAPRole_createTask();
+
+    /* Kick off HID service task - Priority 2 */
+    HidDev_createTask();
+
+    /* Kick off application - Priority 1 */
+    HidEmuKbd_createTask();
+    while (1){
+
+    }
+}
+
+/* Stack size in bytes */
+#define THREADSTACKSIZE    1024
+static void serial_main(void)
+{
+    pthread_t           thread1,thread2;
+    pthread_attr_t      attrs1, attrs2;
+    struct sched_param  priParam1, priParam2;
+    int                 retc;
+    int                 detachState;
+
+    PIN_init(BoardGpioInitTable);
+
+    /* Set priority and stack size attributes */
+    pthread_attr_init(&attrs1);
+    priParam1.sched_priority = 1;
+
+    detachState = PTHREAD_CREATE_DETACHED;
+    retc = pthread_attr_setdetachstate(&attrs1, detachState);
+    if (retc != 0) {
+        /* pthread_attr_setdetachstate() failed */
+        while (1);
+    }
+
+    pthread_attr_setschedparam(&attrs1, &priParam1);
+    retc |= pthread_attr_setstacksize(&attrs1, THREADSTACKSIZE);
+        if (retc != 0) {
+            /* pthread_attr_setstacksize() failed */
+            while (1);
+        }
+
+    /* Set priority and stack size attributes */
+        pthread_attr_init(&attrs2);
+        priParam2.sched_priority = 2;
+
+        detachState = PTHREAD_CREATE_DETACHED;
+        retc = pthread_attr_setdetachstate(&attrs2, detachState);
+        if (retc != 0) {
+            /* pthread_attr_setdetachstate() failed */
+            while (1);
+        }
+
+        pthread_attr_setschedparam(&attrs2, &priParam2);
+
+    retc |= pthread_attr_setstacksize(&attrs2, THREADSTACKSIZE);
+    if (retc != 0) {
+        /* pthread_attr_setstacksize() failed */
+        while (1);
+    }
+
+
+    retc = pthread_create(&thread1, &attrs1, BlemainThread, NULL);
+    if (retc != 0) {
+        /* pthread_create() failed */
+        while (1);
+    }
+
+    retc = pthread_create(&thread2, &attrs2, serialmainThread, NULL);
+    if (retc != 0) {
+        /* pthread_create() failed */
+        while (1);
+    }
+}
 
 /*******************************************************************************
  * @fn          AssertHandler

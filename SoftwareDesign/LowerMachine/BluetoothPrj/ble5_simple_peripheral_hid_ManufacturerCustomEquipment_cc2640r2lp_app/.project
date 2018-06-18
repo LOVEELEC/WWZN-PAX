@@ -129,9 +129,29 @@
 			<locationURI>SRC_BLE_DIR/osal/src/inc/osal_snv.h</locationURI>
 		</link>
 		<link>
+			<name>Startup/_pthread.h</name>
+			<type>1</type>
+			<location>C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/kernel/tirtos/packages/ti/sysbios/posix/_pthread.h</location>
+		</link>
+		<link>
 			<name>Startup/board.c</name>
 			<type>1</type>
 			<locationURI>SRC_BLE_DIR/target/board.c</locationURI>
+		</link>
+		<link>
+			<name>Startup/pthread.c</name>
+			<type>1</type>
+			<location>C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/kernel/tirtos/packages/ti/sysbios/posix/pthread.c</location>
+		</link>
+		<link>
+			<name>Startup/pthread.h</name>
+			<type>1</type>
+			<location>C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/kernel/tirtos/packages/ti/sysbios/posix/pthread.h</location>
+		</link>
+		<link>
+			<name>Startup/pthread_key.c</name>
+			<type>1</type>
+			<location>C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/kernel/tirtos/packages/ti/sysbios/posix/pthread_key.c</location>
 		</link>
 		<link>
 			<name>TOOLS/cc26xx_app.cmd</name>

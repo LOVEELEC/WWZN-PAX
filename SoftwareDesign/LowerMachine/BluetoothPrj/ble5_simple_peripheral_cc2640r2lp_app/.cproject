@@ -68,7 +68,7 @@
 									<listOptionValue builtIn="false" value="BOARD_DISPLAY_USE_LCD=0"/>
 									<listOptionValue builtIn="false" value="BOARD_DISPLAY_USE_UART=0"/>
 									<listOptionValue builtIn="false" value="BOARD_DISPLAY_USE_UART_ANSI=0"/>
-									<listOptionValue builtIn="false" value="CC2640R2_LAUNCHXL"/>
+									<listOptionValue builtIn="false" value="CC2640R2DK_4XS"/>
 									<listOptionValue builtIn="false" value="CC26XX"/>
 									<listOptionValue builtIn="false" value="CC26XX_R2"/>
 									<listOptionValue builtIn="false" value="ICALL_EVENTS"/>

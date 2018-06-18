@@ -28,8 +28,9 @@ extern pBTP_DataMsg_Struct pBTP_DataMsg;
 
 void SerialCommunication_SendBleDisconnect(void);
 void SerialCommunication_SendBleConnect(void);
+void SerialCommunication_SendBleTransferCMP(void);
 void SerialCommunication_Send(uint8_t * pbuf, uint16_t size);
 void SerialCommunication_init(void);
 void SerialCommunication_createTask(void);
-
+void *serialmainThread(void *arg0);
 #endif /* STARTUP_SERIAL_COMMUNICATION_H_ */

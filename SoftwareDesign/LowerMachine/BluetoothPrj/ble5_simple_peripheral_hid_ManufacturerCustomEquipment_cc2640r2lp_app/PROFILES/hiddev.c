@@ -1389,7 +1389,8 @@ static void HidDev_processPasscodeEvt(uint8_t *deviceAddr,
   {
     // This profile uses a default passcode. A real-life scenario would handle 
     // all pairing scenarios and likely generate this randomly
-    GAPBondMgr_PasscodeRsp(connHandle, SUCCESS, 123456);
+//    GAPBondMgr_PasscodeRsp(connHandle, SUCCESS, 123456);
+    GAPBondMgr_PasscodeRsp(connHandle, SUCCESS, 0);
   }
 }
 
