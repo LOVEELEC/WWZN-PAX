@@ -495,7 +495,7 @@ static void SerialCommunication_init(void)
     uartParams.readDataMode = UART_DATA_BINARY;
     uartParams.readReturnMode = UART_RETURN_FULL;
     uartParams.readEcho = UART_ECHO_OFF;
-    uartParams.baudRate = 1000000;
+    uartParams.baudRate = 115200;
 
     uart = UART_open(Board_UART0, &uartParams);
 

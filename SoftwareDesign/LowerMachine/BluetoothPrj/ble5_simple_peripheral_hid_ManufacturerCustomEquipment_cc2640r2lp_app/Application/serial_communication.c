@@ -159,13 +159,13 @@ void SerialCommunication_SendBleConnect(void)
 
 void SerialCommunication_SendBleTransferCMP(void)
 {
-    uint8_t ConMesg[HID_IN_PACKET];
-    memset(ConMesg, 0x00, HID_IN_PACKET);
-    ConMesg[0] = 0x02;
-    ConMesg[1] = 0x59;
+    uint8_t SendCMPMesg[HID_IN_PACKET];
+    memset(SendCMPMesg, 0x00, HID_IN_PACKET);
+    SendCMPMesg[0] = 0x02;
+    SendCMPMesg[1] = 0x59;
 
-    *(width_t *)(&ConMesg[ConMesg[2]+4]) = crcCompute(ConMesg, (ConMesg[2]+4));
-    UART_write(uart, ConMesg, HID_IN_PACKET);
+    *(width_t *)(&SendCMPMesg[SendCMPMesg[2]+4]) = crcCompute(SendCMPMesg, (SendCMPMesg[2]+4));
+    UART_write(uart, SendCMPMesg, HID_IN_PACKET);
 }
 
 void SerialCommunication_Send(uint8_t * pbuf, uint16_t size)

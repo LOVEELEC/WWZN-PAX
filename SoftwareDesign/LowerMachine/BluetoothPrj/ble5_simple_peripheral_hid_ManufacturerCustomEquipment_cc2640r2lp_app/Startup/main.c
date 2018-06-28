@@ -227,7 +227,7 @@ int main()
     /* Kick off application - Priority 1 */
     HidEmuKbd_createTask();
 
-    SerialCommunication_createTask();
+//    SerialCommunication_createTask();
 
 //    serial_main();
   /* enable interrupts and start SYS/BIOS */

@@ -133,20 +133,12 @@
  * CONSTANTS
  */
 
-//#define HID_DEV_DATA_LEN                      9
-//
-//#ifdef HID_DEV_RPT_QUEUE_LEN
-//  #define HID_DEV_REPORT_Q_SIZE               (HID_DEV_RPT_QUEUE_LEN+1)
-//#else
-//  #define HID_DEV_REPORT_Q_SIZE               (10+1)
-//#endif
-
-#define HID_DEV_DATA_LEN                      21
+#define HID_DEV_DATA_LEN                      9
 
 #ifdef HID_DEV_RPT_QUEUE_LEN
   #define HID_DEV_REPORT_Q_SIZE               (HID_DEV_RPT_QUEUE_LEN+1)
 #else
-  #define HID_DEV_REPORT_Q_SIZE               (21+1)
+  #define HID_DEV_REPORT_Q_SIZE               (10+1)
 #endif
 
 // HID Auto Sync White List configuration parameter. This parameter should be
@@ -180,7 +172,7 @@ typedef struct
  uint8_t id;
  uint8_t type;
  uint8_t len;
- uint8_t data[HID_DEV_DATA_LEN];            // HID
+ uint8_t data[HID_DEV_DATA_LEN];
 } hidDevReport_t;
 
 /*********************************************************************
@@ -250,7 +242,7 @@ static uint8_t updateConnParams = TRUE;
 // Pending reports
 static uint8_t firstQIdx = 0;
 static uint8_t lastQIdx = 0;
-static hidDevReport_t hidDevReportQ[HID_DEV_REPORT_Q_SIZE];             // HID Report Buffer
+static hidDevReport_t hidDevReportQ[HID_DEV_REPORT_Q_SIZE];
 
 // Last report sent out
 static hidDevReport_t lastReport = { 0 };
@@ -406,13 +398,13 @@ static void HidDev_init(void)
 
   DevInfo_AddService();
   Batt_AddService();
-//  ScanParam_AddService();
+  ScanParam_AddService();
 
   // Register for Battery service callback.
   Batt_Register(HidDev_batteryCB);
-//
-//  // Register for Scan Parameters service callback.
-//  ScanParam_Register(HidDev_scanParamCB);
+
+  // Register for Scan Parameters service callback.
+  ScanParam_Register(HidDev_scanParamCB);
 
   // Initialize report ready clock timer
   Util_constructClock(&reportReadyClock, HidDev_reportReadyClockCB,

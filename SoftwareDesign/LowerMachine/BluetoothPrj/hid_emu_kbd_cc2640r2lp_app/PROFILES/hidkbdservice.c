@@ -56,8 +56,6 @@
 #include "hiddev.h"
 #include "battservice.h"
 
-
-#include "serial_communication.h"
 /*********************************************************************
  * MACROS
  */
@@ -147,53 +145,10 @@ static CONST uint8 hidInfo[HID_INFORMATION_LEN] =
   HID_KBD_FLAGS                                   // Flags
 };
 
-/************************************************/
-#define TEST_HID_MANUFACTURER_CUSTOM_EQUIPMENT
-/************************************************/
-
 // HID Report Map characteristic value
 // Keyboard report descriptor (using format for Boot interface descriptor)
 static CONST uint8 hidReportMap[] =
 {
-/************************************************/
-#ifdef TEST_HID_MANUFACTURER_CUSTOM_EQUIPMENT
-    0x06, 0xA0, 0xFF,       /* USAGE_PAGE (Vendor Page: 0xFFA0) */
-    0x09, 0x01,             /* USAGE (Demo Kit)               */
-    0xa1, 0x01,             /* COLLECTION (Application)       */
-
-    0x09, 0x02,             /* */
-    0xA1, 0x00,
-    0x06, 0xA1, 0xFF,
-    /* 13 */
-
-    //ÊäÈë±¨¸æ
-    0x09, 0x03,
-    0x09, 0x04,
-    0x15, 0x00,
-    0x25, 0x7F,
-    0x35, 0x00,
-    0x45, 0xFF,
-    0x75, 0x08,
-    0x95, HID_IN_PACKET,
-    0x81, 0x02,
-    /* 31 */
-
-    // Êä³ö±¨¸æ
-    0x09, 0x05,
-    0x09, 0x06,
-    0x15, 0x00,
-    0x25, 0x7F,
-    0x35, 0x00,
-    0x45, 0xFF,
-    0x75, 0x08,
-    0x95, HID_OUT_PACKET,
-    0x91, 0x02,
-    /* 49 */
-    0xC0,
-    0xC0
-    /* 51 */
-#else
-/************************************************/
   0x05, 0x01,     // Usage Pg (Generic Desktop)
   0x09, 0x06,     // Usage (Keyboard)
   0xA1, 0x01,     // Collection: (Application)
@@ -229,8 +184,7 @@ static CONST uint8 hidReportMap[] =
                   //
                   // Key arrays (6 bytes)
   0x95, 0x06,     // Report Count (6)
-//  0x75, 0x08,     // Report Size (8)
-  0x75, 0x0A,     // Report Size (10)
+  0x75, 0x08,     // Report Size (8)
   0x15, 0x00,     // Log Min (0)
   0x25, 0x65,     // Log Max (101)
   0x05, 0x07,     // Usage Pg (Key Codes)
@@ -239,7 +193,6 @@ static CONST uint8 hidReportMap[] =
   0x81, 0x00,     // Input: (Data, Array)
                   //
   0xC0            // End Collection
-#endif
 };
 
 // HID report map length
@@ -295,21 +248,21 @@ static uint8 hidReportLedOut;
 static uint8 hidReportRefLedOut[HID_REPORT_REF_LEN] =
              { HID_RPT_ID_LED_OUT, HID_REPORT_TYPE_OUTPUT };
 
-//// HID Boot Keyboard Input Report
-//static uint8 hidReportBootKeyInProps = GATT_PROP_READ | GATT_PROP_NOTIFY;
-//static uint8 hidReportBootKeyIn;
-//static gattCharCfg_t *hidReportBootKeyInClientCharCfg;
-//
-//// HID Boot Keyboard Output Report
-//static uint8 hidReportBootKeyOutProps = GATT_PROP_READ  |
-//                                        GATT_PROP_WRITE |
-//                                        GATT_PROP_WRITE_NO_RSP;
-//static uint8 hidReportBootKeyOut;
-//
-//// HID Boot Mouse Input Report
-//static uint8 hidReportBootMouseInProps = GATT_PROP_READ | GATT_PROP_NOTIFY;
-//static uint8 hidReportBootMouseIn;
-//static gattCharCfg_t *hidReportBootMouseInClientCharCfg;
+// HID Boot Keyboard Input Report
+static uint8 hidReportBootKeyInProps = GATT_PROP_READ | GATT_PROP_NOTIFY;
+static uint8 hidReportBootKeyIn;
+static gattCharCfg_t *hidReportBootKeyInClientCharCfg;
+
+// HID Boot Keyboard Output Report
+static uint8 hidReportBootKeyOutProps = GATT_PROP_READ  |
+                                        GATT_PROP_WRITE |
+                                        GATT_PROP_WRITE_NO_RSP;
+static uint8 hidReportBootKeyOut;
+
+// HID Boot Mouse Input Report
+static uint8 hidReportBootMouseInProps = GATT_PROP_READ | GATT_PROP_NOTIFY;
+static uint8 hidReportBootMouseIn;
+static gattCharCfg_t *hidReportBootMouseInClientCharCfg;
 
 // Feature Report
 static uint8 hidReportFeatureProps = GATT_PROP_READ | GATT_PROP_WRITE;
@@ -425,8 +378,7 @@ static gattAttribute_t hidAttrTbl[] =
       // HID Report characteristic, key input
       {
         { ATT_BT_UUID_SIZE, hidReportUUID },
-//        GATT_PERMIT_ENCRYPT_READ,
-        GATT_PERMIT_READ,
+        GATT_PERMIT_ENCRYPT_READ,
         0,
         &hidReportKeyIn
       },
@@ -470,69 +422,70 @@ static gattAttribute_t hidAttrTbl[] =
         0,
         hidReportRefLedOut
       },
-//    // HID Boot Keyboard Input Report declaration
-//    {
-//      { ATT_BT_UUID_SIZE, characterUUID },
-//      GATT_PERMIT_READ,
-//      0,
-//      &hidReportBootKeyInProps
-//    },
-//
-//      // HID Boot Keyboard Input Report
-//      {
-//        { ATT_BT_UUID_SIZE, hidBootKeyInputUUID },
-//        GATT_PERMIT_ENCRYPT_READ,
-//        0,
-//        &hidReportBootKeyIn
-//      },
-//
-//      // HID Boot Keyboard Input Report characteristic client characteristic configuration
-//      {
-//        { ATT_BT_UUID_SIZE, clientCharCfgUUID },
-//        GATT_PERMIT_READ | GATT_PERMIT_ENCRYPT_WRITE,
-//        0,
-//        (uint8 *) &hidReportBootKeyInClientCharCfg
-//      },
-//
-//    // HID Boot Keyboard Output Report declaration
-//    {
-//      { ATT_BT_UUID_SIZE, characterUUID },
-//      GATT_PERMIT_READ,
-//      0,
-//      &hidReportBootKeyOutProps
-//    },
-//
-//      // HID Boot Keyboard Output Report
-//      {
-//        { ATT_BT_UUID_SIZE, hidBootKeyOutputUUID },
-//        GATT_PERMIT_ENCRYPT_READ | GATT_PERMIT_ENCRYPT_WRITE,
-//        0,
-//        &hidReportBootKeyOut
-//      },
-//
-//    // HID Boot Mouse Input Report declaration
-//    {
-//      { ATT_BT_UUID_SIZE, characterUUID },
-//      GATT_PERMIT_READ,
-//      0,
-//      &hidReportBootMouseInProps
-//    },
-//
-//      // HID Boot Mouse Input Report
-//      {
-//        { ATT_BT_UUID_SIZE, hidBootMouseInputUUID },
-//        GATT_PERMIT_ENCRYPT_READ,
-//        0,
-//        &hidReportBootMouseIn
-//      },
-//
-//      // HID Boot Mouse Input Report characteristic client characteristic configuration
-//      {
-//        { ATT_BT_UUID_SIZE, clientCharCfgUUID },
-//        GATT_PERMIT_READ | GATT_PERMIT_ENCRYPT_WRITE,
-//        0,
-//        (uint8 *) &hidReportBootMouseInClientCharCfg
-//      },
+
+    // HID Boot Keyboard Input Report declaration
+    {
+      { ATT_BT_UUID_SIZE, characterUUID },
+      GATT_PERMIT_READ,
+      0,
+      &hidReportBootKeyInProps
+    },
+
+      // HID Boot Keyboard Input Report
+      {
+        { ATT_BT_UUID_SIZE, hidBootKeyInputUUID },
+        GATT_PERMIT_ENCRYPT_READ,
+        0,
+        &hidReportBootKeyIn
+      },
+
+      // HID Boot Keyboard Input Report characteristic client characteristic configuration
+      {
+        { ATT_BT_UUID_SIZE, clientCharCfgUUID },
+        GATT_PERMIT_READ | GATT_PERMIT_ENCRYPT_WRITE,
+        0,
+        (uint8 *) &hidReportBootKeyInClientCharCfg
+      },
+
+    // HID Boot Keyboard Output Report declaration
+    {
+      { ATT_BT_UUID_SIZE, characterUUID },
+      GATT_PERMIT_READ,
+      0,
+      &hidReportBootKeyOutProps
+    },
+
+      // HID Boot Keyboard Output Report
+      {
+        { ATT_BT_UUID_SIZE, hidBootKeyOutputUUID },
+        GATT_PERMIT_ENCRYPT_READ | GATT_PERMIT_ENCRYPT_WRITE,
+        0,
+        &hidReportBootKeyOut
+      },
+
+    // HID Boot Mouse Input Report declaration
+    {
+      { ATT_BT_UUID_SIZE, characterUUID },
+      GATT_PERMIT_READ,
+      0,
+      &hidReportBootMouseInProps
+    },
+
+      // HID Boot Mouse Input Report
+      {
+        { ATT_BT_UUID_SIZE, hidBootMouseInputUUID },
+        GATT_PERMIT_ENCRYPT_READ,
+        0,
+        &hidReportBootMouseIn
+      },
+
+      // HID Boot Mouse Input Report characteristic client characteristic configuration
+      {
+        { ATT_BT_UUID_SIZE, clientCharCfgUUID },
+        GATT_PERMIT_READ | GATT_PERMIT_ENCRYPT_WRITE,
+        0,
+        (uint8 *) &hidReportBootMouseInClientCharCfg
+      },
 
     // Feature Report declaration
     {
@@ -580,14 +533,14 @@ enum
   HID_REPORT_LED_OUT_DECL_IDX,    // HID Report characteristic, LED output declaration
   HID_REPORT_LED_OUT_IDX,         // HID Report characteristic, LED output
   HID_REPORT_REF_LED_OUT_IDX,     // HID Report Reference characteristic descriptor, LED output
-//  HID_BOOT_KEY_IN_DECL_IDX,       // HID Boot Keyboard Input Report declaration
-//  HID_BOOT_KEY_IN_IDX,            // HID Boot Keyboard Input Report
-//  HID_BOOT_KEY_IN_CCCD_IDX,       // HID Boot Keyboard Input Report characteristic client characteristic configuration
-//  HID_BOOT_KEY_OUT_DECL_IDX,      // HID Boot Keyboard Output Report declaration
-//  HID_BOOT_KEY_OUT_IDX,           // HID Boot Keyboard Output Report
-//  HID_BOOT_MOUSE_IN_DECL_IDX,     // HID Boot Mouse Input Report declaration
-//  HID_BOOT_MOUSE_IN_IDX,          // HID Boot Mouse Input Report
-//  HID_BOOT_MOUSE_IN_CCCD_IDX,     // HID Boot Mouse Input Report characteristic client characteristic configuration
+  HID_BOOT_KEY_IN_DECL_IDX,       // HID Boot Keyboard Input Report declaration
+  HID_BOOT_KEY_IN_IDX,            // HID Boot Keyboard Input Report
+  HID_BOOT_KEY_IN_CCCD_IDX,       // HID Boot Keyboard Input Report characteristic client characteristic configuration
+  HID_BOOT_KEY_OUT_DECL_IDX,      // HID Boot Keyboard Output Report declaration
+  HID_BOOT_KEY_OUT_IDX,           // HID Boot Keyboard Output Report
+  HID_BOOT_MOUSE_IN_DECL_IDX,     // HID Boot Mouse Input Report declaration
+  HID_BOOT_MOUSE_IN_IDX,          // HID Boot Mouse Input Report
+  HID_BOOT_MOUSE_IN_CCCD_IDX,     // HID Boot Mouse Input Report characteristic client characteristic configuration
   HID_FEATURE_DECL_IDX,           // Feature Report declaration
   HID_FEATURE_IDX,                // Feature Report
   HID_REPORT_REF_FEATURE_IDX      // HID Report Reference characteristic descriptor, feature
@@ -643,32 +596,32 @@ bStatus_t HidKbd_AddService(void)
     return ( bleMemAllocError );
   }
 
-//  hidReportBootKeyInClientCharCfg = (gattCharCfg_t *)ICall_malloc(sizeof(gattCharCfg_t) *
-//                                                                  linkDBNumConns);
-//
-//  if (hidReportBootKeyInClientCharCfg == NULL)
-//  {
-//    ICall_free(hidReportKeyInClientCharCfg);
-//
-//    return ( bleMemAllocError );
-//  }
-//
-//  hidReportBootMouseInClientCharCfg = (gattCharCfg_t *)ICall_malloc(sizeof(gattCharCfg_t) *
-//                                                                    linkDBNumConns);
-//  if (hidReportBootMouseInClientCharCfg == NULL)
-//  {
-//    ICall_free(hidReportKeyInClientCharCfg);
-//
-//    ICall_free(hidReportBootKeyInClientCharCfg);
-//
-//    return ( bleMemAllocError );
-//  }
+  hidReportBootKeyInClientCharCfg = (gattCharCfg_t *)ICall_malloc(sizeof(gattCharCfg_t) *
+                                                                  linkDBNumConns);
+
+  if (hidReportBootKeyInClientCharCfg == NULL)
+  {
+    ICall_free(hidReportKeyInClientCharCfg);
+
+    return ( bleMemAllocError );
+  }
+
+  hidReportBootMouseInClientCharCfg = (gattCharCfg_t *)ICall_malloc(sizeof(gattCharCfg_t) *
+                                                                    linkDBNumConns);
+  if (hidReportBootMouseInClientCharCfg == NULL)
+  {
+    ICall_free(hidReportKeyInClientCharCfg);
+
+    ICall_free(hidReportBootKeyInClientCharCfg);
+
+    return ( bleMemAllocError );
+  }
 
   // Initialize Client Characteristic Configuration attributes
   GATTServApp_InitCharCfg(INVALID_CONNHANDLE, hidReportKeyInClientCharCfg);
-//  GATTServApp_InitCharCfg(INVALID_CONNHANDLE, hidReportBootKeyInClientCharCfg);
-//  GATTServApp_InitCharCfg(INVALID_CONNHANDLE,
-//                          hidReportBootMouseInClientCharCfg);
+  GATTServApp_InitCharCfg(INVALID_CONNHANDLE, hidReportBootKeyInClientCharCfg);
+  GATTServApp_InitCharCfg(INVALID_CONNHANDLE,
+                          hidReportBootMouseInClientCharCfg);
 
   // Register GATT attribute list and CBs with GATT Server App
   status = GATTServApp_RegisterService(hidAttrTbl, GATT_NUM_ATTRS(hidAttrTbl),
@@ -695,28 +648,28 @@ bStatus_t HidKbd_AddService(void)
   hidRptMap[1].pCccdAttr = NULL;
   hidRptMap[1].mode = HID_PROTOCOL_MODE_REPORT;
 
-//  // Boot keyboard input report
-//  // Use same ID and type as key input report
-//  hidRptMap[2].id = hidReportRefKeyIn[0];
-//  hidRptMap[2].type = hidReportRefKeyIn[1];
-//  hidRptMap[2].handle = hidAttrTbl[HID_BOOT_KEY_IN_IDX].handle;
-//  hidRptMap[2].pCccdAttr = &hidAttrTbl[HID_BOOT_KEY_IN_CCCD_IDX];
-//  hidRptMap[2].mode = HID_PROTOCOL_MODE_BOOT;
-//
-//  // Boot keyboard output report
-//  // Use same ID and type as LED output report
-//  hidRptMap[3].id = hidReportRefLedOut[0];
-//  hidRptMap[3].type = hidReportRefLedOut[1];
-//  hidRptMap[3].handle = hidAttrTbl[HID_BOOT_KEY_OUT_IDX].handle;
-//  hidRptMap[3].pCccdAttr = NULL;
-//  hidRptMap[3].mode = HID_PROTOCOL_MODE_BOOT;
-//
-//  // Boot mouse input report
-//  hidRptMap[4].id = HID_RPT_ID_MOUSE_IN;
-//  hidRptMap[4].type = HID_REPORT_TYPE_INPUT;
-//  hidRptMap[4].handle = hidAttrTbl[HID_BOOT_MOUSE_IN_IDX].handle;
-//  hidRptMap[4].pCccdAttr = &hidAttrTbl[HID_BOOT_MOUSE_IN_CCCD_IDX];
-//  hidRptMap[4].mode = HID_PROTOCOL_MODE_BOOT;
+  // Boot keyboard input report
+  // Use same ID and type as key input report
+  hidRptMap[2].id = hidReportRefKeyIn[0];
+  hidRptMap[2].type = hidReportRefKeyIn[1];
+  hidRptMap[2].handle = hidAttrTbl[HID_BOOT_KEY_IN_IDX].handle;
+  hidRptMap[2].pCccdAttr = &hidAttrTbl[HID_BOOT_KEY_IN_CCCD_IDX];
+  hidRptMap[2].mode = HID_PROTOCOL_MODE_BOOT;
+
+  // Boot keyboard output report
+  // Use same ID and type as LED output report
+  hidRptMap[3].id = hidReportRefLedOut[0];
+  hidRptMap[3].type = hidReportRefLedOut[1];
+  hidRptMap[3].handle = hidAttrTbl[HID_BOOT_KEY_OUT_IDX].handle;
+  hidRptMap[3].pCccdAttr = NULL;
+  hidRptMap[3].mode = HID_PROTOCOL_MODE_BOOT;
+
+  // Boot mouse input report
+  hidRptMap[4].id = HID_RPT_ID_MOUSE_IN;
+  hidRptMap[4].type = HID_REPORT_TYPE_INPUT;
+  hidRptMap[4].handle = hidAttrTbl[HID_BOOT_MOUSE_IN_IDX].handle;
+  hidRptMap[4].pCccdAttr = &hidAttrTbl[HID_BOOT_MOUSE_IN_CCCD_IDX];
+  hidRptMap[4].mode = HID_PROTOCOL_MODE_BOOT;
 
   // Feature report
   hidRptMap[5].id = hidReportRefFeature[0];
@@ -786,16 +739,16 @@ uint8 HidKbd_SetParameter(uint8 id, uint8 type, uint16 uuid, uint8 len,
       }
       break;
 
-//    case BOOT_KEY_OUTPUT_UUID:
-//      if (len == 1)
-//      {
-//        hidReportBootKeyOut = *((uint8 *)pValue);
-//      }
-//      else
-//      {
-//        ret = ATT_ERR_INVALID_VALUE_SIZE;
-//      }
-//      break;
+    case BOOT_KEY_OUTPUT_UUID:
+      if (len == 1)
+      {
+        hidReportBootKeyOut = *((uint8 *)pValue);
+      }
+      else
+      {
+        ret = ATT_ERR_INVALID_VALUE_SIZE;
+      }
+      break;
 
     default:
       // Ignore the request
@@ -843,10 +796,10 @@ uint8 HidKbd_GetParameter(uint8 id, uint8 type, uint16 uuid, uint8 *pLen,
       }
       break;
 
-//    case BOOT_KEY_OUTPUT_UUID:
-//      *((uint8 *)pValue) = hidReportBootKeyOut;
-//      *pLen = 1;
-//      break;
+    case BOOT_KEY_OUTPUT_UUID:
+      *((uint8 *)pValue) = hidReportBootKeyOut;
+      *pLen = 1;
+      break;
 
     default:
       *pLen = 0;

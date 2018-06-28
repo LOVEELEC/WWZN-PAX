@@ -799,10 +799,9 @@ static void HidEmuKbd_sendReport(uint8_t keycode)
     }
     memset(buf, 0, HID_KEYBOARD_IN_RPT_LEN);
     piLoopQueue->DeQueue(&pBTP_DataMsg->NotifyServiceBuffer, buf, realLen);
-
+    SerialCommunication_SendBleTransferCMP();
     HidDev_Report(HID_RPT_ID_KEY_IN, HID_REPORT_TYPE_INPUT,
                   HID_KEYBOARD_IN_RPT_LEN, buf);
-    SerialCommunication_SendBleTransferCMP();
 }
 
 #ifdef USE_HID_MOUSE

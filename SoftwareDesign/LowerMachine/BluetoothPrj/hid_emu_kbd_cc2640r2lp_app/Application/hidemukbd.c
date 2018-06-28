@@ -73,7 +73,9 @@
 
 #include "hidemukbd.h"
 
-#include "serial_communication.h"
+//#if defined (NPI_USE_UART) || defined (NPI_USE_SPI)
+//#include "tl.h"
+//#endif //TL
 /*********************************************************************
  * MACROS
  */
@@ -89,8 +91,7 @@
 #define MOUSE_BUTTON_NONE           0x00
 
 // HID keyboard input report length
-//#define HID_KEYBOARD_IN_RPT_LEN     8
-#define HID_KEYBOARD_IN_RPT_LEN     21
+#define HID_KEYBOARD_IN_RPT_LEN     8
 
 // HID LED output report length
 #define HID_LED_OUT_RPT_LEN         1
@@ -168,6 +169,22 @@
 #define HIDEMUKBD_ALL_EVENTS                  (HIDEMUKBD_ICALL_EVT | \
                                                HIDEMUKBD_QUEUE_EVT)
 
+//#if defined (NPI_USE_UART) || defined (NPI_USE_SPI)
+////events that TL will use to control the driver
+//#define MRDY_EVENT                            0x0010
+//#define TRANSPORT_RX_EVENT                    0x0020
+//#define TRANSPORT_TX_DONE_EVENT               0x0040
+//
+//#define APP_TL_BUFF_SIZE                      150
+////used to store data read from transport layer
+//static uint8_t appRxBuf[APP_TL_BUFF_SIZE];
+////TL packet parser
+//static void SimpleBLEPeripheral_TLpacketParser(void);
+//static TLCBs_t SimpleBLEPeripheral_TLCBs =
+//{
+//  SimpleBLEPeripheral_TLpacketParser // parse data read from transport layer
+//};
+//#endif //TL
 /*********************************************************************
  * TYPEDEFS
  */
@@ -202,11 +219,11 @@ static ICall_EntityID selfEntity;
 
 // Event globally used to post local events and pend on system and
 // local events.
-ICall_SyncHandle syncEvent;
+static ICall_SyncHandle syncEvent;
 
 // Queue object used for app messages
 static Queue_Struct appMsg;
-Queue_Handle appMsgQueue;
+static Queue_Handle appMsgQueue;
 
 // Task configuration
 Task_Struct hidEmuKbdTask;
@@ -215,55 +232,20 @@ Char hidEmuKbdTaskStack[HIDEMUKBD_TASK_STACK_SIZE];
 // GAP Profile - Name attribute for SCAN RSP data
 static uint8_t scanData[] =
 {
- /***************************************************************************/
-#if defined(CC2640R2_LAUNCHXL)  //BTP_101 HID Beta Version
-    // complete name
-    0x19,   // length of this data
-    GAP_ADTYPE_LOCAL_NAME_COMPLETE,
-    'B',
-    'T',
-    'P',
-    '_',
-    '1',
-    '0',
-    '1',
-    ' ',
-    'H',
-    'I',
-    'D',
-    ' ',
-    'B',
-    'e',
-    't',
-    'a',
-    ' ',
-    'V',
-    'e',
-    'r',
-    's',
-    'i',
-    'o',
-    'n',
-#else           //"BTP_101 HID Beta"
-    0x11,                             // length of this data
-    GAP_ADTYPE_LOCAL_NAME_COMPLETE,   // AD Type = Complete local name
-    'B',
-    'T',
-    'P',
-    '_',
-    '1',
-    '0',
-    '1',
-    ' ',
-    'H',
-    'I',
-    'D',
-    ' ',
-    'B',
-    'e',
-    't',
-    'a',
-#endif
+  0x0D,                             // length of this data
+  GAP_ADTYPE_LOCAL_NAME_COMPLETE,   // AD Type = Complete local name
+  'H',
+  'I',
+  'D',
+  ' ',
+  'K',
+  'e',
+  'y',
+  'b',
+  'o',
+  'a',
+  'r',
+  'd'
 };
 
 // Advertising data
@@ -289,13 +271,8 @@ static uint8_t advData[] =
   HI_UINT16(BATT_SERV_UUID)
 };
 
-//// Device name attribute value
-//static CONST uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "HID Keyboard";
-#if defined(CC2640R2_LAUNCHXL)
-static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "BTP_101 HID Beta Version";
-#else
-static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "BTP_101 HID Beta";
-#endif
+// Device name attribute value
+static CONST uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "HID Keyboard";
 
 // HID Dev configuration
 static hidDevCfg_t hidEmuKbdCfg =
@@ -401,6 +378,12 @@ void HidEmuKbd_init(void)
   // Set device's Sleep Clock Accuracy
   //HCI_EXT_SetSCACmd(40);
 
+//#if defined (NPI_USE_UART) || defined (NPI_USE_SPI)
+//  //initialize and pass information to TL
+//  TLinit(&syncEvent, &SimpleBLEPeripheral_TLCBs, TRANSPORT_TX_DONE_EVENT,
+//         TRANSPORT_RX_EVENT, MRDY_EVENT);
+//#endif //TL
+
   // Create an RTOS queue for message from profile to be sent to app.
   appMsgQueue = Util_constructQueue(&appMsg);
 
@@ -478,7 +461,7 @@ void HidEmuKbd_init(void)
   HidDev_StartDevice();
 
   // Initialize keys on SmartRF06EB.
-  Board_initKeys(HidEmuKbd_keyPressHandler);        // 按键初始化
+  Board_initKeys(HidEmuKbd_keyPressHandler);
 
   // Register with GAP for HCI/Host messages
   GAP_RegisterForMsgs(selfEntity);
@@ -491,7 +474,7 @@ void HidEmuKbd_init(void)
 #endif // !defined (USE_LL_CONN_PARAM_UPDATE)
   
   // Use default data Tx / Rx data length and times
-  HCI_EXT_SetMaxDataLenCmd(LL_MIN_LINK_DATA_LEN, LL_MIN_LINK_DATA_TIME, LL_MIN_LINK_DATA_LEN, LL_MIN_LINK_DATA_TIME);   // Set Payload Size
+  HCI_EXT_SetMaxDataLenCmd(LL_MIN_LINK_DATA_LEN, LL_MIN_LINK_DATA_TIME, LL_MIN_LINK_DATA_LEN, LL_MIN_LINK_DATA_TIME);
 }
 
 /*********************************************************************
@@ -517,7 +500,10 @@ void HidEmuKbd_taskFxn(UArg a0, UArg a1)
 
     events = Event_pend(syncEvent, Event_Id_NONE, HIDEMUKBD_ALL_EVENTS,
                         ICALL_TIMEOUT_FOREVER);
-
+//#if defined (NPI_USE_UART) || defined (NPI_USE_SPI)
+//    //TL handles driver events. this must be done first
+//    TL_handleISRevent();
+//#endif //TL
     if (events)
     {
       ICall_EntityID dest;
@@ -777,33 +763,21 @@ static void HidEmuKbd_handleKeys(uint8_t shift, uint8_t keys)
  *
  * @return  none
  */
-
-static uint8_t testPenDown[] = {0x02,0xe6,0x0f,0x00,0x00,0x02,0x64,0x00,0x06,0x00,0x01,0x46,0x00,0x35,0x00,0x77,0x06,0x5e,0x0b,0xce,0xba};
-static uint8_t testPenUp[] = {0x02,0xe7,0x0f,0x00,0x0a,0x02,0x00,0x00,0x06,0x00,0x01,0x46,0x00,0x35,0x00,0x69,0x06,0x54,0x0b,0x40,0x04};
 static void HidEmuKbd_sendReport(uint8_t keycode)
 {
-    uint8_t buf[HID_KEYBOARD_IN_RPT_LEN];
-    if (keycode == 0x4F){
-        memcpy(buf, testPenDown, HID_KEYBOARD_IN_RPT_LEN);
-    }else{
-        memcpy(buf, testPenUp, HID_KEYBOARD_IN_RPT_LEN);
-    }
-    HidDev_Report(HID_RPT_ID_KEY_IN, HID_REPORT_TYPE_INPUT,
-                  HID_KEYBOARD_IN_RPT_LEN, buf);
-//    uint8_t buf[HID_KEYBOARD_IN_RPT_LEN];
-//    uint8_t realLen = piLoopQueue->QueueLength(&pBTP_DataMsg->WriteServiceBuffer);
-//    if (realLen < HID_KEYBOARD_IN_RPT_LEN){
-//        return;
-//    }
-//    if (realLen > HID_KEYBOARD_IN_RPT_LEN){
-//        /* 数据缓冲区溢出 */
-//        realLen = HID_KEYBOARD_IN_RPT_LEN;
-//    }
-//    memset(buf, 0, HID_KEYBOARD_IN_RPT_LEN);
-//    piLoopQueue->DeQueue(&pBTP_DataMsg->WriteServiceBuffer, buf, realLen);
-//
-//    HidDev_Report(HID_RPT_ID_KEY_IN, HID_REPORT_TYPE_INPUT,
-//                  HID_KEYBOARD_IN_RPT_LEN, buf);
+  uint8_t buf[HID_KEYBOARD_IN_RPT_LEN];
+
+  buf[0] = 0;         // Modifier keys
+  buf[1] = 0;         // Reserved
+  buf[2] = keycode;   // Keycode 1
+  buf[3] = 0;         // Keycode 2
+  buf[4] = 0;         // Keycode 3
+  buf[5] = 0;         // Keycode 4
+  buf[6] = 0;         // Keycode 5
+  buf[7] = 0;         // Keycode 6
+
+  HidDev_Report(HID_RPT_ID_KEY_IN, HID_REPORT_TYPE_INPUT,
+                HID_KEYBOARD_IN_RPT_LEN, buf);
 }
 
 #ifdef USE_HID_MOUSE
@@ -971,6 +945,32 @@ static uint8_t HidEmuKbd_enqueueMsg(uint16_t event, uint8_t state)
   return FALSE;
 }
 
+///*********************************************************************
+// * @fn      SimpleBLEPeripheral_TLpacketParser
+// *
+// * @brief   Receive Data from TL.
+// *
+// * @param   NONE
+// *
+// * @return  NONE
+// */
+//#if defined (NPI_USE_UART) || defined (NPI_USE_SPI)
+//static void SimpleBLEPeripheral_TLpacketParser(void)
+//{
+//  //read available bytes
+//  uint8_t len = TLgetRxBufLen();
+//  if (len >= APP_TL_BUFF_SIZE)
+//  {
+//    len = APP_TL_BUFF_SIZE;
+//  }
+//  TLread(appRxBuf, len);
+//
+//  // ADD PACKET PARSER HERE
+//  // for now we just echo...
+//
+//  TLwrite(appRxBuf, len);
+//}
+//#endif //TL
 
 /*********************************************************************
 *********************************************************************/
