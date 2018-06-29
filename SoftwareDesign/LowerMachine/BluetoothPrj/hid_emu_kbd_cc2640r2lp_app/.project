@@ -133,16 +133,6 @@
 			<locationURI>SRC_BLE_DIR/osal/src/inc/osal_snv.h</locationURI>
 		</link>
 		<link>
-			<name>PROFILES/devinfoservice.c</name>
-			<type>1</type>
-			<locationURI>SRC_BLE_DIR/profiles/dev_info/cc26xx/devinfoservice.c</locationURI>
-		</link>
-		<link>
-			<name>PROFILES/devinfoservice.h</name>
-			<type>1</type>
-			<locationURI>SRC_BLE_DIR/profiles/dev_info/devinfoservice.h</locationURI>
-		</link>
-		<link>
 			<name>Startup/board.c</name>
 			<type>1</type>
 			<locationURI>SRC_BLE_DIR/target/board.c</locationURI>

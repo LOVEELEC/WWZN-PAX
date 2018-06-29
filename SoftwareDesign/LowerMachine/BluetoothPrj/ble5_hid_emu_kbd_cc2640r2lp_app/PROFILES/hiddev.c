@@ -85,12 +85,12 @@
 #define DEFAULT_SCAN_PARAM_NOTIFY_TEST        TRUE
 
 // Advertising intervals (units of 625us, 160=100ms).
-#define HID_INITIAL_ADV_INT_MIN               48
-#define HID_INITIAL_ADV_INT_MAX               80
-#define HID_HIGH_ADV_INT_MIN                  32
-#define HID_HIGH_ADV_INT_MAX                  48
-#define HID_LOW_ADV_INT_MIN                   1600
-#define HID_LOW_ADV_INT_MAX                   1600
+#define HID_INITIAL_ADV_INT_MIN               48        // 30ms
+#define HID_INITIAL_ADV_INT_MAX               80        // 50ms
+#define HID_HIGH_ADV_INT_MIN                  32        // 20ms
+#define HID_HIGH_ADV_INT_MAX                  48        // 30ms
+#define HID_LOW_ADV_INT_MIN                   1600      // 1000ms
+#define HID_LOW_ADV_INT_MAX                   1600      // 1000ms
 
 // Advertising timeouts in sec.
 #define HID_INITIAL_ADV_TIMEOUT               60
@@ -132,15 +132,23 @@
 /*********************************************************************
  * CONSTANTS
  */
+#ifndef TEST_HID_MANUFACTURER_CUSTOM_EQUIPMENT
+    #define HID_DEV_DATA_LEN                      9
 
-#define HID_DEV_DATA_LEN                      9
+    #ifdef HID_DEV_RPT_QUEUE_LEN
+      #define HID_DEV_REPORT_Q_SIZE               (HID_DEV_RPT_QUEUE_LEN+1)
+    #else
+      #define HID_DEV_REPORT_Q_SIZE               (10+1)
+    #endif
+    #else
+    #define HID_DEV_DATA_LEN                      21
 
-#ifdef HID_DEV_RPT_QUEUE_LEN
-  #define HID_DEV_REPORT_Q_SIZE               (HID_DEV_RPT_QUEUE_LEN+1)
-#else
-  #define HID_DEV_REPORT_Q_SIZE               (10+1)
+    #ifdef HID_DEV_RPT_QUEUE_LEN
+      #define HID_DEV_REPORT_Q_SIZE               (HID_DEV_RPT_QUEUE_LEN+1)
+    #else
+      #define HID_DEV_REPORT_Q_SIZE               (21+1)
+    #endif
 #endif
-
 // HID Auto Sync White List configuration parameter. This parameter should be
 // set to FALSE if the HID Host (i.e., the Master device) uses a Resolvable
 // Private Address (RPA). It should be set to TRUE, otherwise.
@@ -398,13 +406,17 @@ static void HidDev_init(void)
 
   DevInfo_AddService();
   Batt_AddService();
+#ifndef TEST_HID_MANUFACTURER_CUSTOM_EQUIPMENT
   ScanParam_AddService();
+#endif
 
   // Register for Battery service callback.
   Batt_Register(HidDev_batteryCB);
 
+#ifndef TEST_HID_MANUFACTURER_CUSTOM_EQUIPMENT
   // Register for Scan Parameters service callback.
   ScanParam_Register(HidDev_scanParamCB);
+#endif
 
   // Initialize report ready clock timer
   Util_constructClock(&reportReadyClock, HidDev_reportReadyClockCB,

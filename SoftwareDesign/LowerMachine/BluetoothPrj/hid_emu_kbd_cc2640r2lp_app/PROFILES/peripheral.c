@@ -40,8 +40,8 @@
  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  ******************************************************************************
- Release Name: simplelink_cc2640r2_sdk_01_50_00_58
- Release Date: 2017-10-17 18:09:51
+ Release Name: simplelink_cc2640r2_sdk_1_40_00_45
+ Release Date: 2017-07-20 17:16:59
  *****************************************************************************/
 
 /*********************************************************************
@@ -107,7 +107,7 @@
 #define MAX_TIMEOUT_VALUE             0xFFFF
 
 // Task configuration
-#define GAPROLE_TASK_PRIORITY         3
+#define GAPROLE_TASK_PRIORITY         4
 
 #ifndef GAPROLE_TASK_STACK_SIZE
 

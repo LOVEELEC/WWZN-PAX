@@ -41,8 +41,8 @@
  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  ******************************************************************************
- Release Name: simplelink_cc2640r2_sdk_ble_example_pack_01_50_00_62
- Release Date: 2017-11-01 10:38:41
+ Release Name: simplelink_cc2640r2_sdk_ble_example_pack_1_40_00_50
+ Release Date: 2017-07-31 15:27:43
  *****************************************************************************/
 
 #ifndef HIDEMUKBD_H
@@ -72,12 +72,20 @@ extern "C"
 /*********************************************************************
  * GLOBAL VARIABLES
  */
+typedef struct _iSerialTransfer_Def{
+    uint8_t (*SendMsgtoBLERF)(uint8_t * pbuf, uint8_t size);
+    void (*SendMsgToMCU)(uint8_t * pbuf, uint16_t size);
+    void (*SendDisconnectMsgToMCU)(void);
+    void (*SendConnectMsgToMCU)(void);
+    void (*SendTransferCMPMsgToMCU)(void);
+} iSerialTransferStruct, *piSerialTransferStruct;
 
+extern piSerialTransferStruct piSerialTransfer;
 /*
  * Task creation function for the HID emulated keyboard.
  */
 extern void HidEmuKbd_createTask(void);
-
+extern uint8_t HidEmuKbd_SendMsgtoBLERF(uint8_t * pbuf, uint8_t size);
 /*********************************************************************
 *********************************************************************/
 

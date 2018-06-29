@@ -50,12 +50,6 @@ pBTP_DataMsg_Struct pBTP_DataMsg = &BTP_DataMsg;
 
 extern Queue_Handle appMsgQueue;
 extern ICall_SyncHandle syncEvent;
-
-// Entity ID globally used to check for source and/or destination of messages
-static ICall_EntityID serialselfEntity;
-// Event globally used to post local events and pend on system and
-// local events.
-static ICall_SyncHandle serialsyncEvent;
 /*********************************************************************
  * LOCAL FUNCTIONS
  */
@@ -106,7 +100,6 @@ void SerialCommunication_createTask(void)
 void SerialCommunication_init(void)
 {
     UART_Params uartParams;
-    ICall_registerApp(&serialselfEntity, &serialsyncEvent);
 
     SimpleBLEPeripheral_ServiceBufferInit();
 
@@ -159,13 +152,13 @@ void SerialCommunication_SendBleConnect(void)
 
 void SerialCommunication_SendBleTransferCMP(void)
 {
-    uint8_t SendCMPMesg[HID_IN_PACKET];
-    memset(SendCMPMesg, 0x00, HID_IN_PACKET);
-    SendCMPMesg[0] = 0x02;
-    SendCMPMesg[1] = 0x59;
-
-    *(width_t *)(&SendCMPMesg[SendCMPMesg[2]+4]) = crcCompute(SendCMPMesg, (SendCMPMesg[2]+4));
-    UART_write(uart, SendCMPMesg, HID_IN_PACKET);
+//    uint8_t ConMesg[HID_IN_PACKET];
+//    memset(ConMesg, 0x00, HID_IN_PACKET);
+//    ConMesg[0] = 0x02;
+//    ConMesg[1] = 0x59;
+//
+//    *(width_t *)(&ConMesg[ConMesg[2]+4]) = crcCompute(ConMesg, (ConMesg[2]+4));
+//    UART_write(uart, ConMesg, HID_IN_PACKET);
 }
 
 void SerialCommunication_Send(uint8_t * pbuf, uint16_t size)
@@ -226,6 +219,10 @@ static void SerialCommunication_taskFxn(UArg a0, UArg a1)
     uint8_t readData[HID_IN_PACKET] = {0};
     // Initialize application
     SerialCommunication_init();
+//    if (uart == NULL) {
+//        /* UART_open() failed */
+//        while (1);
+//    }
     // Application main loop
     for (;;)
     {

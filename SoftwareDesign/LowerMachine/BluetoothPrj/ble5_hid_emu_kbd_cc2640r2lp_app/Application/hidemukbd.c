@@ -75,11 +75,16 @@
 #include "hidemukbd.h"
 
 
-#define USE_UART_IN_HIDEMUKBD
+//#define USE_UART_IN_HIDEMUKBD
 
 #ifdef USE_UART_IN_HIDEMUKBD
+#include <ti/sysbios/knl/Semaphore.h>
 #include <ti/drivers/uart/UARTCC26XX.h>
 #include "LL_loopQueue.h"
+
+#define HID_IN_PACKET                   21
+#define HID_OUT_PACKET                  21
+
 static void Serial_WriteData(void);
 
 typedef struct _BTP_DataMsg_Struct_Def{
@@ -88,6 +93,7 @@ typedef struct _BTP_DataMsg_Struct_Def{
 } BTP_DataMsg_Struct, *pBTP_DataMsg_Struct;
 BTP_DataMsg_Struct BTP_DataMsg;
 pBTP_DataMsg_Struct pBTP_DataMsg = &BTP_DataMsg;
+static UART_Handle uartHandle;
 #endif
 
 /*********************************************************************
@@ -104,8 +110,12 @@ pBTP_DataMsg_Struct pBTP_DataMsg = &BTP_DataMsg;
 #define MOUSE_BUTTON_1              0x01
 #define MOUSE_BUTTON_NONE           0x00
 
-// HID keyboard input report length
+#ifndef TEST_HID_MANUFACTURER_CUSTOM_EQUIPMENT
+//HID keyboard input report length
 #define HID_KEYBOARD_IN_RPT_LEN     8
+#else
+#define HID_KEYBOARD_IN_RPT_LEN     21
+#endif
 
 // HID LED output report length
 #define HID_LED_OUT_RPT_LEN         1
@@ -233,20 +243,55 @@ Char hidEmuKbdTaskStack[HIDEMUKBD_TASK_STACK_SIZE];
 // GAP Profile - Name attribute for SCAN RSP data
 static uint8_t scanData[] =
 {
-  0x0D,                             // length of this data
-  GAP_ADTYPE_LOCAL_NAME_COMPLETE,   // AD Type = Complete local name
-  'H',
-  'I',
-  'D',
-  ' ',
-  'K',
-  'e',
-  'y',
-  'b',
-  'o',
-  'a',
-  'r',
-  'd'
+ /***************************************************************************/
+#if defined(CC2640R2_LAUNCHXL)  //BTP_101 HID Beta Version
+    // complete name
+    0x19,   // length of this data
+    GAP_ADTYPE_LOCAL_NAME_COMPLETE,
+    'B',
+    'T',
+    'P',
+    '_',
+    '1',
+    '0',
+    '1',
+    ' ',
+    'H',
+    'I',
+    'D',
+    ' ',
+    'B',
+    'e',
+    't',
+    'a',
+    ' ',
+    'V',
+    'e',
+    'r',
+    's',
+    'i',
+    'o',
+    'n',
+#else           //"BTP_101 HID Beta"
+    0x11,                             // length of this data
+    GAP_ADTYPE_LOCAL_NAME_COMPLETE,   // AD Type = Complete local name
+    'B',
+    'T',
+    'P',
+    '_',
+    '1',
+    '0',
+    '1',
+    ' ',
+    'H',
+    'I',
+    'D',
+    ' ',
+    'B',
+    'e',
+    't',
+    'a',
+#endif
 };
 
 // Advertising data
@@ -260,8 +305,10 @@ static uint8_t advData[] =
   // appearance
   0x03,   // length of this data
   GAP_ADTYPE_APPEARANCE,
-  LO_UINT16(GAP_APPEARE_HID_KEYBOARD),
-  HI_UINT16(GAP_APPEARE_HID_KEYBOARD),
+//  LO_UINT16(GAP_APPEARE_HID_KEYBOARD),
+//  HI_UINT16(GAP_APPEARE_HID_KEYBOARD),
+    LO_UINT16(GAP_APPEARE_GENERIC_HID),
+    HI_UINT16(GAP_APPEARE_GENERIC_HID),
 
   // service UUIDs
   0x05,   // length of this data
@@ -272,8 +319,13 @@ static uint8_t advData[] =
   HI_UINT16(BATT_SERV_UUID)
 };
 
-// Device name attribute value
-static CONST uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "HID Keyboard";
+//// Device name attribute value
+//static CONST uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "HID Keyboard";
+#if defined(CC2640R2_LAUNCHXL)
+static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "BTP_101 HID Beta Version";
+#else
+static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "BTP_101 HID Beta";
+#endif
 
 // HID Dev configuration
 static hidDevCfg_t hidEmuKbdCfg =
@@ -475,7 +527,9 @@ void HidEmuKbd_init(void)
 
   // Initialize keys on SmartRF06EB.
   Board_initKeys(HidEmuKbd_keyPressHandler);
+#ifdef USE_UART_IN_HIDEMUKBD
   SerialCommunication_init();
+#endif
   // Register with GAP for HCI/Host messages
   GAP_RegisterForMsgs(selfEntity);
 
@@ -512,7 +566,7 @@ void HidEmuKbd_taskFxn(UArg a0, UArg a1)
 
     events = Event_pend(syncEvent, Event_Id_NONE, HIDEMUKBD_ALL_EVENTS,
                         ICALL_TIMEOUT_FOREVER);
-    Serial_WriteData();
+//    Serial_WriteData();
     if (events)
     {
       ICall_EntityID dest;
@@ -774,19 +828,20 @@ static void HidEmuKbd_handleKeys(uint8_t shift, uint8_t keys)
  */
 static void HidEmuKbd_sendReport(uint8_t keycode)
 {
-  uint8_t buf[HID_KEYBOARD_IN_RPT_LEN];
-
-  buf[0] = 0;         // Modifier keys
-  buf[1] = 0;         // Reserved
-  buf[2] = keycode;   // Keycode 1
-  buf[3] = 0;         // Keycode 2
-  buf[4] = 0;         // Keycode 3
-  buf[5] = 0;         // Keycode 4
-  buf[6] = 0;         // Keycode 5
-  buf[7] = 0;         // Keycode 6
-
-  HidDev_Report(HID_RPT_ID_KEY_IN, HID_REPORT_TYPE_INPUT,
-                HID_KEYBOARD_IN_RPT_LEN, buf);
+//  uint8_t buf[HID_KEYBOARD_IN_RPT_LEN];
+//    uint16_t realLen = piLoopQueue->QueueLength(&pBTP_DataMsg->NotifyServiceBuffer);
+//    if (realLen < HID_KEYBOARD_IN_RPT_LEN){
+//        return;
+//    }
+//    if (realLen > HID_KEYBOARD_IN_RPT_LEN){
+//        /* æ•°æ®ç¼“å†²åŒºæº¢å‡º */
+//        realLen = HID_KEYBOARD_IN_RPT_LEN;
+//    }
+//    memset(buf, 0, HID_KEYBOARD_IN_RPT_LEN);
+//    piLoopQueue->DeQueue(&pBTP_DataMsg->NotifyServiceBuffer, buf, realLen);
+//    UART_write(uartHandle, buf, HID_IN_PACKET);
+//  HidDev_Report(HID_RPT_ID_KEY_IN, HID_REPORT_TYPE_INPUT,
+//                HID_KEYBOARD_IN_RPT_LEN, buf);
 }
 
 #ifdef USE_HID_MOUSE
@@ -956,10 +1011,7 @@ static uint8_t HidEmuKbd_enqueueMsg(uint16_t event, uint8_t state)
 
 
 #ifdef USE_UART_IN_HIDEMUKBD
-#define HID_IN_PACKET                   21
-#define HID_OUT_PACKET                  21
 static void readCallback(UART_Handle handle, void *rxBuf, size_t size);
-static UART_Handle uartHandle;
 static uint8_t readData[HID_IN_PACKET] = {0};
 
 static void SimpleBLEPeripheral_ServiceBufferInit(void)
@@ -1016,15 +1068,17 @@ static void readCallback(UART_Handle handle, void *rxBuf, size_t size)
         realLen = BTP_DataMsg.NotifyServiceBuffer.DataBufMaxSize - piLoopQueue->QueueLength(&BTP_DataMsg.NotifyServiceBuffer);
         if (realLen >= HID_IN_PACKET){
             if (piLoopQueue->EnQueue(&BTP_DataMsg.NotifyServiceBuffer, readData, HID_IN_PACKET) ==  HID_IN_PACKET){
-//                /* Enqueue the message */
-//                HidBTP_enqueueMsg();
+                // Enqueue the event.
+                  HidEmuKbd_enqueueMsg(HIDEMUKBD_KEY_CHANGE_EVT, 0x00);
             }
         }else{
                     /* Buffer is Full */
 
         }
     }
-
+//    // Wake up the application.
+//    Semaphore_post(syncEvent);
+    // Enable RETURN_PARTIAL
     UART_control(uartHandle, UARTCC26XX_RETURN_PARTIAL_ENABLE, NULL);
     UART_read(uartHandle, readData, HID_IN_PACKET);
 }
@@ -1037,7 +1091,7 @@ static void Serial_WriteData(void)
         return;
     }
     if (realLen > HID_IN_PACKET){
-        /* Êı¾İ»º³åÇøÒç³ö */
+        /* æ•°æ®ç¼“å†²åŒºæº¢å‡º */
         realLen = HID_IN_PACKET;
     }
     memset(buf, 0, HID_IN_PACKET);

@@ -129,6 +129,9 @@ Drivers/RF \
 Drivers/TRNG \
 ICall \
 ICallBLE \
+NPI/Transport/UART \
+NPI/Transport \
+NPI \
 PROFILES \
 Startup \
 TOOLS \

@@ -40,8 +40,8 @@
  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  ******************************************************************************
- Release Name: simplelink_cc2640r2_sdk_ble_example_pack_01_50_00_62
- Release Date: 2017-11-01 10:38:41
+ Release Name: simplelink_cc2640r2_sdk_ble_example_pack_1_40_00_50
+ Release Date: 2017-07-31 15:27:43
  *****************************************************************************/
 
 /*******************************************************************************
@@ -63,6 +63,8 @@
 #include "hiddev.h"
 #include "hidemukbd.h"
 
+#include "npi_task.h"
+
 /* Header files required to enable instruction fetch cache */
 #include <inc/hw_memmap.h>
 #include <driverlib/vims.h>
@@ -70,7 +72,7 @@
 #ifndef USE_DEFAULT_USER_CFG
 
 #include "ble_user_config.h"
-#include "npi_task.h"
+
 // BLE user defined configuration
 #ifdef ICALL_JT
 icall_userCfg_t user0Cfg = BLE_USER_CFG;
@@ -147,7 +149,7 @@ int main()
   /* Start tasks of external images - Priority 5 */
   ICall_createRemoteTasks();
 
-  /* Kick off profile - Priority 3 */
+  /* Kick off profile - Priority 4 */
   GAPRole_createTask();
 
   /* Kick off HID service task - Priority 2 */
@@ -155,6 +157,9 @@ int main()
 
   /* Kick off application - Priority 1 */
   HidEmuKbd_createTask();
+
+  /* Kick off NPI */
+  NPITask_createTask(ICALL_SERVICE_CLASS_BLE);
 
   /* enable interrupts and start SYS/BIOS */
   BIOS_start();
