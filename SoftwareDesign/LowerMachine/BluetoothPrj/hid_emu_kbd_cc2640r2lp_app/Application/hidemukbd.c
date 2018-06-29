@@ -729,9 +729,9 @@ static void HidEmuKbd_handleKeys(uint8_t shift, uint8_t * pBuf)
  */
 static void HidEmuKbd_sendReport(uint8_t* pbuf)
 {
-
   HidDev_Report(HID_RPT_ID_KEY_IN, HID_REPORT_TYPE_INPUT,
                 HID_KEYBOARD_IN_RPT_LEN, pbuf);
+  piSerialTransfer->SendTransferCMPMsgToMCU();
 }
 
 #ifdef USE_HID_MOUSE
