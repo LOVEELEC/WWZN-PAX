@@ -105,7 +105,8 @@
  */
 
 // HID idle timeout in msec; set to zero to disable timeout
-#define DEFAULT_HID_IDLE_TIMEOUT              60000
+//#define DEFAULT_HID_IDLE_TIMEOUT              60000
+#define DEFAULT_HID_IDLE_TIMEOUT                0
 
 // Minimum connection interval (units of 1.25ms) if automatic parameter update
 // request is enabled.

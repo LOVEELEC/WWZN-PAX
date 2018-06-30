@@ -1,7 +1,7 @@
 ******************************************************************************
                   TI ARM Linker PC v16.9.6                     
 ******************************************************************************
->> Linked Sat Jun 30 18:39:21 2018
+>> Linked Sat Jun 30 19:23:59 2018
 
 OUTPUT FILE NAME:   <hid_emu_kbd_cc2640r2lp_app.out>
 ENTRY POINT SYMBOL: "ResetISR"  address: 0000aba5
@@ -1369,16 +1369,16 @@ section   page    origin      length       input sections
                   0000eac7    00000001                                       : ll_config.o (.rodata)
 
 .cinit     0    0000eac8    00000554     
-                  0000eac8    0000040f     (.cinit..data.load) [load image, compression = lzss]
-                  0000eed7    00000028     (.cinit..data:ti_sysbios_family_arm_m3_Hwi_Module__state__V.load) [load image, compression = lzss]
-                  0000eeff    00000021     (.cinit..data:ti_sysbios_knl_Task_Module__state__V.load) [load image, compression = lzss]
-                  0000ef20    0000001f     (.cinit..data:ti_sysbios_BIOS_Module__state__V.load) [load image, compression = lzss]
-                  0000ef3f    0000001e     (.cinit..data:ti_sysbios_knl_Clock_Module__state__V.load) [load image, compression = lzss]
-                  0000ef5d    00000010     (.cinit..data:ti_sysbios_knl_Swi_Module__state__V.load) [load image, compression = lzss]
-                  0000ef6d    00000003     --HOLE-- [fill = 0]
-                  0000ef70    0000000c     (__TI_handler_table)
-                  0000ef7c    0000000b     (.cinit..data:ti_sysbios_family_arm_cc26xx_Timer_Module__state__V.load) [load image, compression = lzss]
-                  0000ef87    00000001     --HOLE-- [fill = 0]
+                  0000eac8    0000040c     (.cinit..data.load) [load image, compression = lzss]
+                  0000eed4    00000028     (.cinit..data:ti_sysbios_family_arm_m3_Hwi_Module__state__V.load) [load image, compression = lzss]
+                  0000eefc    00000021     (.cinit..data:ti_sysbios_knl_Task_Module__state__V.load) [load image, compression = lzss]
+                  0000ef1d    0000001f     (.cinit..data:ti_sysbios_BIOS_Module__state__V.load) [load image, compression = lzss]
+                  0000ef3c    0000001e     (.cinit..data:ti_sysbios_knl_Clock_Module__state__V.load) [load image, compression = lzss]
+                  0000ef5a    00000010     (.cinit..data:ti_sysbios_knl_Swi_Module__state__V.load) [load image, compression = lzss]
+                  0000ef6a    00000002     --HOLE-- [fill = 0]
+                  0000ef6c    0000000c     (__TI_handler_table)
+                  0000ef78    0000000b     (.cinit..data:ti_sysbios_family_arm_cc26xx_Timer_Module__state__V.load) [load image, compression = lzss]
+                  0000ef83    00000005     --HOLE-- [fill = 0]
                   0000ef88    00000008     (.cinit..bss.load) [load image, compression = zero_init]
                   0000ef90    00000008     (.cinit..data:xdc_runtime_Memory_Module__state__V.load) [load image, compression = lzss]
                   0000ef98    00000007     (.cinit..data:ti_sysbios_family_arm_cc26xx_TimestampProvider_Module__state__V.load) [load image, compression = lzss]
@@ -1648,7 +1648,7 @@ MODULE SUMMARY
        Total:                                   234     233       16     
                                                                          
     C:\Users\LOVE_E~1\AppData\Local\Temp\
-       {E89A01AF-F411-4552-88DC-FC56E43ABCC3}   0       0         438    
+       {23D4B976-FC35-4A85-85FA-4DC6DDBDA887}   0       0         438    
     +--+----------------------------------------+-------+---------+---------+
        Total:                                   0       0         438    
                                                                          
@@ -1798,21 +1798,21 @@ MODULE SUMMARY
        Total:                                   980     0         0      
                                                                          
        Stack:                                   0       0         1024   
-       Linker Generated:                        488     1359      0      
+       Linker Generated:                        488     1356      0      
     +--+----------------------------------------+-------+---------+---------+
-       Grand Total:                             54714   10927     11456  
+       Grand Total:                             54714   10924     11456  
 
 
 LINKER GENERATED COPY TABLES
 
 __TI_cinit_table @ 0000efb4 records: 13, size/record: 8, table size: 104
-	.data: load addr=0000eac8, load size=0000040f bytes, run addr=20000208, run size=000020ed bytes, compression=lzss
-	.data:ti_sysbios_family_arm_m3_Hwi_Module__state__V: load addr=0000eed7, load size=00000028 bytes, run addr=20000144, run size=00000034 bytes, compression=lzss
-	.data:ti_sysbios_knl_Task_Module__state__V: load addr=0000eeff, load size=00000021 bytes, run addr=20000100, run size=00000044 bytes, compression=lzss
-	.data:ti_sysbios_BIOS_Module__state__V: load addr=0000ef20, load size=0000001f bytes, run addr=200001a4, run size=00000024 bytes, compression=lzss
-	.data:ti_sysbios_knl_Clock_Module__state__V: load addr=0000ef3f, load size=0000001e bytes, run addr=20000178, run size=0000002c bytes, compression=lzss
-	.data:ti_sysbios_knl_Swi_Module__state__V: load addr=0000ef5d, load size=00000010 bytes, run addr=200001c8, run size=0000001c bytes, compression=lzss
-	.data:ti_sysbios_family_arm_cc26xx_Timer_Module__state__V: load addr=0000ef7c, load size=0000000b bytes, run addr=200001e4, run size=00000008 bytes, compression=lzss
+	.data: load addr=0000eac8, load size=0000040c bytes, run addr=20000208, run size=000020ed bytes, compression=lzss
+	.data:ti_sysbios_family_arm_m3_Hwi_Module__state__V: load addr=0000eed4, load size=00000028 bytes, run addr=20000144, run size=00000034 bytes, compression=lzss
+	.data:ti_sysbios_knl_Task_Module__state__V: load addr=0000eefc, load size=00000021 bytes, run addr=20000100, run size=00000044 bytes, compression=lzss
+	.data:ti_sysbios_BIOS_Module__state__V: load addr=0000ef1d, load size=0000001f bytes, run addr=200001a4, run size=00000024 bytes, compression=lzss
+	.data:ti_sysbios_knl_Clock_Module__state__V: load addr=0000ef3c, load size=0000001e bytes, run addr=20000178, run size=0000002c bytes, compression=lzss
+	.data:ti_sysbios_knl_Swi_Module__state__V: load addr=0000ef5a, load size=00000010 bytes, run addr=200001c8, run size=0000001c bytes, compression=lzss
+	.data:ti_sysbios_family_arm_cc26xx_Timer_Module__state__V: load addr=0000ef78, load size=0000000b bytes, run addr=200001e4, run size=00000008 bytes, compression=lzss
 	.bss: load addr=0000ef88, load size=00000008 bytes, run addr=200022f8, run size=00000605 bytes, compression=zero_init
 	.data:xdc_runtime_Memory_Module__state__V: load addr=0000ef90, load size=00000008 bytes, run addr=20000200, run size=00000004 bytes, compression=lzss
 	.data:ti_sysbios_family_arm_cc26xx_TimestampProvider_Module__state__V: load addr=0000ef98, load size=00000007 bytes, run addr=200001ec, run size=00000004 bytes, compression=lzss
@@ -1823,7 +1823,7 @@ __TI_cinit_table @ 0000efb4 records: 13, size/record: 8, table size: 104
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 0000ef70 records: 3, size/record: 4, table size: 12
+__TI_handler_table @ 0000ef6c records: 3, size/record: 4, table size: 12
 	index: 0, handler: __TI_decompress_lzss
 	index: 1, handler: __TI_decompress_none
 	index: 2, handler: __TI_zero_init
@@ -3237,8 +3237,8 @@ UNDEFED   SHT$$INIT_ARRAY$$Limit
 000000d3  __TARG__                                                                  
 0000efb4  __TI_CINIT_Base                                                           
 0000f01c  __TI_CINIT_Limit                                                          
-0000ef70  __TI_Handler_Table_Base                                                   
-0000ef7c  __TI_Handler_Table_Limit                                                  
+0000ef6c  __TI_Handler_Table_Base                                                   
+0000ef78  __TI_Handler_Table_Limit                                                  
 00007c01  __TI_auto_init                                                            
 200021fc  __TI_cleanup_ptr                                                          
 00009a11  __TI_decompress_lzss                                                      
@@ -5337,8 +5337,8 @@ address   name
 0000eac4  maxPktsPerEvt                                                             
 0000eac6  wlSize                                                                    
 0000eac7  cryptoMode                                                                
-0000ef70  __TI_Handler_Table_Base                                                   
-0000ef7c  __TI_Handler_Table_Limit                                                  
+0000ef6c  __TI_Handler_Table_Base                                                   
+0000ef78  __TI_Handler_Table_Limit                                                  
 0000efb4  __TI_CINIT_Base                                                           
 0000f01c  __TI_CINIT_Limit                                                          
 0001e000  NV_FLASH                                                                  
