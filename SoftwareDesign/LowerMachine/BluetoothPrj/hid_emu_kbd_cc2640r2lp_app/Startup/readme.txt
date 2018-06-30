@@ -6,3 +6,7 @@ V0.0.1
 
 V0.0.2
 	+ 添加蓝牙笔相关的指令(Connect/Disconnect/SendCmp)
+	
+V0.0.3	
+	+ 添加POWER_SAVING
+	+ 添加WakeUP功能

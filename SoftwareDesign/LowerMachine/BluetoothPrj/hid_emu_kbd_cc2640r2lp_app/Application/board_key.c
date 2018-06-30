@@ -107,6 +107,8 @@ PIN_Config keyPinsCfg[] =
     Board_KEY_DOWN      | PIN_GPIO_OUTPUT_DIS  | PIN_INPUT_EN  |  PIN_PULLUP,
     Board_KEY_LEFT      | PIN_GPIO_OUTPUT_DIS  | PIN_INPUT_EN  |  PIN_PULLUP,
     Board_KEY_RIGHT     | PIN_GPIO_OUTPUT_DIS  | PIN_INPUT_EN  |  PIN_PULLUP,
+#elif defined(CC2640R2DK_4XS)
+    Board_BUTTON0       | PIN_GPIO_OUTPUT_DIS  | PIN_INPUT_EN  |  PIN_PULLUP,
 #endif
     PIN_TERMINATE
 };
@@ -141,6 +143,8 @@ void Board_initKeys(keysPressedCB_t appKeyCB)
   PIN_setConfig(hKeyPins, PIN_BM_IRQ, Board_KEY_DOWN    | PIN_IRQ_NEGEDGE);
   PIN_setConfig(hKeyPins, PIN_BM_IRQ, Board_KEY_LEFT    | PIN_IRQ_NEGEDGE);
   PIN_setConfig(hKeyPins, PIN_BM_IRQ, Board_KEY_RIGHT   | PIN_IRQ_NEGEDGE);
+#elif defined(CC2640R2DK_4XS)
+  PIN_setConfig(hKeyPins, PIN_BM_IRQ, Board_BUTTON0     | PIN_IRQ_NEGEDGE);
 #endif
 
 #ifdef POWER_SAVING
@@ -154,15 +158,19 @@ void Board_initKeys(keysPressedCB_t appKeyCB)
   PIN_setConfig(hKeyPins, PINCC26XX_BM_WAKEUP, Board_KEY_DOWN | PINCC26XX_WAKEUP_NEGEDGE);
   PIN_setConfig(hKeyPins, PINCC26XX_BM_WAKEUP, Board_KEY_LEFT | PINCC26XX_WAKEUP_NEGEDGE);
   PIN_setConfig(hKeyPins, PINCC26XX_BM_WAKEUP, Board_KEY_RIGHT | PINCC26XX_WAKEUP_NEGEDGE);
+#elif defined(CC2640R2DK_4XS)
+  PIN_setConfig(hKeyPins, PINCC26XX_BM_WAKEUP, Board_BUTTON0     | PINCC26XX_WAKEUP_NEGEDGE);
 #endif
 #endif //POWER_SAVING
 
+#ifndef CC2640R2DK_4XS
   // Setup keycallback for keys
   Util_constructClock(&keyChangeClock, Board_keyChangeHandler,
                       KEY_DEBOUNCE_TIMEOUT, 0, false, 0);
 
   // Set the application callback
   appKeyChangeHandler = appKeyCB;
+#endif
 }
 
 /*********************************************************************
@@ -213,9 +221,13 @@ static void Board_keyCallback(PIN_Handle hPin, PIN_Id pinId)
   {
     keysPressed |= KEY_RIGHT;
   }
+#elif defined(CC2640R2DK_4XS)
+
 #endif
 
+#ifndef CC2640R2DK_4XS
   Util_startClock(&keyChangeClock);
+#endif
 }
 
 /*********************************************************************
@@ -229,11 +241,13 @@ static void Board_keyCallback(PIN_Handle hPin, PIN_Id pinId)
  */
 static void Board_keyChangeHandler(UArg a0)
 {
+#ifndef CC2640R2DK_4XS
   if (appKeyChangeHandler != NULL)
   {
     // Notify the application
     (*appKeyChangeHandler)(keysPressed);
   }
+#endif
 }
 /*********************************************************************
 *********************************************************************/

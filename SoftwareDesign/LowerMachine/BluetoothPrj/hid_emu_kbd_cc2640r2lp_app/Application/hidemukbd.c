@@ -482,8 +482,8 @@ void HidEmuKbd_init(void)
   // Start the GAP Role and Register the Bond Manager.
   HidDev_StartDevice();
 
-//  // Initialize keys on SmartRF06EB.
-//  Board_initKeys(HidEmuKbd_keyPressHandler);
+  // Initialize keys on SmartRF06EB.
+  Board_initKeys(HidEmuKbd_keyPressHandler);
 
   // Register with GAP for HCI/Host messages
   GAP_RegisterForMsgs(selfEntity);

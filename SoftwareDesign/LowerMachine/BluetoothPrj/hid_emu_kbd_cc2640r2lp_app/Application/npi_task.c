@@ -54,6 +54,7 @@
 #include "inc/npi_data.h"
 #include "inc/npi_rxbuf.h"
 #include "inc/npi_tl.h"
+
 #include "hidemukbd.h"
 #include "crc16.h"
 // ****************************************************************************
@@ -285,9 +286,6 @@ static void NPITask_inititializeTask(void)
 // -----------------------------------------------------------------------------
 static void NPITask_process(void)
 { 
-//    unsigned char hello[] = "Hello World.\n";
-//    NPITask_sendToHost(hello, sizeof(hello));
-    
     /* Forever loop */
     for (;; )
     {
@@ -312,9 +310,9 @@ static void NPITask_process(void)
             if (NPITask_events & NPITASK_MRDY_EVENT)
             {
                 NPITask_events &= ~NPITASK_MRDY_EVENT;
-#ifdef POWER_SAVING
-                NPITL_handleMrdyEvent();
-#endif //POWER_SAVING
+//#ifdef POWER_SAVING
+//                NPITL_handleMrdyEvent();
+//#endif //POWER_SAVING
 
             }
 

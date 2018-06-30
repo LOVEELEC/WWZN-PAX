@@ -58,7 +58,7 @@
 
 #include "inc/hw_memmap.h"
 #include "inc/hw_ints.h"
-#include <board.h>
+#include "board.h"
 #include "icall.h"
 #include "hal_types.h"
 #include "inc/npi_tl.h"
@@ -178,25 +178,25 @@ void NPITL_initTL(npiRtosCB_t npiCBTx, npiRtosCB_t npiCBRx, npiRtosCB_t npiCBMrd
 
     taskTxCB = npiCBTx;
     taskRxCB = npiCBRx;
-//#if (NPI_FLOW_CTRL == 1)
-//    taskMrdyCB = npiCBMrdy;
-//#endif // NPI_FLOW_CTRL = 1
+#if (NPI_FLOW_CTRL == 1)
+    taskMrdyCB = npiCBMrdy;
+#endif // NPI_FLOW_CTRL = 1
 
     transportInit(npiRxBuf,npiTxBuf, NPITL_transmissionCallBack);
 
-//#if (NPI_FLOW_CTRL == 1)
-//    SRDY_DISABLE();
-//
-//    // Initialize SRDY/MRDY. Enable int after callback registered
-//    hNpiHandshakePins = PIN_open(&npiHandshakePins, npiHandshakePinsCfg);
-//    PIN_registerIntCb(hNpiHandshakePins, NPITL_MRDYPinHwiFxn);
-//    PIN_setConfig(hNpiHandshakePins, PIN_BM_IRQ, MRDY_PIN | PIN_IRQ_BOTHEDGES);
-//
-//    // Enable wakeup
-//    PIN_setConfig(hNpiHandshakePins, PINCC26XX_BM_WAKEUP, MRDY_PIN | PINCC26XX_WAKEUP_NEGEDGE);
-//
-//    mrdy_state = PIN_getInputValue(MRDY_PIN);
-//#endif // NPI_FLOW_CTRL = 1
+#if (NPI_FLOW_CTRL == 1)
+    SRDY_DISABLE();
+
+    // Initialize SRDY/MRDY. Enable int after callback registered
+    hNpiHandshakePins = PIN_open(&npiHandshakePins, npiHandshakePinsCfg);
+    PIN_registerIntCb(hNpiHandshakePins, NPITL_MRDYPinHwiFxn);
+    PIN_setConfig(hNpiHandshakePins, PIN_BM_IRQ, MRDY_PIN | PIN_IRQ_BOTHEDGES);
+
+    // Enable wakeup
+    PIN_setConfig(hNpiHandshakePins, PINCC26XX_BM_WAKEUP, MRDY_PIN | PINCC26XX_WAKEUP_NEGEDGE);
+
+    mrdy_state = PIN_getInputValue(MRDY_PIN);
+#endif // NPI_FLOW_CTRL = 1
 
     ICall_leaveCriticalSection(key);
 
