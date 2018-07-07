@@ -56,6 +56,8 @@
 #include <ti/sysbios/BIOS.h>
 #include <ti/sysbios/knl/Clock.h>
 
+#include "npi_task.h"
+
 #include <icall.h>
 #include "hal_assert.h"
 #include "bcomdef.h"
@@ -217,7 +219,10 @@ int main()
 
   SimpleBLEPeripheral_createTask();
 
-  SerialCommunication_createTask();
+//  SerialCommunication_createTask();
+  /* Kick off NPI */
+  NPITask_createTask(ICALL_SERVICE_CLASS_BLE);
+
   /* enable interrupts and start SYS/BIOS */
   BIOS_start();
 

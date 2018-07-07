@@ -93,6 +93,11 @@
 
 #include "simple_gatt_profile.h"
 
+#ifdef USE_SERIAL_COMMUNICATION
+#include "serial_communication.h"
+#else
+
+#endif
 /*********************************************************************
  * CONSTANTS
  */
@@ -247,10 +252,13 @@ static Queue_Handle hOadQ;
 Task_Struct sbpTask;
 Char sbpTaskStack[SBP_TASK_STACK_SIZE];
 
+#ifdef USE_SERIAL_COMMUNICATION
 /***************************************************************************/
 #define TEST_USART
 UART_Handle uart;
 /***************************************************************************/
+#endif
+
 // Scan response data (max size = 31 bytes)
 static uint8_t scanRspData[] =
 {
@@ -375,7 +383,10 @@ static uint8_t rspTxRetry = 0;
 /*********************************************************************
  * LOCAL FUNCTIONS
  */
+#ifdef USE_SERIAL_COMMUNICATION
 static void SerialCommunication_init(void);
+#endif
+
 static void SimpleBLEPeripheral_ServiceBufferInit(void);
 static void SimpleBLEPeripheral_init( void );
 static void SimpleBLEPeripheral_taskFxn(UArg a0, UArg a1);
@@ -472,6 +483,7 @@ void SimpleBLEPeripheral_createTask(void)
   Task_construct(&sbpTask, SimpleBLEPeripheral_taskFxn, &taskParams, NULL);
 }
 
+#ifdef USE_SERIAL_COMMUNICATION
 /*********************************************************************
  * @fn      SerialCommunication_init
  *
@@ -495,7 +507,7 @@ static void SerialCommunication_init(void)
     uartParams.readDataMode = UART_DATA_BINARY;
     uartParams.readReturnMode = UART_RETURN_FULL;
     uartParams.readEcho = UART_ECHO_OFF;
-    uartParams.baudRate = 115200;
+    uartParams.baudRate = 1000000;
 
     uart = UART_open(Board_UART0, &uartParams);
 
@@ -504,13 +516,48 @@ static void SerialCommunication_init(void)
         while (1);
     }
 }
-
+#endif
 
 static void SimpleBLEPeripheral_ServiceBufferInit(void)
 {
     piLoopQueue->InitQueue(&BTP_DataMsg.WriteServiceBuffer,sizeof(BTP_DataMsg.WriteServiceBuffer.dataBuf));
     piLoopQueue->InitQueue(&BTP_DataMsg.NotifyServiceBuffer,sizeof(BTP_DataMsg.WriteServiceBuffer.dataBuf));
 }
+
+/*********************************************************************
+ * @fn      HidEmuKbd_enqueueMsg
+ *
+ * @brief   Creates a message and puts the message in RTOS queue.
+ *
+ * @param   event  - message event.
+ * @param   state  - message state.
+ *
+ * @return  TRUE or FALSE
+ */
+uint8_t SimpleBLEPeripheral_SendMsgtoBLERF(uint8_t * pbuf, uint8_t size)
+{
+    if (piLoopQueue->EnQueue(&BTP_DataMsg.NotifyServiceBuffer, pbuf, size) < size){
+        /* Buffer is Full */
+        return false;
+    }
+
+    return true;
+//  hidEmuKbdEvt_t *pMsg;
+//
+//  // Create dynamic pointer to message.
+//  if (pMsg = ICall_malloc(sizeof(hidEmuKbdEvt_t)))
+//  {
+//    pMsg->hdr.event = HIDEMUKBD_KEY_CHANGE_EVT;
+//    pMsg->hdr.state = 0x00;
+//    memcpy(pMsg->reportBuf, pbuf, size);
+//
+//    // Enqueue the message.
+//    return Util_enqueueMsg(appMsgQueue, syncEvent, (uint8_t *)pMsg);
+//  }
+//
+//  return FALSE;
+}
+
 /*********************************************************************
  * @fn      SimpleBLEPeripheral_init
  *
@@ -828,44 +875,36 @@ static void SimpleBLEPeripheral_taskFxn(UArg a0, UArg a1)
     events = Event_pend(syncEvent, Event_Id_NONE, SBP_ALL_EVENTS,
                         ICALL_TIMEOUT_FOREVER);
 
-    if (events)
-    {
+    if (events){
       ICall_EntityID dest;
       ICall_ServiceEnum src;
       ICall_HciExtEvt *pMsg = NULL;
 
       // Fetch any available messages that might have been sent from the stack
       if (ICall_fetchServiceMsg(&src, &dest,
-                                (void **)&pMsg) == ICALL_ERRNO_SUCCESS)
-      {
+                                (void **)&pMsg) == ICALL_ERRNO_SUCCESS){
         uint8 safeToDealloc = TRUE;
 
-        if ((src == ICALL_SERVICE_CLASS_BLE) && (dest == selfEntity))
-        {
+        if ((src == ICALL_SERVICE_CLASS_BLE) && (dest == selfEntity)){
           ICall_Stack_Event *pEvt = (ICall_Stack_Event *)pMsg;
 
           // Check for BLE stack events first
-          if (pEvt->signature == 0xffff)
-          {
+          if (pEvt->signature == 0xffff){
             // The GATT server might have returned a blePending as it was trying
             // to process an ATT Response. Now that we finished with this
             // connection event, let's try sending any remaining ATT Responses
             // on the next connection event.
-            if (pEvt->event_flag & SBP_HCI_CONN_EVT_END_EVT)
-            {
+            if (pEvt->event_flag & SBP_HCI_CONN_EVT_END_EVT){
               // Try to retransmit pending ATT Response (if any)
               SimpleBLEPeripheral_sendAttRsp();
             }
-          }
-          else
-          {
+          }else{
             // Process inter-task message
             safeToDealloc = SimpleBLEPeripheral_processStackMsg((ICall_Hdr *)pMsg);
           }
         }
 
-        if (pMsg && safeToDealloc)
-        {
+        if (pMsg && safeToDealloc){
           ICall_freeMsg(pMsg);
         }
       }
@@ -1073,7 +1112,6 @@ static uint8_t SimpleBLEPeripheral_processGATTMsg(gattMsgEvent_t *pMsg)
     {
       // First free any pending response
       SimpleBLEPeripheral_freeAttRsp(FAILURE);
-
       // Hold on to the response message for retransmission
       pAttRsp = pMsg;
 
@@ -1129,7 +1167,6 @@ static void SimpleBLEPeripheral_sendAttRsp(void)
     {
       // Disable connection event end notice
       HCI_EXT_ConnEventNoticeCmd(pAttRsp->connHandle, selfEntity, 0);
-
       // We're done with the response message
       SimpleBLEPeripheral_freeAttRsp(status);
     }
@@ -1317,6 +1354,7 @@ static void SimpleBLEPeripheral_processStateChangeEvt(gaprole_States_t newState)
         {
           Display_print1(dispHandle, SBP_ROW_ROLESTATE, 0, "Num Conns: %d", (uint16_t)numActive);
           Display_print0(dispHandle, SBP_ROW_STATUS_1, 0, Util_convertBdAddr2Str(linkInfo.addr));
+          piSerialTransfer->SendConnectMsgToMCU();
         }
         else
         {
@@ -1365,7 +1403,7 @@ static void SimpleBLEPeripheral_processStateChangeEvt(gaprole_States_t newState)
       SimpleBLEPeripheral_freeAttRsp(bleNotConnected);
 
       Display_print0(dispHandle, SBP_ROW_ROLESTATE, 0, "Disconnected");
-
+      piSerialTransfer->SendDisconnectMsgToMCU();
 #if !defined(Display_DISABLE_ALL)
       // Disable PHY change
       tbm_setItemStatus(&sbpMenuMain, TBM_ITEM_NONE, TBM_ITEM_ALL);

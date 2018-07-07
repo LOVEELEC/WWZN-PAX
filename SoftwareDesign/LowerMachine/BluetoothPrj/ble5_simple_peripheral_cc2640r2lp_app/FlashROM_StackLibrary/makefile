@@ -10,7 +10,13 @@ GEN_OPTS__FLAG := --cmd_file="configPkg/compiler.opt"
 GEN_CMDS__FLAG := -l"configPkg/linker.cmd"
 
 ORDERED_OBJS += \
+"./Application/LL_loopQueue.obj" \
 "./Application/board_key.obj" \
+"./Application/crc16.obj" \
+"./Application/npi_rxbuf.obj" \
+"./Application/npi_task.obj" \
+"./Application/npi_tl.obj" \
+"./Application/npi_tl_uart.obj" \
 "./Application/simple_peripheral.obj" \
 "./Application/simple_peripheral_menu.obj" \
 "./Application/two_btn_menu.obj" \
@@ -28,11 +34,9 @@ ORDERED_OBJS += \
 "./PROFILES/gattservapp_util.obj" \
 "./PROFILES/peripheral.obj" \
 "./PROFILES/simple_gatt_profile.obj" \
-"./Startup/LL_loopQueue.obj" \
 "./Startup/board.obj" \
 "./Startup/ccfg_app_ble.obj" \
 "./Startup/main.obj" \
-"./Startup/serial_communication.obj" \
 $(GEN_CMDS__FLAG) \
 -l"C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/devices/cc26x0r2/driverlib/bin/ccs/driverlib.lib" \
 -l"C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/kernel/tirtos/packages/ti/dpl/lib/dpl_cc26x0r2.aem3" \
@@ -191,7 +195,7 @@ dependents:
 ble5_simple_peripheral_cc2640r2lp_app.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS) C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/ble5_simple_peripheral_cc2640r2lp_stack_library/FlashROM_Library/ble5_simple_peripheral_cc2640r2lp_stack_library.lib
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: ARM Linker'
-	"C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/bin/armcl" --cmd_file="C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/config/build_components.opt" --cmd_file="C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/config/factory_config.opt" --cmd_file="C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/ble5_simple_peripheral_cc2640r2lp_stack_library/TOOLS/build_config.opt"  -mv7M3 --code_state=16 -me -O4 --opt_for_speed=0 --define=DeviceFamily_CC26X0R2 --define=BOARD_DISPLAY_USE_LCD=0 --define=BOARD_DISPLAY_USE_UART=0 --define=BOARD_DISPLAY_USE_UART_ANSI=0 --define=CC2640R2_LAUNCHXL --define=CC26XX --define=CC26XX_R2 --define=ICALL_EVENTS --define=ICALL_JT --define=ICALL_LITE --define=ICALL_MAX_NUM_ENTITIES=6 --define=ICALL_MAX_NUM_TASKS=3 --define=ICALL_STACK0_ADDR --define=POWER_SAVING --define=RF_SINGLEMODE --define=STACK_LIBRARY --define=TBM_ACTIVE_ITEMS_ONLY --define=USE_ICALL --define=xdc_runtime_Assert_DISABLE_ALL --define=xdc_runtime_Log_DISABLE_ALL -g --c99 --gcc --diag_warning=225 --diag_wrap=off --display_error_number --gen_func_subsections=on --abi=eabi -z -m"ble5_simple_peripheral_cc2640r2lp_app.map" --heap_size=0 --stack_size=256 -i"C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/lib" -i"C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include" --reread_libs --define=CC26X0ROM=2 --diag_suppress=16002-D --diag_suppress=10247-D --diag_suppress=10325-D --diag_suppress=10229-D --diag_suppress=16032-D --diag_wrap=off --display_error_number --warn_sections --xml_link_info="ble5_simple_peripheral_cc2640r2lp_app_linkInfo.xml" --rom_model -o "ble5_simple_peripheral_cc2640r2lp_app.out" $(ORDERED_OBJS)
+	"C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/bin/armcl" --cmd_file="C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/config/build_components.opt" --cmd_file="C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/config/factory_config.opt" --cmd_file="C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/ble5_simple_peripheral_cc2640r2lp_stack_library/TOOLS/build_config.opt"  -mv7M3 --code_state=16 -me -O4 --opt_for_speed=0 --define=xNPI_USE_SPI --define=NPI_USE_UART --define=DeviceFamily_CC26X0R2 --define=BOARD_DISPLAY_USE_LCD=0 --define=BOARD_DISPLAY_USE_UART=0 --define=BOARD_DISPLAY_USE_UART_ANSI=0 --define=CC2640R2_LAUNCHXL --define=CC26XX --define=CC26XX_R2 --define=xNPI_USE_SPI --define=ICALL_EVENTS --define=ICALL_JT --define=ICALL_LITE --define=ICALL_MAX_NUM_ENTITIES=8 --define=ICALL_MAX_NUM_TASKS=4 --define=ICALL_STACK0_ADDR --define=POWER_SAVING --define=RF_SINGLEMODE --define=STACK_LIBRARY --define=TBM_ACTIVE_ITEMS_ONLY --define=USE_ICALL --define=xdc_runtime_Assert_DISABLE_ALL --define=xdc_runtime_Log_DISABLE_ALL -g --c99 --gcc --diag_warning=225 --diag_wrap=off --display_error_number --gen_func_subsections=on --abi=eabi -z -m"ble5_simple_peripheral_cc2640r2lp_app.map" --heap_size=0 --stack_size=256 -i"C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/lib" -i"C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include" --reread_libs --define=CC26X0ROM=2 --diag_suppress=16002-D --diag_suppress=10247-D --diag_suppress=10325-D --diag_suppress=10229-D --diag_suppress=16032-D --diag_wrap=off --display_error_number --warn_sections --xml_link_info="ble5_simple_peripheral_cc2640r2lp_app_linkInfo.xml" --rom_model -o "ble5_simple_peripheral_cc2640r2lp_app.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 	@$(MAKE) --no-print-directory post-build
@@ -208,8 +212,8 @@ ble5_simple_peripheral_cc2640r2lp_app.hex: $(EXE_OUTPUTS)
 clean:
 	-$(RM) $(GEN_CMDS__QUOTED)$(GEN_MISC_FILES__QUOTED)$(BIN_OUTPUTS__QUOTED)$(GEN_FILES__QUOTED)$(EXE_OUTPUTS__QUOTED)$(GEN_OPTS__QUOTED)
 	-$(RMDIR) $(GEN_MISC_DIRS__QUOTED)
-	-$(RM) "Application\board_key.obj" "Application\simple_peripheral.obj" "Application\simple_peripheral_menu.obj" "Application\two_btn_menu.obj" "Application\util.obj" "Drivers\ECC\ECCROMCC26XX.obj" "Drivers\TRNG\TRNGCC26XX.obj" "Drivers\pin\PINCC26XX.obj" "ICall\icall.obj" "ICall\icall_cc2650.obj" "ICall\icall_user_config.obj" "ICallBLE\ble_user_config.obj" "ICallBLE\icall_api_lite.obj" "PROFILES\devinfoservice.obj" "PROFILES\gatt_uuid.obj" "PROFILES\gattservapp_util.obj" "PROFILES\peripheral.obj" "PROFILES\simple_gatt_profile.obj" "Startup\LL_loopQueue.obj" "Startup\board.obj" "Startup\ccfg_app_ble.obj" "Startup\main.obj" "Startup\serial_communication.obj" 
-	-$(RM) "Application\board_key.d" "Application\simple_peripheral.d" "Application\simple_peripheral_menu.d" "Application\two_btn_menu.d" "Application\util.d" "Drivers\ECC\ECCROMCC26XX.d" "Drivers\TRNG\TRNGCC26XX.d" "Drivers\pin\PINCC26XX.d" "ICall\icall.d" "ICall\icall_cc2650.d" "ICall\icall_user_config.d" "ICallBLE\ble_user_config.d" "ICallBLE\icall_api_lite.d" "PROFILES\devinfoservice.d" "PROFILES\gatt_uuid.d" "PROFILES\gattservapp_util.d" "PROFILES\peripheral.d" "PROFILES\simple_gatt_profile.d" "Startup\LL_loopQueue.d" "Startup\board.d" "Startup\ccfg_app_ble.d" "Startup\main.d" "Startup\serial_communication.d" 
+	-$(RM) "Application\LL_loopQueue.obj" "Application\board_key.obj" "Application\crc16.obj" "Application\npi_rxbuf.obj" "Application\npi_task.obj" "Application\npi_tl.obj" "Application\npi_tl_uart.obj" "Application\simple_peripheral.obj" "Application\simple_peripheral_menu.obj" "Application\two_btn_menu.obj" "Application\util.obj" "Drivers\ECC\ECCROMCC26XX.obj" "Drivers\TRNG\TRNGCC26XX.obj" "Drivers\pin\PINCC26XX.obj" "ICall\icall.obj" "ICall\icall_cc2650.obj" "ICall\icall_user_config.obj" "ICallBLE\ble_user_config.obj" "ICallBLE\icall_api_lite.obj" "PROFILES\devinfoservice.obj" "PROFILES\gatt_uuid.obj" "PROFILES\gattservapp_util.obj" "PROFILES\peripheral.obj" "PROFILES\simple_gatt_profile.obj" "Startup\board.obj" "Startup\ccfg_app_ble.obj" "Startup\main.obj" 
+	-$(RM) "Application\LL_loopQueue.d" "Application\board_key.d" "Application\crc16.d" "Application\npi_rxbuf.d" "Application\npi_task.d" "Application\npi_tl.d" "Application\npi_tl_uart.d" "Application\simple_peripheral.d" "Application\simple_peripheral_menu.d" "Application\two_btn_menu.d" "Application\util.d" "Drivers\ECC\ECCROMCC26XX.d" "Drivers\TRNG\TRNGCC26XX.d" "Drivers\pin\PINCC26XX.d" "ICall\icall.d" "ICall\icall_cc2650.d" "ICall\icall_user_config.d" "ICallBLE\ble_user_config.d" "ICallBLE\icall_api_lite.d" "PROFILES\devinfoservice.d" "PROFILES\gatt_uuid.d" "PROFILES\gattservapp_util.d" "PROFILES\peripheral.d" "PROFILES\simple_gatt_profile.d" "Startup\board.d" "Startup\ccfg_app_ble.d" "Startup\main.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

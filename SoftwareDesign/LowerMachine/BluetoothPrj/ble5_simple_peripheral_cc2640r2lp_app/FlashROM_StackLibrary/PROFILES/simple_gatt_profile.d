@@ -201,7 +201,7 @@ PROFILES/simple_gatt_profile.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/sourc
 PROFILES/simple_gatt_profile.obj: ../PROFILES/simple_gatt_profile.h
 PROFILES/simple_gatt_profile.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/UART.h
 PROFILES/simple_gatt_profile.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h
-PROFILES/simple_gatt_profile.obj: C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/BTP_DevFile/dataStruct/loopQueue/inc/LL_loopQueue.h
+PROFILES/simple_gatt_profile.obj: C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/ble5_simple_peripheral_cc2640r2lp_app/Application/LL_loopQueue.h
 PROFILES/simple_gatt_profile.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdlib.h
 PROFILES/simple_gatt_profile.obj: C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/ble5_simple_peripheral_cc2640r2lp_app/Application/board_key.h
 PROFILES/simple_gatt_profile.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/common/cc26xx/menu/two_btn_menu.h
@@ -209,6 +209,7 @@ PROFILES/simple_gatt_profile.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/sourc
 PROFILES/simple_gatt_profile.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/display/Display.h
 PROFILES/simple_gatt_profile.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdarg.h
 PROFILES/simple_gatt_profile.obj: C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/ble5_simple_peripheral_cc2640r2lp_app/Application/simple_peripheral_menu.h
+PROFILES/simple_gatt_profile.obj: C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/ble5_simple_peripheral_cc2640r2lp_app/Application/simple_peripheral.h
 
 ../PROFILES/simple_gatt_profile.c: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/string.h: 
@@ -411,7 +412,7 @@ C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/icall/inc/icall_api
 ../PROFILES/simple_gatt_profile.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/UART.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h: 
-C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/BTP_DevFile/dataStruct/loopQueue/inc/LL_loopQueue.h: 
+C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/ble5_simple_peripheral_cc2640r2lp_app/Application/LL_loopQueue.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdlib.h: 
 C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/ble5_simple_peripheral_cc2640r2lp_app/Application/board_key.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/common/cc26xx/menu/two_btn_menu.h: 
@@ -419,3 +420,4 @@ C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/hal/src/target/_com
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/display/Display.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdarg.h: 
 C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/ble5_simple_peripheral_cc2640r2lp_app/Application/simple_peripheral_menu.h: 
+C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/ble5_simple_peripheral_cc2640r2lp_app/Application/simple_peripheral.h: 

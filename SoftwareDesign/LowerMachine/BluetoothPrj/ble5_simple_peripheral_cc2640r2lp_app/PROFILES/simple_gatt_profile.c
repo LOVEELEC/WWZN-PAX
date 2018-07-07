@@ -63,6 +63,11 @@
 #include "simple_peripheral_menu.h"
 #endif  // !Display_DISABLE_ALL
 
+#ifdef USE_SERIAL_COMMUNICATION
+#include "serial_communication.h"
+#else
+#include "simple_peripheral.h"
+#endif
 extern Display_Handle dispHandle;
 /*********************************************************************
  * MACROS
@@ -134,7 +139,7 @@ static uint8 BTPWriteChannelUserDesp[16] = "BTPWriteChannel";
 // Simple Profile BTPNotifyChannel Properties
 static uint8 BTPNotifyChannelProps = GATT_PROP_NOTIFY;
 // BTPNotifyChannel Value
-//static uint8 BTPNotifyChannelProfile[BTPNOTITYCHANNEL_LEN] = { 0, 0, 0, 0, 0, 0 };
+static uint8 BTPNotifyChannelProfile[BTPNOTITYCHANNEL_LEN] = { 0, 0, 0, 0, 0, 0 };
 // Simple Profile BTPNotifyChannel Configuration Each client has its own
 // instantiation of the Client Characteristic Configuration. Reads of the
 // Client Characteristic Configuration only shows the configuration for
@@ -197,8 +202,8 @@ static gattAttribute_t simpleProfileAttrTbl[SERVAPP_NUM_ATTR_SUPPORTED] =
         { ATT_BT_UUID_SIZE, simpleProfileBTPNotifyUUID },
         0,
         0,
-//        BTPNotifyChannelProfile
-        BTP_DataMsg.NotifyServiceBuffer.dataBuf
+        BTPNotifyChannelProfile
+//        BTP_DataMsg.NotifyServiceBuffer.dataBuf
       },
 
       // Characteristic BTPNotifyChannel configuration
@@ -336,6 +341,7 @@ bStatus_t SimpleProfile_RegisterAppCBs( simpleProfileCBs_t *appCallbacks )
  *
  * @return  bStatus_t
  */
+static uint8_t signTest = 0;
 bStatus_t SimpleProfile_SetParameter( uint8 param, uint8 len, void *value )
 {
   bStatus_t ret = SUCCESS;
@@ -351,7 +357,7 @@ bStatus_t SimpleProfile_SetParameter( uint8 param, uint8 len, void *value )
 	        break;
 	    }
 	    piLoopQueue->EnQueue(&BTP_DataMsg.WriteServiceBuffer, (LoopDataWidth *)value, len);
-      break;
+	    break;
 
 	 case SIMPLEPROFILE_BTPNotify:
 	     realLen = piLoopQueue->QueueLength(&BTP_DataMsg.NotifyServiceBuffer);
@@ -361,13 +367,19 @@ bStatus_t SimpleProfile_SetParameter( uint8 param, uint8 len, void *value )
 	         break;
 	     }
 	     // See if Notification has been enabled
-	     GATTServApp_ProcessCharCfg( BTPNotifyChannelConfig, BTP_DataMsg.NotifyServiceBuffer.dataBuf, FALSE,
+	     GATTServApp_ProcessCharCfg( BTPNotifyChannelConfig, BTPNotifyChannelProfile, FALSE,
 	                                 simpleProfileAttrTbl, GATT_NUM_ATTRS( simpleProfileAttrTbl ),
 	                                 INVALID_TASK_ID, simpleProfile_ReadAttrCB );
-//	     // See if Notification has been enabled
-//	     GATTServApp_ProcessCharCfg( BTPNotifyChannelConfig, BTPNotifyChannelProfile, FALSE,
-//	                                 simpleProfileAttrTbl, GATT_NUM_ATTRS( simpleProfileAttrTbl ),
-//	                                 INVALID_TASK_ID, simpleProfile_ReadAttrCB );
+	     if (signTest){
+        #ifdef USE_SERIAL_COMMUNICATION
+	         SerialCommunication_SendBleTransferCMP();
+        #else
+	         piSerialTransfer->SendTransferCMPMsgToMCU();
+        #endif
+	         signTest = 0;
+	     }else{
+	         signTest = 1;
+	     }
       break;
 	/***************************************************************************/
 	  
@@ -454,7 +466,9 @@ static bStatus_t simpleProfile_ReadAttrCB(uint16_t connHandle,
                                           uint8_t method)
 {
   bStatus_t status = SUCCESS;
+//#ifdef USE_SERIAL_COMMUNICATION
   uint8_t realLen = 0;
+//#endif
   // Make sure it's not a blob operation (no attributes in the profile are long)
   if ( offset > 0 )
   {
@@ -472,7 +486,7 @@ static bStatus_t simpleProfile_ReadAttrCB(uint16_t connHandle,
 //        *pLen = BTPWRITECHANNEL_LEN;
 //        VOID memcpy( pValue, pAttr->pValue, BTPWRITECHANNEL_LEN );
 //        break;
-		
+//	#ifdef USE_SERIAL_COMMUNICATION
 	  case BTPNotifyChannel_UUID:
 	      realLen = piLoopQueue->QueueLength(&BTP_DataMsg.NotifyServiceBuffer);
 	      if (realLen == 0){
@@ -485,6 +499,12 @@ static bStatus_t simpleProfile_ReadAttrCB(uint16_t connHandle,
 	      *pLen = realLen;
 	      piLoopQueue->DeQueue(&BTP_DataMsg.NotifyServiceBuffer, pValue, realLen);
         break;
+//	#else
+//	  case BTPNotifyChannel_UUID:
+//	    *pLen = BTPWRITECHANNEL_LEN;
+//		VOID memcpy( pValue, pAttr->pValue, BTPWRITECHANNEL_LEN );
+//        break;
+//	#endif
 	/***************************************************************************/
 		
       default:
@@ -551,10 +571,13 @@ static bStatus_t simpleProfile_WriteAttrCB(uint16_t connHandle,
 		//Write the value
         if ( status == SUCCESS )
         {
+#ifdef USE_SERIAL_COMMUNICATION
           UART_write(uart, pValue, len);
-          if( pAttr->pValue == BTP_DataMsg.WriteServiceBuffer.dataBuf)
-          {
-            notifyApp = SIMPLEPROFILE_BTPWrite;
+#else
+          piSerialTransfer->SendMsgToMCU(pValue, len);
+#endif
+          if( pAttr->pValue == BTP_DataMsg.WriteServiceBuffer.dataBuf){
+              notifyApp = SIMPLEPROFILE_BTPWrite;
           }
         }
       	break;

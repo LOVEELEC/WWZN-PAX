@@ -1,3 +1,4 @@
+
 /******************************************************************************
 
  @file       main.c
@@ -61,6 +62,8 @@
 #include "bcomdef.h"
 #include "peripheral.h"
 #include "simple_peripheral.h"
+
+#include "npi_task.h"
 
 /* Header files required to enable instruction fetch cache */
 #include <inc/hw_memmap.h>
@@ -215,6 +218,9 @@ int main()
   GAPRole_createTask();
 
   SimpleBLEPeripheral_createTask();
+
+  /* Kick off NPI */
+  NPITask_createTask(ICALL_SERVICE_CLASS_BLE);
 
   /* enable interrupts and start SYS/BIOS */
   BIOS_start();

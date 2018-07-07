@@ -1,6 +1,6 @@
 # FIXED
 
-Startup/serial_communication.obj: C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/BTP_DevFile/CommunicationInterface/src/serial_communication.c
+Startup/serial_communication.obj: ../Startup/serial_communication.c
 Startup/serial_communication.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/string.h
 Startup/serial_communication.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/linkage.h
 Startup/serial_communication.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/kernel/tirtos/packages/ti/sysbios/knl/Task.h
@@ -174,7 +174,7 @@ Startup/serial_communication.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/sourc
 Startup/serial_communication.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/devices/cc26x0r2/driverlib/../driverlib/rom.h
 Startup/serial_communication.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/devices/cc26x0r2/driverlib/gpio.h
 Startup/serial_communication.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/devices/cc26x0r2/driverlib/../inc/hw_gpio.h
-Startup/serial_communication.obj: C:/ti/SoftwareDesign/LowerMachine/BluetoothPrj/serial_communication.h
+Startup/serial_communication.obj: ../Startup/serial_communication.h
 Startup/serial_communication.obj: C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/ble5_simple_peripheral_cc2640r2lp_app/PROFILES/simple_gatt_profile.h
 Startup/serial_communication.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/icall/src/inc/icall.h
 Startup/serial_communication.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdlib.h
@@ -185,10 +185,11 @@ Startup/serial_communication.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/sourc
 Startup/serial_communication.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/inc/bcomdef.h
 Startup/serial_communication.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/osal/src/inc/comdef.h
 Startup/serial_communication.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/hal/src/target/_common/hal_types.h
-Startup/serial_communication.obj: C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/BTP_DevFile/dataStruct/loopQueue/inc/LL_loopQueue.h
+Startup/serial_communication.obj: C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/ble5_simple_peripheral_cc2640r2lp_app/Application/LL_loopQueue.h
 Startup/serial_communication.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdlib.h
+Startup/serial_communication.obj: C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/ble5_simple_peripheral_cc2640r2lp_app/Application/crc16.h
 
-C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/BTP_DevFile/CommunicationInterface/src/serial_communication.c: 
+../Startup/serial_communication.c: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/string.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/linkage.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/kernel/tirtos/packages/ti/sysbios/knl/Task.h: 
@@ -362,7 +363,7 @@ C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/devices/cc26x0r2/driverlib/..
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/devices/cc26x0r2/driverlib/../driverlib/rom.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/devices/cc26x0r2/driverlib/gpio.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/devices/cc26x0r2/driverlib/../inc/hw_gpio.h: 
-C:/ti/SoftwareDesign/LowerMachine/BluetoothPrj/serial_communication.h: 
+../Startup/serial_communication.h: 
 C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/ble5_simple_peripheral_cc2640r2lp_app/PROFILES/simple_gatt_profile.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/icall/src/inc/icall.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdlib.h: 
@@ -373,5 +374,6 @@ C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/hal/src/inc/hal_def
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/inc/bcomdef.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/osal/src/inc/comdef.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/hal/src/target/_common/hal_types.h: 
-C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/BTP_DevFile/dataStruct/loopQueue/inc/LL_loopQueue.h: 
+C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/ble5_simple_peripheral_cc2640r2lp_app/Application/LL_loopQueue.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdlib.h: 
+C:/ti/WWZN-PAX/SoftwareDesign/LowerMachine/BluetoothPrj/ble5_simple_peripheral_cc2640r2lp_app/Application/crc16.h: 

@@ -35,6 +35,8 @@
 							<tool id="com.ti.ccstudio.buildDefinitions.TMS470_16.9.exe.compilerDebug.1329292199" name="ARM Compiler" superClass="com.ti.ccstudio.buildDefinitions.TMS470_16.9.exe.compilerDebug">
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_16.9.compilerID.INCLUDE_PATH.1306925559" name="Add dir to #include search path (--include_path, -I)" superClass="com.ti.ccstudio.buildDefinitions.TMS470_16.9.compilerID.INCLUDE_PATH" valueType="includePath">
 									<listOptionValue builtIn="false" value="${INHERITED_INCLUDE_PATH}"/>
+									<listOptionValue builtIn="false" value="${SRC_BLE_DIR}/../../../source/ti/ble5stack/npi/src"/>
+									<listOptionValue builtIn="false" value="${SRC_BLE_DIR}/../../../source/ti/ble5stack/npi/src/inc"/>
 									<listOptionValue builtIn="false" value="${COM_TI_SIMPLELINK_CC2640R2_SDK_INCLUDE_PATH}"/>
 									<listOptionValue builtIn="false" value="${PROJECT_ROOT}"/>
 									<listOptionValue builtIn="false" value="${PROJECT_LOC}/Application"/>
@@ -63,6 +65,8 @@
 								</option>
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_16.9.compilerID.DEFINE.726371382" name="Pre-define NAME (--define, -D)" superClass="com.ti.ccstudio.buildDefinitions.TMS470_16.9.compilerID.DEFINE" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="${INHERITED_SYMBOLS}"/>
+									<listOptionValue builtIn="false" value="xNPI_USE_SPI"/>
+									<listOptionValue builtIn="false" value="NPI_USE_UART"/>
 									<listOptionValue builtIn="false" value="${COM_TI_SIMPLELINK_CC2640R2_SDK_SYMBOLS}"/>
 									<listOptionValue builtIn="false" value="DeviceFamily_CC26X0R2"/>
 									<listOptionValue builtIn="false" value="BOARD_DISPLAY_USE_LCD=0"/>
@@ -71,11 +75,12 @@
 									<listOptionValue builtIn="false" value="CC2640R2_LAUNCHXL"/>
 									<listOptionValue builtIn="false" value="CC26XX"/>
 									<listOptionValue builtIn="false" value="CC26XX_R2"/>
+									<listOptionValue builtIn="false" value="xNPI_USE_SPI"/>
 									<listOptionValue builtIn="false" value="ICALL_EVENTS"/>
 									<listOptionValue builtIn="false" value="ICALL_JT"/>
 									<listOptionValue builtIn="false" value="ICALL_LITE"/>
-									<listOptionValue builtIn="false" value="ICALL_MAX_NUM_ENTITIES=6"/>
-									<listOptionValue builtIn="false" value="ICALL_MAX_NUM_TASKS=3"/>
+									<listOptionValue builtIn="false" value="ICALL_MAX_NUM_ENTITIES=8"/>
+									<listOptionValue builtIn="false" value="ICALL_MAX_NUM_TASKS=4"/>
 									<listOptionValue builtIn="false" value="ICALL_STACK0_ADDR"/>
 									<listOptionValue builtIn="false" value="POWER_SAVING"/>
 									<listOptionValue builtIn="false" value="RF_SINGLEMODE"/>

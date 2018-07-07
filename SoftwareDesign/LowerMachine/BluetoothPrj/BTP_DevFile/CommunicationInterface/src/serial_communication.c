@@ -21,6 +21,8 @@
 #include "board.h"
 #include "serial_communication.h"
 #include "simple_gatt_profile.h"
+
+#include "crc16.h"
 /*********************************************************************
  * CONSTANTS
  */
@@ -28,7 +30,8 @@
 #define COM_TASK_PRIORITY                     1
 #define COM_TASK_STACK_SIZE                   644
 
-
+#define HID_IN_PACKET                   21
+#define HID_OUT_PACKET                  21
 /*********************************************************************
  * LOCAL VARIABLES
  */
@@ -99,7 +102,44 @@ static void SerialCommunication_init(void)
         while (1);
     }
 }
+void SerialCommunication_SendBleDisconnect(void)
+{
+    uint8_t DisConMesg[HID_IN_PACKET];
+    memset(DisConMesg, 0x00, HID_IN_PACKET);
+    DisConMesg[0] = 0x02;
+    DisConMesg[1] = 0x58;
 
+    *(width_t *)(&DisConMesg[DisConMesg[2]+4]) = crcCompute(DisConMesg, (DisConMesg[2] + 4));
+    UART_write(uart, DisConMesg, HID_IN_PACKET);
+}
+
+void SerialCommunication_SendBleConnect(void)
+{
+    uint8_t ConMesg[HID_IN_PACKET];
+    memset(ConMesg, 0x00, HID_IN_PACKET);
+    ConMesg[0] = 0x02;
+    ConMesg[1] = 0x57;
+
+    *(width_t *)(&ConMesg[ConMesg[2]+4]) = crcCompute(ConMesg, (ConMesg[2]+4));
+    UART_write(uart, ConMesg, HID_IN_PACKET);
+}
+
+
+void SerialCommunication_SendBleTransferCMP(void)
+{
+    uint8_t ConMesg[HID_IN_PACKET];
+    memset(ConMesg, 0x00, HID_IN_PACKET);
+    ConMesg[0] = 0x02;
+    ConMesg[1] = 0x59;
+
+    *(width_t *)(&ConMesg[ConMesg[2]+4]) = crcCompute(ConMesg, (ConMesg[2]+4));
+    UART_write(uart, ConMesg, HID_IN_PACKET);
+}
+
+void SerialCommunication_Send(uint8_t * pbuf, uint16_t size)
+{
+    UART_write(uart, pbuf, size);
+}
 /*********************************************************************
  * @fn      SimpleBLEPeripheral_taskFxn
  *

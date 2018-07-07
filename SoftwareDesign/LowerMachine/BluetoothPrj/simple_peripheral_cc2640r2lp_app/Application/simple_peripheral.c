@@ -81,6 +81,7 @@
 
 #include "simple_peripheral.h"
 
+#include "simple_gatt_profile.h"
 /*********************************************************************
  * CONSTANTS
  */
@@ -114,7 +115,7 @@
 #define DEFAULT_CONN_PAUSE_PERIPHERAL         6
 
 // How often to perform periodic event (in msec)
-#define SBP_PERIODIC_EVT_PERIOD               5000
+#define SBP_PERIODIC_EVT_PERIOD               10
 
 // Application specific event ID for HCI Connection Event End Events
 #define SBP_HCI_CONN_EVT_END_EVT              0x0001
@@ -198,28 +199,68 @@ Char sbpTaskStack[SBP_TASK_STACK_SIZE];
 // Scan response data (max size = 31 bytes)
 static uint8_t scanRspData[] =
 {
-  // complete name
-  0x14,   // length of this data
-  GAP_ADTYPE_LOCAL_NAME_COMPLETE,
-  'S',
-  'i',
-  'm',
-  'p',
-  'l',
-  'e',
-  'B',
-  'L',
-  'E',
-  'P',
-  'e',
-  'r',
-  'i',
-  'p',
-  'h',
-  'e',
-  'r',
-  'a',
-  'l',
+ /***************************************************************************/
+#if defined(CC2640R2_LAUNCHXL)  //BTP_101 Beta Version
+    // complete name
+    0x15,   // length of this data
+    GAP_ADTYPE_LOCAL_NAME_COMPLETE,
+    'B',
+    'T',
+    'P',
+    '_',
+    '1',
+    '0',
+    '1',
+    ' ',
+    'B',
+    'e',
+    't',
+    'a',
+    ' ',
+    'V',
+    'e',
+    'r',
+    's',
+    'i',
+    'o',
+    'n',
+#else           //"BTP_101 Beta"
+    // complete name
+    0x0D,   // length of this data
+    GAP_ADTYPE_LOCAL_NAME_COMPLETE,
+    'B',
+    'T',
+    'P',
+    '_',
+    '1',
+    '0',
+    '1',
+    ' ',
+    'B',
+    'e',
+    't',
+    'a',
+#endif
+    /***************************************************************************/
+//  'S',
+//  'i',
+//  'm',
+//  'p',
+//  'l',
+//  'e',
+//  'B',
+//  'L',
+//  'E',
+//  'P',
+//  'e',
+//  'r',
+//  'i',
+//  'p',
+//  'h',
+//  'e',
+//  'r',
+//  'a',
+//  'l',
 
   // connection interval range
   0x05,   // length of this data
@@ -255,7 +296,12 @@ static uint8_t advertData[] =
 };
 
 // GAP GATT Attributes
-static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "Simple Peripheral";
+//static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "Simple Peripheral";
+#if defined(CC2640R2_LAUNCHXL)
+static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "BTP_101 Beta Version";
+#else
+static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "BTP_101 Beta";
+#endif
 
 // Globals used for ATT Response retransmission
 static gattMsgEvent_t *pAttRsp = NULL;
@@ -265,6 +311,7 @@ static uint8_t rspTxRetry = 0;
  * LOCAL FUNCTIONS
  */
 
+static void SimpleBLEPeripheral_ServiceBufferInit(void);
 static void SimpleBLEPeripheral_init( void );
 static void SimpleBLEPeripheral_taskFxn(UArg a0, UArg a1);
 
@@ -347,6 +394,46 @@ void SimpleBLEPeripheral_createTask(void)
   Task_construct(&sbpTask, SimpleBLEPeripheral_taskFxn, &taskParams, NULL);
 }
 
+static void SimpleBLEPeripheral_ServiceBufferInit(void)
+{
+    piLoopQueue->InitQueue(&BTP_DataMsg.WriteServiceBuffer,sizeof(BTP_DataMsg.WriteServiceBuffer.dataBuf));
+    piLoopQueue->InitQueue(&BTP_DataMsg.NotifyServiceBuffer,sizeof(BTP_DataMsg.WriteServiceBuffer.dataBuf));
+}
+
+/*********************************************************************
+ * @fn      HidEmuKbd_enqueueMsg
+ *
+ * @brief   Creates a message and puts the message in RTOS queue.
+ *
+ * @param   event  - message event.
+ * @param   state  - message state.
+ *
+ * @return  TRUE or FALSE
+ */
+uint8_t SimpleBLEPeripheral_SendMsgtoBLERF(uint8_t * pbuf, uint8_t size)
+{
+    if (piLoopQueue->EnQueue(&BTP_DataMsg.NotifyServiceBuffer, pbuf, size) < size){
+        /* Buffer is Full */
+        return false;
+    }
+
+    return true;
+//  hidEmuKbdEvt_t *pMsg;
+//
+//  // Create dynamic pointer to message.
+//  if (pMsg = ICall_malloc(sizeof(hidEmuKbdEvt_t)))
+//  {
+//    pMsg->hdr.event = HIDEMUKBD_KEY_CHANGE_EVT;
+//    pMsg->hdr.state = 0x00;
+//    memcpy(pMsg->reportBuf, pbuf, size);
+//
+//    // Enqueue the message.
+//    return Util_enqueueMsg(appMsgQueue, syncEvent, (uint8_t *)pMsg);
+//  }
+//
+//  return FALSE;
+}
+
 /*********************************************************************
  * @fn      SimpleBLEPeripheral_init
  *
@@ -368,6 +455,8 @@ static void SimpleBLEPeripheral_init(void)
   // so that the application can send and receive messages.
   ICall_registerApp(&selfEntity, &syncEvent);
 
+  HCI_EXT_SetTxPowerCmd(HCI_EXT_TX_POWER_5_DBM);   //设置发射功率
+  SimpleBLEPeripheral_ServiceBufferInit();
 #ifdef USE_RCOSC
   RCOSC_enableCalibration();
 #endif // USE_RCOSC
@@ -496,25 +585,32 @@ static void SimpleBLEPeripheral_init(void)
 
   // Setup the SimpleProfile Characteristic Values
   // For more information, see the sections in the User's Guide:
-  // http://software-dl.ti.com/lprf/sdg-latest/html/
-  {
-    uint8_t charValue1 = 1;
-    uint8_t charValue2 = 2;
-    uint8_t charValue3 = 3;
-    uint8_t charValue4 = 4;
-    uint8_t charValue5[SIMPLEPROFILE_CHAR5_LEN] = { 1, 2, 3, 4, 5 };
-
-    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR1, sizeof(uint8_t),
-                               &charValue1);
-    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR2, sizeof(uint8_t),
-                               &charValue2);
-    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR3, sizeof(uint8_t),
-                               &charValue3);
-    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR4, sizeof(uint8_t),
-                               &charValue4);
-    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR5, SIMPLEPROFILE_CHAR5_LEN,
-                               charValue5);
-  }
+  // http://software-dl.ti.com/lprf/ble5stack-docs-latest/html/ble-stack/gatt.html#
+//  // http://software-dl.ti.com/lprf/ble5stack-docs-latest/html/ble-stack/gatt.html#gattservapp-module
+//  {
+//    uint8_t charValue1 = 1;
+//    uint8_t charValue2 = 2;
+//    uint8_t charValue3 = 3;
+//    uint8_t charValue4 = 4;
+//    uint8_t charValue5[SIMPLEPROFILE_CHAR5_LEN] = { 1, 2, 3, 4, 5 };
+//    /***************************************************************************/
+////    uint8_t BtpWriteValue[] = {};
+//    /***************************************************************************/
+//
+//    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR1, sizeof(uint8_t),
+//                               &charValue1);
+//    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR2, sizeof(uint8_t),
+//                               &charValue2);
+//    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR3, sizeof(uint8_t),
+//                               &charValue3);
+//    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR4, sizeof(uint8_t),
+//                               &charValue4);
+//    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR5, SIMPLEPROFILE_CHAR5_LEN,
+//                               charValue5);
+//    /***************************************************************************/
+//
+//    /***************************************************************************/
+//  }
 
   // Register callback with SimpleGATTprofile
   SimpleProfile_RegisterAppCBs(&SimpleBLEPeripheral_simpleProfileCBs);
@@ -1129,17 +1225,17 @@ static void SimpleBLEPeripheral_processCharValueChangeEvt(uint8_t paramID)
 
   switch(paramID)
   {
-    case SIMPLEPROFILE_CHAR1:
-      SimpleProfile_GetParameter(SIMPLEPROFILE_CHAR1, &newValue);
-
-      Display_print1(dispHandle, 4, 0, "Char 1: %d", (uint16_t)newValue);
-      break;
-
-    case SIMPLEPROFILE_CHAR3:
-      SimpleProfile_GetParameter(SIMPLEPROFILE_CHAR3, &newValue);
-
-      Display_print1(dispHandle, 4, 0, "Char 3: %d", (uint16_t)newValue);
-      break;
+//    case SIMPLEPROFILE_CHAR1:
+//      SimpleProfile_GetParameter(SIMPLEPROFILE_CHAR1, &newValue);
+//
+//      Display_print1(dispHandle, SBP_ROW_STATUS_1, 0, "Char 1: %d", (uint16_t)newValue);
+//      break;
+//
+//    case SIMPLEPROFILE_CHAR3:
+//      SimpleProfile_GetParameter(SIMPLEPROFILE_CHAR3, &newValue);
+//
+//      Display_print1(dispHandle, SBP_ROW_STATUS_1, 0, "Char 3: %d", (uint16_t)newValue);
+//      break;
 
     default:
       // should not reach here!
@@ -1162,18 +1258,7 @@ static void SimpleBLEPeripheral_processCharValueChangeEvt(uint8_t paramID)
  */
 static void SimpleBLEPeripheral_performPeriodicTask(void)
 {
-  uint8_t valueToCopy;
-
-  // Call to retrieve the value of the third characteristic in the profile
-  if (SimpleProfile_GetParameter(SIMPLEPROFILE_CHAR3, &valueToCopy) == SUCCESS)
-  {
-    // Call to set that value of the fourth characteristic in the profile.
-    // Note that if notifications of the fourth characteristic have been
-    // enabled by a GATT client device, then a notification will be sent
-    // every time this function is called.
-    SimpleProfile_SetParameter(SIMPLEPROFILE_CHAR4, sizeof(uint8_t),
-                               &valueToCopy);
-  }
+    SimpleProfile_SetParameter(SIMPLEPROFILE_BTPNotify, BTPNOTITYCHANNEL_LEN, (void *)0);
 }
 
 /*********************************************************************

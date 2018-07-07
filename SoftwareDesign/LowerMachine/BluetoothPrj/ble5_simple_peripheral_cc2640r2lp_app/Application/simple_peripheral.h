@@ -75,12 +75,24 @@ extern "C"
 /*********************************************************************
  * FUNCTIONS
  */
+/*********************************************************************
+ * GLOBAL VARIABLES
+ */
+typedef struct _iSerialTransfer_Def{
+    uint8_t (*SendMsgtoBLERF)(uint8_t * pbuf, uint8_t size);
+    void (*SendMsgToMCU)(uint8_t * pbuf, uint16_t size);
+    void (*SendDisconnectMsgToMCU)(void);
+    void (*SendConnectMsgToMCU)(void);
+    void (*SendTransferCMPMsgToMCU)(void);
+} iSerialTransferStruct, *piSerialTransferStruct;
+
+extern piSerialTransferStruct piSerialTransfer;
 
 /*
  * Task creation function for the Simple Peripheral.
  */
 extern void SimpleBLEPeripheral_createTask(void);
-
+uint8_t SimpleBLEPeripheral_SendMsgtoBLERF(uint8_t * pbuf, uint8_t size);
 #if !defined(Display_DISABLE_ALL)
 /*
  * Functions for menu action

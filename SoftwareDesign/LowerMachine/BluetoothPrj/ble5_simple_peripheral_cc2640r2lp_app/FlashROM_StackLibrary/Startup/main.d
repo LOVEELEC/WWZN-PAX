@@ -133,6 +133,8 @@ Startup/main.obj: C:/ti/xdctools_3_50_05_12_core/packages/xdc/runtime/Types.h
 Startup/main.obj: C:/ti/xdctools_3_50_05_12_core/packages/xdc/runtime/IInstance.h
 Startup/main.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/kernel/tirtos/packages/ti/sysbios/interfaces/ITimer.h
 Startup/main.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/kernel/tirtos/packages/ti/sysbios/knl/package/Clock_TimerProxy.h
+Startup/main.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/npi/src/inc/npi_task.h
+Startup/main.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/npi/src/inc/npi_data.h
 Startup/main.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/icall/src/inc/icall.h
 Startup/main.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdlib.h
 Startup/main.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/linkage.h
@@ -328,6 +330,8 @@ C:/ti/xdctools_3_50_05_12_core/packages/xdc/runtime/Types.h:
 C:/ti/xdctools_3_50_05_12_core/packages/xdc/runtime/IInstance.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/kernel/tirtos/packages/ti/sysbios/interfaces/ITimer.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/kernel/tirtos/packages/ti/sysbios/knl/package/Clock_TimerProxy.h: 
+C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/npi/src/inc/npi_task.h: 
+C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/npi/src/inc/npi_data.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/icall/src/inc/icall.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdlib.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/linkage.h: 
