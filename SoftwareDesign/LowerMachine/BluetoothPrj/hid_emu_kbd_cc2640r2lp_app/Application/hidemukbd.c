@@ -400,6 +400,7 @@ void HidEmuKbd_init(void)
   // so that the application can send and receive messages.
   ICall_registerApp(&selfEntity, &syncEvent);
 
+  HCI_EXT_SetTxPowerCmd(HCI_EXT_TX_POWER_5_DBM);   //设置发射功率
   // Hard code the DB Address till CC2650 board gets its own IEEE address
   //uint8 bdAddress[B_ADDR_LEN] = { 0x22, 0x22, 0x22, 0x22, 0x22, 0x5A };
   //HCI_EXT_SetBDADDRCmd(bdAddress);

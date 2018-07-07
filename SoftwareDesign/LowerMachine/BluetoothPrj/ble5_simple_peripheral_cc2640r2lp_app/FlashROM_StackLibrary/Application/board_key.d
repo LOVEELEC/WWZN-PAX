@@ -213,16 +213,19 @@ Application/board_key.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/kernel/tirto
 Application/board_key.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/kernel/tirtos/packages/ti/sysbios/knl/Event.h
 Application/board_key.obj: ../Application/board_key.h
 Application/board_key.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/board.h
-Application/board_key.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2em/cc2640r2em_board.h
-Application/board_key.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2em/../../boards/CC2640R2DK_4XS/Board.h
-Application/board_key.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/GPIO.h
+Application/board_key.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2lp/cc2640r2lp_board.h
+Application/board_key.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2lp/../../boards/CC2640R2_LAUNCHXL/Board.h
+Application/board_key.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/ADC.h
+Application/board_key.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h
+Application/board_key.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/ADCBuf.h
+Application/board_key.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h
 Application/board_key.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/PWM.h
 Application/board_key.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/SPI.h
 Application/board_key.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h
 Application/board_key.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/UART.h
 Application/board_key.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h
 Application/board_key.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/Watchdog.h
-Application/board_key.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2em/../../boards/CC2640R2DK_4XS/CC2640R2DK_4XS.h
+Application/board_key.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2lp/../../boards/CC2640R2_LAUNCHXL/CC2640R2_LAUNCHXL.h
 
 ../Application/board_key.c: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdbool.h: 
@@ -437,13 +440,16 @@ C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/kernel/tirtos/packages/ti/sysbios/knl/Q
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/kernel/tirtos/packages/ti/sysbios/knl/Event.h: 
 ../Application/board_key.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/board.h: 
-C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2em/cc2640r2em_board.h: 
-C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2em/../../boards/CC2640R2DK_4XS/Board.h: 
-C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/GPIO.h: 
+C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2lp/cc2640r2lp_board.h: 
+C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2lp/../../boards/CC2640R2_LAUNCHXL/Board.h: 
+C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/ADC.h: 
+C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h: 
+C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/ADCBuf.h: 
+C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/PWM.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/SPI.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/UART.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/Watchdog.h: 
-C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2em/../../boards/CC2640R2DK_4XS/CC2640R2DK_4XS.h: 
+C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2lp/../../boards/CC2640R2_LAUNCHXL/CC2640R2_LAUNCHXL.h: 

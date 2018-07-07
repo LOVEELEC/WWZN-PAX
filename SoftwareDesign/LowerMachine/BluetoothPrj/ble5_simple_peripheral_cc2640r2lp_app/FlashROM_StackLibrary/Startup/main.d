@@ -170,16 +170,19 @@ Startup/main.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/devices/cc2
 Startup/main.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/devices/cc26x0r2/driverlib/rf_ble_cmd.h
 Startup/main.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/icall/inc/ble_dispatch.h
 Startup/main.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/board.h
-Startup/main.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2em/cc2640r2em_board.h
-Startup/main.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2em/../../boards/CC2640R2DK_4XS/Board.h
-Startup/main.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/GPIO.h
+Startup/main.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2lp/cc2640r2lp_board.h
+Startup/main.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2lp/../../boards/CC2640R2_LAUNCHXL/Board.h
+Startup/main.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/ADC.h
+Startup/main.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h
+Startup/main.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/ADCBuf.h
+Startup/main.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h
 Startup/main.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/PWM.h
 Startup/main.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/SPI.h
 Startup/main.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h
 Startup/main.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/UART.h
 Startup/main.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h
 Startup/main.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/Watchdog.h
-Startup/main.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2em/../../boards/CC2640R2DK_4XS/CC2640R2DK_4XS.h
+Startup/main.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2lp/../../boards/CC2640R2_LAUNCHXL/CC2640R2_LAUNCHXL.h
 Startup/main.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/PIN.h
 Startup/main.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h
 Startup/main.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/devices/cc26x0r2/driverlib/ioc.h
@@ -362,16 +365,19 @@ C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/devices/cc26x0r2/driverlib/rf
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/devices/cc26x0r2/driverlib/rf_ble_cmd.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/icall/inc/ble_dispatch.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/board.h: 
-C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2em/cc2640r2em_board.h: 
-C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2em/../../boards/CC2640R2DK_4XS/Board.h: 
-C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/GPIO.h: 
+C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2lp/cc2640r2lp_board.h: 
+C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2lp/../../boards/CC2640R2_LAUNCHXL/Board.h: 
+C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/ADC.h: 
+C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h: 
+C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/ADCBuf.h: 
+C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/PWM.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/SPI.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/UART.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/Watchdog.h: 
-C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2em/../../boards/CC2640R2DK_4XS/CC2640R2DK_4XS.h: 
+C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2lp/../../boards/CC2640R2_LAUNCHXL/CC2640R2_LAUNCHXL.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/PIN.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/devices/cc26x0r2/driverlib/ioc.h: 
