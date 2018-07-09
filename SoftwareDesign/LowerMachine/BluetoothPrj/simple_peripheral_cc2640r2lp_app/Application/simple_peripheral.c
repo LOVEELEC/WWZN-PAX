@@ -917,6 +917,9 @@ static void SimpleBLEPeripheral_sendAttRsp(void)
       // Disable connection event end notice
       HCI_EXT_ConnEventNoticeCmd(pAttRsp->connHandle, selfEntity, 0);
 
+      /**/
+      piSerialTransfer->SendDisconnectMsgToMCU();
+
       // We're done with the response message
       SimpleBLEPeripheral_freeAttRsp(status);
     }
@@ -1120,6 +1123,7 @@ static void SimpleBLEPeripheral_processStateChangeEvt(gaprole_States_t newState)
         {
           Display_print1(dispHandle, 2, 0, "Num Conns: %d", (uint16_t)numActive);
           Display_print0(dispHandle, 3, 0, Util_convertBdAddr2Str(linkInfo.addr));
+          piSerialTransfer->SendConnectMsgToMCU();
         }
         else
         {
@@ -1164,6 +1168,7 @@ static void SimpleBLEPeripheral_processStateChangeEvt(gaprole_States_t newState)
       SimpleBLEPeripheral_freeAttRsp(bleNotConnected);
 
       Display_print0(dispHandle, 2, 0, "Disconnected");
+      piSerialTransfer->SendDisconnectMsgToMCU();
 
       // Clear remaining lines
       Display_clearLines(dispHandle, 3, 5);

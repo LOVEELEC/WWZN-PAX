@@ -81,7 +81,7 @@
 #define NPITASK_STACK_SIZE 512
 
 //! \brief Task priority for NPI RTOS task
-#define NPITASK_PRIORITY 2
+#define NPITASK_PRIORITY 1
 
 
 #if defined (NPI_USE_UART) || defined (NPI_USE_SPI)
@@ -285,6 +285,8 @@ static void NPITask_inititializeTask(void)
 //!
 //! \return     void
 // -----------------------------------------------------------------------------
+uint8_t frameCounter = 0;
+uint8_t frameTestSign = 0;
 static void NPITask_process(void)
 { 
     /* Forever loop */
@@ -344,26 +346,40 @@ static void NPITask_process(void)
             if(NPITask_events & NPITASK_TRANSPORT_RX_EVENT)
             {
                 length = NPIRxBuf_GetRxBufCount();
-                
-                //Do custom app processing
-                NPIRxBuf_ReadFromRxBuf(buf, length);
+                if (length >= HID_IN_PACKET){
+                    length = HID_IN_PACKET;
+                    //Do custom app processing
+                    NPIRxBuf_ReadFromRxBuf(buf, length);
+                    if (buf[1] != 0x8B){
+                        if (!frameTestSign){
+                            frameTestSign = 1;
+                            frameCounter = buf[4];
+                        }else{
+                            if ((frameCounter + 1) % 256 != buf[4]){
+                                /* Error */
+                                while (1);
+                            }
+                            frameCounter = buf[4];
+                        }
+                    }
 
-                /* Send Data to HidEmuKbd_enqueueMsg */
-                piSerialTransfer->SendMsgtoBLERF(buf,length);
-//                //Echo back via UART
-//                NPITask_sendToHost(buf, length);
+                    /* Send Data to HidEmuKbd_enqueueMsg */
+                    piSerialTransfer->SendMsgtoBLERF(buf,(length - 1));
+    //                //Echo back via UART
+    //                NPITask_sendToHost(buf, length);
 
-                if (NPIRxBuf_GetRxBufCount() == 0)
-                {
-                    // No additional bytes to collect, clear the flag.
+                    if (NPIRxBuf_GetRxBufCount() == 0)
+                    {
+                        // No additional bytes to collect, clear the flag.
 
-                    NPITask_events &= ~NPITASK_TRANSPORT_RX_EVENT;
-                }
-                else
-                {
-                    // Additional bytes to collect, preserve the flag and repost
-                    // to the semaphore
-                    Semaphore_post(appSem);
+                        NPITask_events &= ~NPITASK_TRANSPORT_RX_EVENT;
+                    }
+                    else
+                    {
+                        // Additional bytes to collect, preserve the flag and repost
+                        // to the semaphore
+                        Semaphore_post(appSem);
+                    }
                 }
             }
 

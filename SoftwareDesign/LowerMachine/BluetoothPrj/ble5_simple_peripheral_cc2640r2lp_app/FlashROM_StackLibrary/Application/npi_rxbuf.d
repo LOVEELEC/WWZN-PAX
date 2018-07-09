@@ -11,20 +11,17 @@ Application/npi_rxbuf.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/kernel/tirto
 Application/npi_rxbuf.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/kernel/tirtos/packages/ti/targets/std.h
 Application/npi_rxbuf.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdint.h
 Application/npi_rxbuf.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/board.h
-Application/npi_rxbuf.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2lp/cc2640r2lp_board.h
-Application/npi_rxbuf.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2lp/../../boards/CC2640R2_LAUNCHXL/Board.h
-Application/npi_rxbuf.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/ADC.h
-Application/npi_rxbuf.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdbool.h
-Application/npi_rxbuf.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h
-Application/npi_rxbuf.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/ADCBuf.h
-Application/npi_rxbuf.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h
+Application/npi_rxbuf.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2em/cc2640r2em_board.h
+Application/npi_rxbuf.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2em/../../boards/CC2640R2DK_4XS/Board.h
+Application/npi_rxbuf.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/GPIO.h
 Application/npi_rxbuf.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/PWM.h
 Application/npi_rxbuf.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/SPI.h
+Application/npi_rxbuf.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdbool.h
 Application/npi_rxbuf.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h
 Application/npi_rxbuf.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/UART.h
 Application/npi_rxbuf.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h
 Application/npi_rxbuf.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/Watchdog.h
-Application/npi_rxbuf.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2lp/../../boards/CC2640R2_LAUNCHXL/CC2640R2_LAUNCHXL.h
+Application/npi_rxbuf.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2em/../../boards/CC2640R2DK_4XS/CC2640R2DK_4XS.h
 Application/npi_rxbuf.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/PIN.h
 Application/npi_rxbuf.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h
 Application/npi_rxbuf.obj: C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/devices/cc26x0r2/driverlib/ioc.h
@@ -59,20 +56,17 @@ C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/kernel/tirtos/packages/ti/targets/arm/e
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/kernel/tirtos/packages/ti/targets/std.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdint.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/board.h: 
-C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2lp/cc2640r2lp_board.h: 
-C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2lp/../../boards/CC2640R2_LAUNCHXL/Board.h: 
-C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/ADC.h: 
-C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdbool.h: 
-C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h: 
-C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/ADCBuf.h: 
-C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h: 
+C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2em/cc2640r2em_board.h: 
+C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2em/../../boards/CC2640R2DK_4XS/Board.h: 
+C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/GPIO.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/PWM.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/SPI.h: 
+C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdbool.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/UART.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/Watchdog.h: 
-C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2lp/../../boards/CC2640R2_LAUNCHXL/CC2640R2_LAUNCHXL.h: 
+C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/ble5stack/target/./cc2640r2em/../../boards/CC2640R2DK_4XS/CC2640R2DK_4XS.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/drivers/PIN.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stddef.h: 
 C:/ti/simplelink_cc2640r2_sdk_1_40_00_45/source/ti/devices/cc26x0r2/driverlib/ioc.h: 

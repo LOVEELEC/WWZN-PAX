@@ -144,7 +144,7 @@
 #define DEFAULT_CONN_PAUSE_PERIPHERAL         6
 
 // How often to perform periodic event (in msec)
-#define SBP_PERIODIC_EVT_PERIOD               10
+#define SBP_PERIODIC_EVT_PERIOD               1
 
 // Application specific event ID for HCI Connection Event End Events
 #define SBP_HCI_CONN_EVT_END_EVT              0x0001
@@ -1167,6 +1167,8 @@ static void SimpleBLEPeripheral_sendAttRsp(void)
     {
       // Disable connection event end notice
       HCI_EXT_ConnEventNoticeCmd(pAttRsp->connHandle, selfEntity, 0);
+	  /* */ 
+	  
       // We're done with the response message
       SimpleBLEPeripheral_freeAttRsp(status);
     }
@@ -1433,6 +1435,7 @@ static void SimpleBLEPeripheral_processStateChangeEvt(gaprole_States_t newState)
 
     case GAPROLE_ERROR:
       Display_print0(dispHandle, SBP_ROW_RESULT, 0, "Error");
+      piSerialTransfer->SendDisconnectMsgToMCU();
       break;
 
     default:

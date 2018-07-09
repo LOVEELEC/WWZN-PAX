@@ -96,14 +96,15 @@
 									<listOptionValue builtIn="false" value="BOARD_DISPLAY_USE_LCD=0"/>
 									<listOptionValue builtIn="false" value="BOARD_DISPLAY_USE_UART=0"/>
 									<listOptionValue builtIn="false" value="BOARD_DISPLAY_USE_UART_ANSI=0"/>
-									<listOptionValue builtIn="false" value="CC2640R2_LAUNCHXL"/>
+									<listOptionValue builtIn="false" value="CC2640R2DK_4XS"/>
+									<listOptionValue builtIn="false" value="xCC2640R2_LAUNCHXL"/>
 									<listOptionValue builtIn="false" value="CC26XX"/>
 									<listOptionValue builtIn="false" value="CC26XX_R2"/>
 									<listOptionValue builtIn="false" value="ICALL_EVENTS"/>
 									<listOptionValue builtIn="false" value="ICALL_JT"/>
 									<listOptionValue builtIn="false" value="ICALL_LITE"/>
-									<listOptionValue builtIn="false" value="ICALL_MAX_NUM_ENTITIES=6"/>
-									<listOptionValue builtIn="false" value="ICALL_MAX_NUM_TASKS=3"/>
+									<listOptionValue builtIn="false" value="ICALL_MAX_NUM_ENTITIES=8"/>
+									<listOptionValue builtIn="false" value="ICALL_MAX_NUM_TASKS=4"/>
 									<listOptionValue builtIn="false" value="ICALL_STACK0_ADDR"/>
 									<listOptionValue builtIn="false" value="POWER_SAVING"/>
 									<listOptionValue builtIn="false" value="RF_SINGLEMODE"/>

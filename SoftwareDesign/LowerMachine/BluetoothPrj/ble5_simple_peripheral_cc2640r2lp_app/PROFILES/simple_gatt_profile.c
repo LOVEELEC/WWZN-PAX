@@ -341,6 +341,8 @@ bStatus_t SimpleProfile_RegisterAppCBs( simpleProfileCBs_t *appCallbacks )
  *
  * @return  bStatus_t
  */
+#define SENDTIMEOUTCOUNTER        (5)
+static uint8_t sendTimeOutCnt = 0x00;
 static uint8_t signTest = 0;
 bStatus_t SimpleProfile_SetParameter( uint8 param, uint8 len, void *value )
 {
@@ -364,22 +366,24 @@ bStatus_t SimpleProfile_SetParameter( uint8 param, uint8 len, void *value )
 	     if (realLen == 0){
 	         /* 数据缓冲区无数据则不进行Notify  */
 	         ret = bleInvalidRange;
+	         sendTimeOutCnt++;      // 接收数据超时，恢复Host
+	         if ((sendTimeOutCnt >= SENDTIMEOUTCOUNTER) && signTest){
+	             sendTimeOutCnt = 0;
+	             signTest = 0;
+                #ifdef USE_SERIAL_COMMUNICATION
+	             SerialCommunication_SendBleTransferCMP();
+                #else
+	             piSerialTransfer->SendTransferCMPMsgToMCU();
+                #endif
+	         }
 	         break;
 	     }
+	     signTest = 1;
+	     sendTimeOutCnt = 0;
 	     // See if Notification has been enabled
 	     GATTServApp_ProcessCharCfg( BTPNotifyChannelConfig, BTPNotifyChannelProfile, FALSE,
 	                                 simpleProfileAttrTbl, GATT_NUM_ATTRS( simpleProfileAttrTbl ),
 	                                 INVALID_TASK_ID, simpleProfile_ReadAttrCB );
-	     if (signTest){
-        #ifdef USE_SERIAL_COMMUNICATION
-	         SerialCommunication_SendBleTransferCMP();
-        #else
-	         piSerialTransfer->SendTransferCMPMsgToMCU();
-        #endif
-	         signTest = 0;
-	     }else{
-	         signTest = 1;
-	     }
       break;
 	/***************************************************************************/
 	  
@@ -459,6 +463,7 @@ bStatus_t SimpleProfile_GetParameter( uint8 param, void *value )
  *
  * @return      SUCCESS, blePending or Failure
  */
+//static uint8_t signTest = 0;
 static bStatus_t simpleProfile_ReadAttrCB(uint16_t connHandle,
                                           gattAttribute_t *pAttr,
                                           uint8_t *pValue, uint16_t *pLen,
@@ -498,6 +503,16 @@ static bStatus_t simpleProfile_ReadAttrCB(uint16_t connHandle,
 	      }
 	      *pLen = realLen;
 	      piLoopQueue->DeQueue(&BTP_DataMsg.NotifyServiceBuffer, pValue, realLen);
+//	      if (signTest){
+//        #ifdef USE_SERIAL_COMMUNICATION
+//	          SerialCommunication_SendBleTransferCMP();
+//        #else
+//	          piSerialTransfer->SendTransferCMPMsgToMCU();
+//        #endif
+//	          signTest = 0;
+//	      }else{
+//	          signTest = 1;
+//	      }
         break;
 //	#else
 //	  case BTPNotifyChannel_UUID:

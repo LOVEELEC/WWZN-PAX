@@ -270,7 +270,7 @@ bStatus_t SimpleProfile_AddService( uint32 services )
   {
     return ( bleMemAllocError );
   }
-
+	
   // Initialize Client Characteristic Configuration attributes
   GATTServApp_InitCharCfg( INVALID_CONNHANDLE, BTPNotifyChannelConfig );
   /***************************************************************************/
@@ -329,7 +329,8 @@ bStatus_t SimpleProfile_RegisterAppCBs( simpleProfileCBs_t *appCallbacks )
  *
  * @return  bStatus_t
  */
-static uint8_t signTest = 0;
+#define SENDTIMEOUTCOUNTER        (20)
+static uint8_t sendTimeOutCnt = 0x00;
 bStatus_t SimpleProfile_SetParameter( uint8 param, uint8 len, void *value )
 {
   bStatus_t ret = SUCCESS;
@@ -352,22 +353,22 @@ bStatus_t SimpleProfile_SetParameter( uint8 param, uint8 len, void *value )
 	     if (realLen == 0){
 	         /* Êý¾Ý»º³åÇøÎÞÊý¾ÝÔò²»½øÐÐNotify  */
 	         ret = bleInvalidRange;
+//	         sendTimeOutCnt++;      // ½ÓÊÕÊý¾Ý³¬Ê±£¬»Ö¸´Host
+//	         if (sendTimeOutCnt >= SENDTIMEOUTCOUNTER){
+//	             sendTimeOutCnt = 0;
+//                #ifdef USE_SERIAL_COMMUNICATION
+//	             SerialCommunication_SendBleTransferCMP();
+//                #else
+//	             piSerialTransfer->SendTransferCMPMsgToMCU();
+//                #endif
+//	         }
 	         break;
 	     }
+	     sendTimeOutCnt = 0;
 	     // See if Notification has been enabled
 	     GATTServApp_ProcessCharCfg( BTPNotifyChannelConfig, BTPNotifyChannelProfile, FALSE,
 	                                 simpleProfileAttrTbl, GATT_NUM_ATTRS( simpleProfileAttrTbl ),
 	                                 INVALID_TASK_ID, simpleProfile_ReadAttrCB );
-	     if (signTest){
-        #ifdef USE_SERIAL_COMMUNICATION
-	         SerialCommunication_SendBleTransferCMP();
-        #else
-	         piSerialTransfer->SendTransferCMPMsgToMCU();
-        #endif
-	         signTest = 0;
-	     }else{
-	         signTest = 1;
-	     }
       break;
 	/***************************************************************************/
 	  
@@ -447,6 +448,7 @@ bStatus_t SimpleProfile_GetParameter( uint8 param, void *value )
  *
  * @return      SUCCESS, blePending or Failure
  */
+static uint8_t signTest = 0;
 static bStatus_t simpleProfile_ReadAttrCB(uint16_t connHandle,
                                           gattAttribute_t *pAttr,
                                           uint8_t *pValue, uint16_t *pLen,
@@ -454,9 +456,9 @@ static bStatus_t simpleProfile_ReadAttrCB(uint16_t connHandle,
                                           uint8_t method)
 {
   bStatus_t status = SUCCESS;
-#ifdef USE_SERIAL_COMMUNICATION
+//#ifdef USE_SERIAL_COMMUNICATION
   uint8_t realLen = 0;
-#endif
+//#endif
   // Make sure it's not a blob operation (no attributes in the profile are long)
   if ( offset > 0 )
   {
@@ -474,7 +476,7 @@ static bStatus_t simpleProfile_ReadAttrCB(uint16_t connHandle,
 //        *pLen = BTPWRITECHANNEL_LEN;
 //        VOID memcpy( pValue, pAttr->pValue, BTPWRITECHANNEL_LEN );
 //        break;
-	#ifdef USE_SERIAL_COMMUNICATION
+//	#ifdef USE_SERIAL_COMMUNICATION
 	  case BTPNotifyChannel_UUID:
 	      realLen = piLoopQueue->QueueLength(&BTP_DataMsg.NotifyServiceBuffer);
 	      if (realLen == 0){
@@ -486,13 +488,23 @@ static bStatus_t simpleProfile_ReadAttrCB(uint16_t connHandle,
 	      }
 	      *pLen = realLen;
 	      piLoopQueue->DeQueue(&BTP_DataMsg.NotifyServiceBuffer, pValue, realLen);
+//	      if (signTest){
+        #ifdef USE_SERIAL_COMMUNICATION
+	          SerialCommunication_SendBleTransferCMP();
+        #else
+	          piSerialTransfer->SendTransferCMPMsgToMCU();
+        #endif
+//	          signTest = 0;
+//	      }else{
+//	          signTest = 1;
+//	      }
         break;
-	#else
-	  case BTPNotifyChannel_UUID:
-	    *pLen = BTPWRITECHANNEL_LEN;
-		VOID memcpy( pValue, pAttr->pValue, BTPWRITECHANNEL_LEN );
-        break;	
-	#endif
+//	#else
+//	  case BTPNotifyChannel_UUID:
+//	    *pLen = BTPWRITECHANNEL_LEN;
+//		VOID memcpy( pValue, pAttr->pValue, BTPWRITECHANNEL_LEN );
+//        break;
+//	#endif
 	/***************************************************************************/
 		
       default:
