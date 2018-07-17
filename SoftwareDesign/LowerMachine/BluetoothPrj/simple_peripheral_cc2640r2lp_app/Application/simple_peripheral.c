@@ -94,11 +94,11 @@
 
 // Minimum connection interval (units of 1.25ms, 80=100ms) for automatic
 // parameter update request
-#define DEFAULT_DESIRED_MIN_CONN_INTERVAL     80
+#define DEFAULT_DESIRED_MIN_CONN_INTERVAL     6//80
 
 // Maximum connection interval (units of 1.25ms, 800=1000ms) for automatic
 // parameter update request
-#define DEFAULT_DESIRED_MAX_CONN_INTERVAL     800
+#define DEFAULT_DESIRED_MAX_CONN_INTERVAL     6//800
 
 // Slave latency to use for automatic parameter update request
 #define DEFAULT_DESIRED_SLAVE_LATENCY         0
@@ -109,10 +109,17 @@
 
 // After the connection is formed, the peripheral waits until the central
 // device asks for its preferred connection parameters
-#define DEFAULT_ENABLE_UPDATE_REQUEST         GAPROLE_LINK_PARAM_UPDATE_WAIT_REMOTE_PARAMS
+//#define DEFAULT_ENABLE_UPDATE_REQUEST         GAPROLE_LINK_PARAM_UPDATE_WAIT_REMOTE_PARAMS
+#define DEFAULT_ENABLE_UPDATE_REQUEST         GAPROLE_LINK_PARAM_UPDATE_INITIATE_APP_PARAMS
+//GAPROLE_LINK_PARAM_UPDATE_INITIATE_BOTH_PARAMS //!< Initiate parameter update request, respond with best combination of local and remote parameters.
+//GAPROLE_LINK_PARAM_UPDATE_INITIATE_APP_PARAMS//!< Initiate parameter update request, respond with local requested parameters only.
+//GAPROLE_LINK_PARAM_UPDATE_WAIT_APP_PARAMS //!< Wait for parameter update request, respond with local requested parameters only.
+//GAPROLE_LINK_PARAM_UPDATE_WAIT_BOTH_PARAMS//!< Wait for parameter update request, respond with best combination of local and remote parameters.
+//GAPROLE_LINK_PARAM_UPDATE_REJECT_REQUEST //!< Reject all parameter update requests.
+//GAPROLE_LINK_PARAM_UPDATE_NUM_OPTIONS
 
 // Connection Pause Peripheral time value (in seconds)
-#define DEFAULT_CONN_PAUSE_PERIPHERAL         6
+#define DEFAULT_CONN_PAUSE_PERIPHERAL         4
 
 // How often to perform periodic event (in msec)
 #define SBP_PERIODIC_EVT_PERIOD               10
@@ -338,6 +345,9 @@ static void SimpleBLEPeripheral_charValueChangeCB(uint8_t paramID);
 static uint8_t SimpleBLEPeripheral_enqueueMsg(uint8_t event, uint8_t state,
                                               uint8_t *pData);
 
+static void simpleperipheral_gapRolesParamUpdateCB(uint16_t connInterval,
+                                            uint16_t connSlaveLatency,
+                                            uint16_t connTimeout);
 /*********************************************************************
  * EXTERN FUNCTIONS
  */
@@ -368,6 +378,9 @@ static simpleProfileCBs_t SimpleBLEPeripheral_simpleProfileCBs =
   SimpleBLEPeripheral_charValueChangeCB // Simple GATT Characteristic value change callback
 };
 
+static gapRolesParamUpdateCB_t simpleperipheral_gapRolesParamUpdateCBs = {
+  simpleperipheral_gapRolesParamUpdateCB
+};
 /*********************************************************************
  * PUBLIC FUNCTIONS
  */
@@ -434,6 +447,16 @@ uint8_t SimpleBLEPeripheral_SendMsgtoBLERF(uint8_t * pbuf, uint8_t size)
 //  return FALSE;
 }
 
+static void simpleperipheral_gapRolesParamUpdateCB(uint16_t connInterval,
+                                            uint16_t connSlaveLatency,
+                                            uint16_t connTimeout)
+{
+//    if (connInterval == DEFAULT_DESIRED_MIN_CONN_INTERVAL){
+//        piSerialTransfer->SendConnectMsgToMCU();
+//    }
+//    // Create one-shot clocks for internal periodic events.
+    Util_rescheduleClock(&periodicClock, 10);
+}
 /*********************************************************************
  * @fn      SimpleBLEPeripheral_init
  *
@@ -455,7 +478,7 @@ static void SimpleBLEPeripheral_init(void)
   // so that the application can send and receive messages.
   ICall_registerApp(&selfEntity, &syncEvent);
 
-  HCI_EXT_SetTxPowerCmd(HCI_EXT_TX_POWER_5_DBM);   //设置发射功率
+//  HCI_EXT_SetTxPowerCmd(HCI_EXT_TX_POWER_5_DBM);   //设置发射功率
   SimpleBLEPeripheral_ServiceBufferInit();
 #ifdef USE_RCOSC
   RCOSC_enableCalibration();
@@ -615,6 +638,8 @@ static void SimpleBLEPeripheral_init(void)
   // Register callback with SimpleGATTprofile
   SimpleProfile_RegisterAppCBs(&SimpleBLEPeripheral_simpleProfileCBs);
 
+  GAPRole_RegisterAppCBs(&simpleperipheral_gapRolesParamUpdateCBs);
+
   // Start the Device
   VOID GAPRole_StartDevice(&SimpleBLEPeripheral_gapRoleCBs);
 
@@ -761,6 +786,9 @@ static uint8_t SimpleBLEPeripheral_processStackMsg(ICall_Hdr *pMsg)
 
   switch (pMsg->event)
   {
+    case HCI_GAP_META_EVENT_EVENT:
+
+      break;
     case GATT_MSG_EVENT:
       // Process GATT message
       safeToDealloc = SimpleBLEPeripheral_processGATTMsg((gattMsgEvent_t *)pMsg);
@@ -768,7 +796,6 @@ static uint8_t SimpleBLEPeripheral_processStackMsg(ICall_Hdr *pMsg)
 
     case HCI_GAP_EVENT_EVENT:
       {
-
         // Process HCI message
         switch(pMsg->status)
         {
@@ -917,8 +944,8 @@ static void SimpleBLEPeripheral_sendAttRsp(void)
       // Disable connection event end notice
       HCI_EXT_ConnEventNoticeCmd(pAttRsp->connHandle, selfEntity, 0);
 
-      /**/
-      piSerialTransfer->SendDisconnectMsgToMCU();
+//      /**/
+//      piSerialTransfer->SendDisconnectMsgToMCU();
 
       // We're done with the response message
       SimpleBLEPeripheral_freeAttRsp(status);
@@ -1124,6 +1151,7 @@ static void SimpleBLEPeripheral_processStateChangeEvt(gaprole_States_t newState)
           Display_print1(dispHandle, 2, 0, "Num Conns: %d", (uint16_t)numActive);
           Display_print0(dispHandle, 3, 0, Util_convertBdAddr2Str(linkInfo.addr));
           piSerialTransfer->SendConnectMsgToMCU();
+
         }
         else
         {

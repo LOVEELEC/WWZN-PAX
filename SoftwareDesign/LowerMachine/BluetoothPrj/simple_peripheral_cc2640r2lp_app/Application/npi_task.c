@@ -78,7 +78,7 @@
 #define NPITASK_MRDY_EVENT 0x0080
 
 //! \brief Size of stack created for NPI RTOS task
-#define NPITASK_STACK_SIZE 512
+#define NPITASK_STACK_SIZE 1024
 
 //! \brief Task priority for NPI RTOS task
 #define NPITASK_PRIORITY 1
@@ -234,14 +234,14 @@ static void SerialCommunication_SendBleConnect(void)
     NPITask_sendToHost(ConMesg, HID_IN_PACKET);
 }
 
-
+volatile uint32_t testSendCnt = 0x00;
 static void SerialCommunication_SendBleTransferCMP(void)
 {
     uint8_t CmpMesg[HID_IN_PACKET];
     memset(CmpMesg, 0x00, HID_IN_PACKET);
     CmpMesg[0] = 0x02;
     CmpMesg[1] = 0x59;
-
+    testSendCnt++;
     *(width_t *)(&CmpMesg[CmpMesg[2]+4]) = crcCompute(CmpMesg, (CmpMesg[2]+4));
     NPITask_sendToHost(CmpMesg, HID_IN_PACKET);
 }
@@ -285,8 +285,8 @@ static void NPITask_inititializeTask(void)
 //!
 //! \return     void
 // -----------------------------------------------------------------------------
-uint8_t frameCounter = 0;
-uint8_t frameTestSign = 0;
+volatile uint8_t frameCounter = 0;
+volatile uint8_t frameTestSign = 0;
 static void NPITask_process(void)
 { 
     /* Forever loop */
@@ -350,18 +350,22 @@ static void NPITask_process(void)
                     length = HID_IN_PACKET;
                     //Do custom app processing
                     NPIRxBuf_ReadFromRxBuf(buf, length);
-                    if (buf[1] != 0x8B){
-                        if (!frameTestSign){
-                            frameTestSign = 1;
-                            frameCounter = buf[4];
-                        }else{
-                            if ((frameCounter + 1) % 256 != buf[4]){
-                                /* Error */
-                                while (1);
-                            }
-                            frameCounter = buf[4];
-                        }
-                    }
+//                    if ((buf[1] != 0x8B) && (buf[1] != 0)){
+//                        if (!frameTestSign){
+//                            frameTestSign = 1;
+//                            frameCounter = buf[4];
+//                        }else{
+//                            if ((frameCounter + 1) % 256 != buf[4]){
+////                                /* Send Data to HidEmuKbd_enqueueMsg */
+////                                piSerialTransfer->SendMsgtoBLERF(buf,(length - 1));
+//                                SerialCommunication_SendBleDisconnect();
+////                                /* Error */
+////                                while (1);
+//                            }else{
+//                                frameCounter = buf[4];
+//                            }
+//                        }
+//                    }
 
                     /* Send Data to HidEmuKbd_enqueueMsg */
                     piSerialTransfer->SendMsgtoBLERF(buf,(length - 1));

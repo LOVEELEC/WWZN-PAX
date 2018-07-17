@@ -80,7 +80,7 @@
 #define NPITASK_STACK_SIZE 512
 
 //! \brief Task priority for NPI RTOS task
-#define NPITASK_PRIORITY 1
+#define NPITASK_PRIORITY        3
 
 
 #if defined (NPI_USE_UART) || defined (NPI_USE_SPI)
